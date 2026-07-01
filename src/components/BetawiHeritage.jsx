@@ -415,7 +415,7 @@ const BetawiHeritage = () => {
                 <img
                   src={item.img}
                   alt={item.title}
-                  className="w-full rounded-lg h-full object-cover"
+                  className="w-full rounded-lg h-full object-cover object-top"
                 />
               </motion.div>
               <h3 className="text-center font-semibold text-gray-900 text-lg">{item.title}</h3>
