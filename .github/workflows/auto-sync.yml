@@ -1,0 +1,28 @@
+name: auto-sync
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Your Fork
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Sync with Upstream
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+        with:
+          target_sync_branch: react
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_sync_branch: react
+          upstream_sync_repo: MochammadAldiansyah/Noekarta
+          test_mode: false
