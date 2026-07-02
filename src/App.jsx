@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import History from './components/history';
 import BetawiHeritage from './components/BetawiHeritage';
+import KulinerJakarta from './components/KulinerJakarta';
 import 'lenis/dist/lenis.css';
 import './index.css';
 
@@ -37,6 +38,7 @@ function App() {
       <About />
       <History />
       <BetawiHeritage />
+      <KulinerJakarta />
     </div>
   )
 }
