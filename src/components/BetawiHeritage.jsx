@@ -357,7 +357,7 @@ const BetawiHeritage = () => {
   const [selectedCard, setSelectedCard] = useState(null);
 
   return (
-    <section className="pb-18 bg-white">
+    <section className="py-18 bg-white">
       <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">

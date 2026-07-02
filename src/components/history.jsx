@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import historyTitle from '../assets/history_title.png';
+import historyBg from '../assets/history-background.png';
+import historyTitle from '../assets/history-title.png';
 import history1 from '../assets/history1.png';
 import history2 from '../assets/history2.png';
 import history3 from '../assets/history3.png';
@@ -167,17 +168,26 @@ const History = () => {
   }, []);
 
   return (
-    <section id="history" className="pb-20 bg-white relative overflow-hidden">
-      <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
+    <section
+      id="history"
+      className="pt-[100px] pb-[100px] bg-[#AC1717] relative overflow-hidden"
+      style={{
+        backgroundImage: `url(${historyBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="container mx-auto px-4 md:px-8 max-w-[1511px]">
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-16">
+        <div className="flex flex-col items-center text-center mb-[80px]">
           <img
             src={historyTitle}
             alt="Lorong Waktu digital"
             className="h-14 md:h-20 mb-6 select-none object-contain"
           />
-          <p className="text-gray-800 text-lg md:text-xl font-medium max-w-2xl">
+          <p className="text-white text-lg md:text-xl font-medium max-w-2xl">
             Jelajahi perjalanan panjang Jakarta Dari masa ke masa
           </p>
         </div>
@@ -198,7 +208,7 @@ const History = () => {
                   key={item.id}
                   onMouseEnter={(e) => handleCardHover(item.id, e)}
                   onClick={(e) => handleCardClick(item.id, e)}
-                  className={`relative min-w-[280px] md:min-w-[320px] h-[480px] bg-white rounded-[24px] cursor-pointer transition-shadow duration-500 border border-gray-100 flex-shrink-0 ${isActive ? 'shadow-[0_20px_40px_rgb(0,0,0,0.12)]' : 'shadow-[0_4px_20px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]'}`}
+                  className={`relative min-w-[280px] md:min-w-[320px] h-[480px] bg-white rounded-[24px] cursor-pointer transition-shadow duration-500 flex-shrink-0 ${isActive ? 'shadow-[0_20px_40px_rgb(0,0,0,0.12)]' : 'shadow-[0_4px_20px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]'}`}
                 >
                   {/* Image Container */}
                   <div className={`absolute transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-0 ${isActive ? 'top-5 left-5 right-5 bottom-[calc(100%-190px)]' : 'top-0 left-0 right-0 bottom-0'}`}>
@@ -238,7 +248,7 @@ const History = () => {
 
           {/* efek blur kanan*/}
           <div
-            className={`absolute top-0 -right-5 bg-gradient-to-l from-white via-white/80 bottom-12 w-32 md:w-48 pointer-events-none transition-opacity duration-500 hidden md:flex items-center justify-end pr-2 md:pr-4 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute top-3  rounded-xl -right-6 bg-gradient-to-l from-[#AC1717] via-[#AC1717]/80 to-transparent bottom-11 w-32 md:w-48 pointer-events-none transition-opacity duration-500 hidden md:flex items-center justify-end pr-2 md:pr-4 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
           >
           </div>
         </div>
