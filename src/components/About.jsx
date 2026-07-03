@@ -46,7 +46,7 @@ const About = () => {
 
         {/* card image */}
         <div className="relative h-[500px] md:h-[550px] w-full flex mt-8  overflow-hidden justify-center">
-          <div className="relative w-[321px] h-[462px]">
+          <div className="relative w-[321px] h-[462px]" style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}>
             {CARDS.map((cardImg, index) => {
               const len = CARDS.length;
               let offset = index - activeIndex;
@@ -54,37 +54,51 @@ const About = () => {
               if (offset > Math.floor(len / 2)) offset -= len;
               if (offset < -Math.floor(len / 2)) offset += len;
 
-              let scale = 1;
               let translateX = 0;
               let translateY = 0;
+              let translateZ = 0;
+              let rotateY = 0;
               let zIndex = 10;
               let opacity = 1;
 
               if (offset === 0) {
                 // Tengah
-                scale = 1;
                 translateX = 0;
                 translateY = 0;
+                translateZ = 0;
+                rotateY = 0;
                 zIndex = 20;
                 opacity = 1;
               } else if (offset === -1) {
                 // Kiri
-                scale = 0.85;
-                translateX = -140;
+                translateX = -160;
                 translateY = 15;
+                translateZ = -100;
+                rotateY = 20;
                 zIndex = 10;
-                opacity = 0.9;
+                opacity = 0.5;
               } else if (offset === 1) {
                 // Kanan
-                scale = 0.85;
-                translateX = 140;
+                translateX = 160;
                 translateY = 15;
+                translateZ = -100;
+                rotateY = -20;
                 zIndex = 10;
-                opacity = 0.9;
-              } else {
-                scale = 0.7;
-                translateX = 0;
+                opacity = 0.5;
+              } else if (offset < -1) {
+                // Sembunyi di kiri
+                translateX = -250;
                 translateY = 30;
+                translateZ = -200;
+                rotateY = 40;
+                zIndex = 0;
+                opacity = 0;
+              } else if (offset > 1) {
+                // Sembunyi di kanan
+                translateX = 250;
+                translateY = 30;
+                translateZ = -200;
+                rotateY = -40;
                 zIndex = 0;
                 opacity = 0;
               }
@@ -94,9 +108,9 @@ const About = () => {
                   key={index}
                   src={cardImg}
                   alt={`Jakarta landmark ${index + 1}`}
-                  className="absolute top-0 left-0 w-[321px] h-[462px] rounded-[20px] object-cover select-none transition-all duration-700 ease-in-out origin-bottom"
+                  className="absolute top-0 left-0 w-[321px] h-[462px] rounded-[20px] object-cover select-none transition-all duration-700 ease-in-out"
                   style={{
-                    transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                    transform: `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
                     zIndex,
                     opacity,
                   }}

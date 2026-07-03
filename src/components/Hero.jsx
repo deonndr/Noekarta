@@ -22,7 +22,7 @@ const timelineCards = [
     {
         title: 'Batavia',
         description: 'Batavia adalah nama yang diberikan oleh penjajah Belanda untuk kota pelabuhan yang kemudian berkembang menjadi ibu kota Hindia Belanda',
-        positionClass: 'h-[273px] lg:mb-68',
+        positionClass: 'h-[273px] lg:mb-28',
     },
     {
         title: 'Jayakarta',
@@ -267,10 +267,23 @@ const Hero = () => {
     };
 
     return (
-        <section ref={heroRef} className="w-full min-h-[85vh] flex flex-col items-center justify-start  pt-10 overflow-hidden">
-            <div className="flex flex-col  px-4 md:px-6 items-center justify-center text-center mt-8 mb-12">
+        <section ref={heroRef} className="w-full min-h-[85vh] lg:min-h-[1000px] flex flex-col items-center justify-start pt-10 overflow-hidden relative">
+            {/* Background Image g */}
+            <img 
+                src={hero} 
+                alt="" 
+                className="absolute pointer-events-none max-w-none"
+                style={{
+                    width: '1870px',
+                    height: '1390px',
+                    left: '-250px',
+                    bottom: '-150px',
+                    opacity: 1
+                }}
+            />
+            <div className="flex flex-col px-4 md:px-6 items-center justify-center text-center mt-8 mb-12 relative z-10">
        
-                <div className="flex items-center justify-center whitespace-nowrap gap-1 sm:gap-2 md:gap-4 lg:gap-5 xl:gap-6 text-2xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black tracking-tight leading-[1.2] md:leading-[1.1]">
+                <div className="flex items-center justify-center whitespace-nowrap gap-1 sm:gap-2 md:gap-4 lg:gap-5 xl:gap-6 text-2xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-[50px] font-extrabold text-black tracking-tight leading-[1.2] md:leading-[1.1]">
                     <span>Dari Jejak</span>
                     {/* Pembungkus untuk gambar*/}
                     <div
@@ -290,26 +303,25 @@ const Hero = () => {
                 </div>
 
                 {/* Baris Kedua */}
-                <div className="mt-2 md:mt-4 lg:mt-5 xl:mt-6 text-2xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black tracking-tight leading-[1.2] md:leading-[1.1]">
-                    jakarta Kota Digital
+                <div className="mt-2 md:mt-4 lg:mt-5 xl:mt-6 text-2xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-[50px] font-extrabold text-black tracking-tight leading-[1.2] md:leading-[1.1]">
+                    Jakarta Kota Digital
                 </div>
             </div>
 
-            {/* Hero Image Section as Background */}
+            {/* Search Bar and Cards Section */}
             <div
-                className="w-full mx-auto max-w-7xl mb-8 relative mt-16 rounded-2xl bg-no-repeat bg-cover bg-bottom flex flex-col items-center justify-start min-h-[350px] md:min-h-[450px] lg:min-h-[650px]"
-                style={{ backgroundImage: `url(${hero})` }}
+                className="w-full relative mt-16 flex flex-col items-center justify-start flex-1 w-full"
             >
                 {/* Search Bar Overlapping */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-3/4 max-w-[684px] z-10">
-                    <div className="bg-white/80 backdrop-blur-lg backdrop-saturate-150 rounded-3xl flex items-center px-6 py-3 mt-8 md:py-4 shadow-[3px_3px_3px_rgba(0,0,0,0.1)] border border-black/10 focus-within:bg-white/60 focus-within:ring-2 focus-within:ring-white/80 transition-all duration-300">
+                    <div className="bg-white/70 backdrop-blur-lg backdrop-saturate-150 rounded-3xl flex items-center px-6 py-3 mt-8 md:py-4 shadow-[3px_3px_3px_rgba(0,0,0,0.1)] border border-black/10 focus-within:bg-white/60 focus-within:ring-2 focus-within:ring-white/80 transition-all duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400 shrink-0 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         <input
                             type="text"
                             placeholder="Jelajahi Sejarah, budaya, kuliner, dll"
-                            className="w-full bg-transparent outline-none text-gray-900 placeholder-gray-400 text-base md:text-lg font-medium"
+                            className="w-full bg-transparent outline-none text-gray-900 placeholder-gray-500 text-base md:text-lg font-medium"
                         />
                     </div>
                 </div>

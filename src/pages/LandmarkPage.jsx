@@ -1,0 +1,191 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { ChevronLeft, MapPin } from 'lucide-react';
+import L from 'leaflet';
+import { landmarks } from '../data/landmarks';
+import logo from '../assets/logo-noekarta.png';
+
+// Fix Leaflet default icon
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
+
+// Custom red marker icon
+const redIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+});
+
+// Fly-to controller
+const MapController = ({ position, zoom }) => {
+    const map = useMap();
+    useEffect(() => {
+        if (position) {
+            map.flyTo(position, zoom || 16, { duration: 1.5 });
+        }
+    }, [position, zoom, map]);
+    return null;
+};
+
+const LandmarkPage = () => {
+    const navigate = useNavigate();
+    const [activeLandmark, setActiveLandmark] = useState(null);
+    const defaultCenter = [-6.1700, 106.8250];
+
+    const handleBack = () => {
+        navigate('/');
+        // Scroll to top so Navbar is not in floating state
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+
+    const handleLandmarkClick = (landmark) => {
+        setActiveLandmark(landmark);
+    };
+
+    return (
+        <div className="min-h-screen bg-white font-poppins flex flex-col">
+            {/* Custom Header (no landing Navbar) */}
+            <header className="w-full bg-white border-b border-gray-100 shadow-sm z-50 relative">
+                <div className="max-w-7xl mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between gap-4">
+                    {/* Back Button */}
+                    <button
+                        onClick={handleBack}
+                        className="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium transition-colors"
+                    >
+                        <ChevronLeft className="w-5 h-5" />
+                        <span className="text-sm md:text-base">Kembali</span>
+                    </button>
+
+                    {/* Logo Center */}
+                    <a href="/" className="absolute left-1/2 -translate-x-1/2">
+                        <img src={logo} alt="Noekarta" className="h-8 w-auto" />
+                    </a>
+
+                    {/* Title Right */}
+                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                        <MapPin className="w-4 h-4 text-red-500" />
+                        <span className="hidden md:inline">Jakarta Landmark Explorer</span>
+                    </div>
+                </div>
+            </header>
+
+            {/* Main Content */}
+            <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+
+                {/* Sidebar: Landmark List */}
+                <aside className="w-full lg:w-[320px] xl:w-[380px] bg-white border-r border-gray-100 flex flex-col shrink-0 overflow-y-auto">
+                    <div className="p-6 border-b border-gray-100">
+                        <h1 className="text-xl font-bold text-gray-900 mb-1">Landmark Jakarta</h1>
+                        <p className="text-gray-500 text-sm">Klik landmark untuk menuju lokasinya di peta</p>
+                    </div>
+
+                    <div className="flex flex-col gap-2 p-4">
+                        {landmarks.map((landmark) => {
+                            const isActive = activeLandmark?.id === landmark.id;
+                            return (
+                                <button
+                                    key={landmark.id}
+                                    onClick={() => handleLandmarkClick(landmark)}
+                                    className={`flex items-center gap-4 p-3 rounded-[14px] text-left transition-all duration-300 border ${
+                                        isActive
+                                            ? 'bg-red-50 border-red-300 shadow-sm'
+                                            : 'bg-white border-gray-100 hover:border-red-200 hover:bg-red-50/40'
+                                    }`}
+                                >
+                                    {/* Thumbnail */}
+                                    <div className="w-16 h-16 rounded-[10px] overflow-hidden shrink-0">
+                                        <img
+                                            src={landmark.image}
+                                            alt={landmark.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    {/* Info */}
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className={`font-semibold text-base truncate ${isActive ? 'text-red-600' : 'text-gray-900'}`}>
+                                            {landmark.title}
+                                        </h3>
+                                        <p className="text-gray-500 text-xs mt-0.5 leading-relaxed line-clamp-2">
+                                            {landmark.description}
+                                        </p>
+                                    </div>
+                                    {/* Pin indicator */}
+                                    {isActive && (
+                                        <MapPin className="w-4 h-4 text-red-500 shrink-0" />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </aside>
+
+                {/* Map */}
+                <div className="flex-1 relative min-h-[450px]">
+                    <MapContainer
+                        center={defaultCenter}
+                        zoom={13}
+                        scrollWheelZoom={true}
+                        className="w-full h-full"
+                        style={{ minHeight: '450px' }}
+                    >
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        {landmarks.map((landmark) => (
+                            <Marker
+                                key={landmark.id}
+                                position={landmark.position}
+                                icon={redIcon}
+                                eventHandlers={{
+                                    click: () => handleLandmarkClick(landmark),
+                                }}
+                            >
+                                <Popup>
+                                    <div className="flex flex-col gap-2 min-w-[160px]">
+                                        <img
+                                            src={landmark.image}
+                                            alt={landmark.title}
+                                            className="w-full h-24 object-cover rounded-lg"
+                                        />
+                                        <p className="font-bold text-gray-900 text-sm">{landmark.title}</p>
+                                        <p className="text-gray-500 text-xs">{landmark.description}</p>
+                                    </div>
+                                </Popup>
+                            </Marker>
+                        ))}
+                        {activeLandmark && (
+                            <MapController position={activeLandmark.position} zoom={16} />
+                        )}
+                    </MapContainer>
+
+                    {/* Active landmark pill on top of map */}
+                    {activeLandmark && (
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000]">
+                            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-red-200">
+                                <MapPin className="w-4 h-4 text-red-500" />
+                                <span className="font-semibold text-gray-800 text-sm">{activeLandmark.title}</span>
+                                <button
+                                    onClick={() => setActiveLandmark(null)}
+                                    className="ml-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default LandmarkPage;
