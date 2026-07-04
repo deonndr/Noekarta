@@ -158,14 +158,14 @@ const Hero = () => {
 
         // Check initially to freeze Lenis
         if (shouldControlHeroScroll()) {
-            if (window.scrollY <= 10) {
-                setTimeout(() => {
+            setTimeout(() => {
+                if (window.scrollY <= 10) {
                     if (window.lenis) window.lenis.stop();
                     window.scrollTo(0, 0);
-                }, 50);
-            } else {
-                completeScrollSequence();
-            }
+                } else {
+                    completeScrollSequence();
+                }
+            }, 150);
         }
 
         const handleWheel = (event) => {

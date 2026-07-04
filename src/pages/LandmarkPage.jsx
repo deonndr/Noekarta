@@ -6,7 +6,9 @@ import L from 'leaflet';
 import { landmarks } from '../data/landmarks';
 import logo from '../assets/logo-noekarta.png';
 
-// Fix Leaflet default icon
+const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/f87171/ffffff?text=Image+Not+Available';
+
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -29,7 +31,8 @@ const MapController = ({ position, zoom }) => {
     const map = useMap();
     useEffect(() => {
         if (position) {
-            map.flyTo(position, zoom || 16, { duration: 1.5 });
+            map.invalidateSize();
+            map.flyTo(position, zoom || 16, { duration: 1.5, animate: true });
         }
     }, [position, zoom, map]);
     return null;
@@ -41,9 +44,7 @@ const LandmarkPage = () => {
     const defaultCenter = [-6.1700, 106.8250];
 
     const handleBack = () => {
-        navigate('/');
-        // Scroll to top so Navbar is not in floating state
-        window.scrollTo({ top: 0, behavior: 'instant' });
+        navigate('/', { state: { scrollToLandmarkExplorer: true } });
     };
 
     const handleLandmarkClick = (landmark) => {
@@ -51,8 +52,8 @@ const LandmarkPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white font-poppins flex flex-col">
-            {/* Custom Header (no landing Navbar) */}
+        <div className="h-screen bg-white font-poppins flex flex-col overflow-hidden">
+            {/* Custom Header*/}
             <header className="w-full bg-white border-b border-gray-100 shadow-sm z-50 relative">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between gap-4">
                     {/* Back Button */}
@@ -78,10 +79,10 @@ const LandmarkPage = () => {
             </header>
 
             {/* Main Content */}
-            <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+            <div className="flex flex-col lg:flex-row overflow-hidden" style={{ height: 'calc(100vh - 72px)' }}>
 
-                {/* Sidebar: Landmark List */}
-                <aside className="w-full lg:w-[320px] xl:w-[380px] bg-white border-r border-gray-100 flex flex-col shrink-0 overflow-y-auto">
+                {/* Sidebar: Landmark List (Desktop) */}
+                <aside className="hidden lg:flex lg:w-[320px] xl:w-[380px] bg-white border-r border-gray-100 flex-col shrink-0 overflow-y-auto h-full">
                     <div className="p-6 border-b border-gray-100">
                         <h1 className="text-xl font-bold text-gray-900 mb-1">Landmark Jakarta</h1>
                         <p className="text-gray-500 text-sm">Klik landmark untuk menuju lokasinya di peta</p>
@@ -103,9 +104,10 @@ const LandmarkPage = () => {
                                     {/* Thumbnail */}
                                     <div className="w-16 h-16 rounded-[10px] overflow-hidden shrink-0">
                                         <img
-                                            src={landmark.image}
+                                            src={landmark.image || PLACEHOLDER_IMAGE}
                                             alt={landmark.title}
-                                            className="w-full h-full object-cover"
+                                            className="w-full select-none h-full object-cover"
+                                            onError={(e) => { e.currentTarget.src = PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
                                         />
                                     </div>
                                     {/* Info */}
@@ -128,13 +130,13 @@ const LandmarkPage = () => {
                 </aside>
 
                 {/* Map */}
-                <div className="flex-1 relative min-h-[450px]">
+                <div className="flex-1 relative h-full min-h-[300px]">
                     <MapContainer
                         center={defaultCenter}
                         zoom={13}
                         scrollWheelZoom={true}
                         className="w-full h-full"
-                        style={{ minHeight: '450px' }}
+                        style={{ height: '100%' }}
                     >
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -152,9 +154,10 @@ const LandmarkPage = () => {
                                 <Popup>
                                     <div className="flex flex-col gap-2 min-w-[160px]">
                                         <img
-                                            src={landmark.image}
+                                            src={landmark.image || PLACEHOLDER_IMAGE}
                                             alt={landmark.title}
                                             className="w-full h-24 object-cover rounded-lg"
+                                            onError={(e) => { e.currentTarget.src = PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
                                         />
                                         <p className="font-bold text-gray-900 text-sm">{landmark.title}</p>
                                         <p className="text-gray-500 text-xs">{landmark.description}</p>
@@ -172,7 +175,7 @@ const LandmarkPage = () => {
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000]">
                             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-red-200">
                                 <MapPin className="w-4 h-4 text-red-500" />
-                                <span className="font-semibold text-gray-800 text-sm">{activeLandmark.title}</span>
+                                <span className="font-semibold text-gray-800 text-sm whitespace-nowrap">{activeLandmark.title}</span>
                                 <button
                                     onClick={() => setActiveLandmark(null)}
                                     className="ml-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
@@ -182,6 +185,51 @@ const LandmarkPage = () => {
                             </div>
                         </div>
                     )}
+
+                    {/* Mobile Landmark Carousel */}
+                    <div className="absolute bottom-6 left-0 right-0 z-[1000] lg:hidden">
+                        <style>{`
+                            .mobile-carousel::-webkit-scrollbar { display: none; }
+                        `}</style>
+                        <div className="flex overflow-x-auto gap-4 px-4 pb-2 snap-x snap-mandatory mobile-carousel" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                            {landmarks.map((landmark) => {
+                                const isActive = activeLandmark?.id === landmark.id;
+                                return (
+                                    <button
+                                        key={landmark.id}
+                                        onClick={() => handleLandmarkClick(landmark)}
+                                        className={`flex flex-col gap-3 p-3 rounded-2xl text-left transition-all duration-300 border bg-white shrink-0 w-[260px] snap-center shadow-lg ${
+                                            isActive
+                                                ? 'border-red-400 ring-4 ring-red-50'
+                                                : 'border-gray-100 opacity-95 hover:opacity-100'
+                                        }`}
+                                    >
+                                        <div className="w-full h-32 rounded-xl overflow-hidden shrink-0 relative">
+                                            <img
+                                                src={landmark.image || PLACEHOLDER_IMAGE}
+                                                alt={landmark.title}
+                                                className="w-full h-full select-none object-cover"
+                                                onError={(e) => { e.currentTarget.src = PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                                            />
+                                            {isActive && (
+                                                <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                                    <MapPin className="w-4 h-4 text-red-500" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h3 className={`font-semibold text-sm truncate ${isActive ? 'text-red-600' : 'text-gray-900'}`}>
+                                                {landmark.title}
+                                            </h3>
+                                            <p className="text-gray-500 text-xs mt-1 leading-relaxed line-clamp-2">
+                                                {landmark.description}
+                                            </p>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Bookmark, Map as MapIcon, ChevronRight, ChevronLeft } from 'lucide-react';
@@ -36,9 +36,24 @@ const MapController = ({ position, zoom }) => {
 
 const LandmarkExplorer = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [activeLandmark, setActiveLandmark] = useState(null);
     const scrollRef = useRef(null);
+    const sectionRef = useRef(null);
     const defaultCenter = [-6.1700, 106.8250];
+
+    useLayoutEffect(() => {
+        if (location.state?.scrollToLandmarkExplorer && sectionRef.current) {
+            
+            // Scroll instantly before the browser paints the first frame
+            sectionRef.current.scrollIntoView({ behavior: 'instant', block: 'start' });
+            
+            // If Lenis is already initialized, sync it immediately
+            if (window.lenis) {
+                window.lenis.scrollTo(sectionRef.current, { immediate: true });
+            }
+        }
+    }, [location]);
 
     const scroll = (direction) => {
         if (!scrollRef.current) return;
@@ -56,7 +71,7 @@ const LandmarkExplorer = () => {
     };
 
     return (
-        <section className="w-full py-16 px-4 md:px-8 max-w-7xl mx-auto font-poppins relative z-10 bg-white">
+        <section ref={sectionRef} id="landmark-explorer" className="w-full py-16 px-4 md:px-8 max-w-7xl mx-auto font-poppins relative z-10 bg-white">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                 <div>
@@ -97,7 +112,7 @@ const LandmarkExplorer = () => {
                                 <img
                                     src={landmark.image}
                                     alt={landmark.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className="w-full h-full select-none object-cover group-hover:scale-105 transition-transform duration-500"
                                     loading="lazy"
                                 />
                                 <div className="absolute top-2 right-2 bg-white w-7 h-7 rounded-full flex items-center justify-center shadow-md">
