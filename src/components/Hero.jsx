@@ -1,13 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Search, Star, ArrowRight } from 'lucide-react';
 
-// impor gambar
+// impor component
+import component2 from '../assets/components/starcomponent.png';
+
+// impor gambar judul
 import img1 from '../assets/hero-title1.png';
 import img2 from '../assets/hero-title2.png';
 import img3 from '../assets/hero-title3.png';
 import img4 from '../assets/hero-title4.png';
 import img5 from '../assets/hero-title5.png';
 import img6 from '../assets/hero-title6.png';
-import hero from '../assets/hero-image.png';
+
+// impor gambar floating cards
+import cardfly1 from '../assets/cardfly1.svg';
+import cardfly2 from '../assets/cardfly2.svg';
+import cardfly3 from '../assets/cardfly3.svg';
+import cardfly4 from '../assets/cardfly4.svg';
 
 const titleFrames = [
     { label: 'Batavia', image: img1 },
@@ -18,49 +27,45 @@ const titleFrames = [
     { label: 'Jakarta Digital', image: img6 },
 ];
 
-const timelineCards = [
-    {
-        title: 'Batavia',
-        description: 'Batavia adalah nama yang diberikan oleh penjajah Belanda untuk kota pelabuhan yang kemudian berkembang menjadi ibu kota Hindia Belanda',
-        positionClass: 'h-[273px] lg:mb-28',
-    },
-    {
-        title: 'Jayakarta',
-        description: 'Jayakarta adalah nama lama dari kota Jakarta sebelum diubah menjadi Batavia pada masa penjajahan Belanda',
-        positionClass: 'h-[230px] lg:mt-15',
-    },
-    {
-        title: 'Sunda Kelapa',
-        description: 'Sunda Kelapa adalah pelabuhan tua bersejarah di Jakarta yang terletak di muara Sungai Ciliwung, Jakarta Utara',
-        positionClass: 'h-[249px] lg:mt-3',
-    },
-    {
-        title: 'Jakarta Merdeka',
-        description: 'Jakarta adalah nama ibu kota Republik Indonesia yang sebelumnya dikenal dengan nama Batavia pada masa penjajahan Belanda',
-        positionClass: 'h-[249px] lg:-mt-15',
-    },
-];
+// Load all landmark images 1-20
+const imageModules = import.meta.glob('../assets/landmarkjakarta*.png', { eager: true, import: 'default' });
+const baseLandmarkImages = Object.keys(imageModules)
+    .sort((a, b) => {
+        const numA = parseInt(a.match(/landmarkjakarta(\d+)\.png/)[1], 10);
+        const numB = parseInt(b.match(/landmarkjakarta(\d+)\.png/)[1], 10);
+        return numA - numB;
+    })
+    .map(key => imageModules[key]);
 
-const SCROLL_STEP_DELTA = 35;
-const TITLE_SCROLL_COOLDOWN = 1000;
-const CARD_SCROLL_COOLDOWN = 500;
+// Duplicate for seamless infinite loop (3 sets to be safe)
+const landmarkImages = [...baseLandmarkImages, ...baseLandmarkImages, ...baseLandmarkImages];
+
+// ── Arc geometry constants ──
+const ARC_MAX_ROTATE = 15;     // max rotateZ in degrees
+const ARC_MAX_TRANSLATE_Y = 40; // max Y drop in px for arc curve
+const ARC_MIN_SCALE = 0.85;    // scale at edges
+const ARC_Z_BASE = 20;         // base z-index for center card
+const CARD_WIDTH = 200;
+const CARD_HEIGHT = 260;
+const CARD_GAP = 16;
+const AUTO_SCROLL_SPEED = 1;   // px per frame
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [visibleCardCount, setVisibleCardCount] = useState(0);
     const [opacity, setOpacity] = useState(1);
 
     const containerRef = useRef(null);
     const imgRef = useRef(null);
-    const heroRef = useRef(null);
-    const cardsRef = useRef(null);
-    const currentIndexRef = useRef(0);
-    const cardStageRef = useRef(0);
-    const sequencePhaseRef = useRef('cards'); 
     const fadeTimeoutRef = useRef(null);
-    const lastScrollStepAtRef = useRef(0);
-    const wheelDeltaRef = useRef(0);
-    const touchStartYRef = useRef(null);
+
+    // Arc carousel refs
+    const carouselRef = useRef(null);
+    const cardRefs = useRef([]);
+    const visibleCards = useRef(new Set());
+    const rafId = useRef(null);
+    const autoScrollRafId = useRef(null);
+    const resizeTimer = useRef(null);
+    const isHovered = useRef(false);
 
     const updateContainerWidth = useCallback((imgW, imgH) => {
         if (!containerRef.current) return;
@@ -71,170 +76,6 @@ const Hero = () => {
         }
     }, []);
 
-    const showTitleFrame = useCallback((nextIndex, animate = false) => {
-        const normalizedIndex = (nextIndex + titleFrames.length) % titleFrames.length;
-
-        if (fadeTimeoutRef.current) {
-            window.clearTimeout(fadeTimeoutRef.current);
-            fadeTimeoutRef.current = null;
-        }
-
-        if (!animate || normalizedIndex === currentIndexRef.current) {
-            currentIndexRef.current = normalizedIndex;
-            setCurrentIndex(normalizedIndex);
-            setOpacity(1);
-            return;
-        }
-
-        setOpacity(0);
-        fadeTimeoutRef.current = window.setTimeout(() => {
-            currentIndexRef.current = normalizedIndex;
-            setCurrentIndex(normalizedIndex);
-            setOpacity(1);
-            fadeTimeoutRef.current = null;
-        }, 400);
-    }, []);
-
-    const applyCardStage = useCallback((nextStage) => {
-        const stage = Math.max(0, Math.min(timelineCards.length, nextStage));
-        if (cardStageRef.current === stage) return;
-        cardStageRef.current = stage;
-        setVisibleCardCount(stage);
-    }, []);
-
-    const completeScrollSequence = useCallback(() => {
-        sequencePhaseRef.current = 'done';
-        wheelDeltaRef.current = 0;
-        cardStageRef.current = timelineCards.length;
-        setVisibleCardCount(timelineCards.length);
-        if (window.lenis) window.lenis.start();
-    }, []);
-
-    const stepCardSequence = useCallback((direction) => {
-        if (direction < 0) {
-            if (cardStageRef.current > 0) {
-                applyCardStage(cardStageRef.current - 1);
-            }
-            return;
-        }
-
-        const nextStage = Math.min(timelineCards.length, cardStageRef.current + 1);
-        applyCardStage(nextStage);
-
-        if (nextStage === timelineCards.length) {
-            window.setTimeout(completeScrollSequence, 360);
-        }
-    }, [applyCardStage, completeScrollSequence]);
-
-    const stepScrollSequence = useCallback((direction) => {
-        const now = window.performance.now();
-
-        if (sequencePhaseRef.current === 'done' || now - lastScrollStepAtRef.current < CARD_SCROLL_COOLDOWN) {
-            return;
-        }
-
-        lastScrollStepAtRef.current = now;
-        stepCardSequence(direction);
-    }, [stepCardSequence]);
-
-    useEffect(() => {
-        const isTouch = window.matchMedia && window.matchMedia('(hover: none)').matches;
-        
-        if (isTouch) {
-            // Pada mobile, putar animasi otomatis dan biarkan pengguna scroll secara native
-            const autoPlayInterval = setInterval(() => {
-                if (cardStageRef.current >= timelineCards.length) {
-                    completeScrollSequence();
-                    clearInterval(autoPlayInterval);
-                } else {
-                    applyCardStage(cardStageRef.current + 1);
-                }
-            }, 800);
-
-            return () => clearInterval(autoPlayInterval);
-        }
-
-        const shouldControlHeroScroll = () => sequencePhaseRef.current !== 'done';
-
-        // Check initially to freeze Lenis
-        if (shouldControlHeroScroll()) {
-            setTimeout(() => {
-                if (window.scrollY <= 10) {
-                    if (window.lenis) window.lenis.stop();
-                    window.scrollTo(0, 0);
-                } else {
-                    completeScrollSequence();
-                }
-            }, 150);
-        }
-
-        const handleWheel = (event) => {
-            if (!shouldControlHeroScroll() || event.deltaY === 0) return;
-            
-            // Allow native scroll if trying to scroll up when at the first card stage
-            if (event.deltaY < 0 && cardStageRef.current === 0) return;
-
-            event.preventDefault();
-            wheelDeltaRef.current += Math.abs(event.deltaY);
-
-            if (wheelDeltaRef.current < SCROLL_STEP_DELTA) return;
-
-            wheelDeltaRef.current = 0;
-            stepScrollSequence(event.deltaY > 0 ? 1 : -1);
-        };
-
-        const handleKeyDown = (event) => {
-            if (!shouldControlHeroScroll()) return;
-
-            const downKeys = ['ArrowDown', 'PageDown', 'End'];
-            const upKeys = ['ArrowUp', 'PageUp', 'Home'];
-            const isSpaceDown = event.key === ' ' && !event.shiftKey;
-            const isSpaceUp = event.key === ' ' && event.shiftKey;
-
-            if (downKeys.includes(event.key) || isSpaceDown) {
-                event.preventDefault();
-                stepScrollSequence(1);
-            }
-
-            if (upKeys.includes(event.key) || isSpaceUp) {
-                if (cardStageRef.current === 0) return;
-                event.preventDefault();
-                stepScrollSequence(-1);
-            }
-        };
-
-        const handleTouchStart = (event) => {
-            touchStartYRef.current = event.touches[0]?.clientY ?? null;
-        };
-
-        const handleTouchMove = (event) => {
-            if (!shouldControlHeroScroll() || touchStartYRef.current === null) return;
-
-            const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
-            const deltaY = touchStartYRef.current - currentY;
-
-            if (Math.abs(deltaY) < 36) return;
-            if (deltaY < 0 && cardStageRef.current === 0) return;
-
-            event.preventDefault();
-            touchStartYRef.current = currentY;
-            stepScrollSequence(deltaY > 0 ? 1 : -1);
-        };
-
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-        return () => {
-            window.removeEventListener('wheel', handleWheel);
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
-        };
-    }, [stepScrollSequence]);
-
-    // buat Perbarui lebar saat ukuran diubah
     useEffect(() => {
         const handleResize = () => {
             if (imgRef.current) {
@@ -245,20 +86,31 @@ const Hero = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, [updateContainerWidth]);
 
-    // Judul berputar otomatis setiap 5 detik tanpa peduli scroll state
+    const showTitleFrame = useCallback((nextIndex) => {
+        const normalizedIndex = (nextIndex + titleFrames.length) % titleFrames.length;
+        if (fadeTimeoutRef.current) {
+            window.clearTimeout(fadeTimeoutRef.current);
+            fadeTimeoutRef.current = null;
+        }
+        setOpacity(0);
+        fadeTimeoutRef.current = window.setTimeout(() => {
+            setCurrentIndex(normalizedIndex);
+            setOpacity(1);
+            fadeTimeoutRef.current = null;
+        }, 400);
+    }, []);
+
+    // Judul berputar otomatis setiap 5 detik
     useEffect(() => {
         const interval = setInterval(() => {
-            showTitleFrame(currentIndexRef.current + 1, true);
+            showTitleFrame(currentIndex + 1);
         }, 5000);
-
         return () => clearInterval(interval);
-    }, [showTitleFrame]);
+    }, [currentIndex, showTitleFrame]);
 
     useEffect(() => {
         return () => {
-            if (fadeTimeoutRef.current) {
-                window.clearTimeout(fadeTimeoutRef.current);
-            }
+            if (fadeTimeoutRef.current) window.clearTimeout(fadeTimeoutRef.current);
         };
     }, []);
 
@@ -266,29 +118,224 @@ const Hero = () => {
         updateContainerWidth(e.target.naturalWidth, e.target.naturalHeight);
     };
 
+    // ── Arc Coverflow: calculate & apply transforms ──
+    const applyArcTransforms = useCallback(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        const scrollLeft = carousel.scrollLeft;
+        const containerWidth = carousel.clientWidth;
+        const centerX = scrollLeft + containerWidth / 2;
+
+        // Only process visible cards + small buffer
+        visibleCards.current.forEach((idx) => {
+            const card = cardRefs.current[idx];
+            if (!card) return;
+
+            const cardCenterX = card.offsetLeft + card.offsetWidth / 2;
+            // Normalize offset: -1 (far left) to +1 (far right)
+            const halfContainer = containerWidth / 2;
+            const rawOffset = (cardCenterX - centerX) / halfContainer;
+            const offset = Math.max(-1, Math.min(1, rawOffset));
+
+            const rotateZ = offset * ARC_MAX_ROTATE;
+            const translateY = Math.abs(offset) * ARC_MAX_TRANSLATE_Y;
+            const scale = 1 - Math.abs(offset) * (1 - ARC_MIN_SCALE);
+            const zIndex = ARC_Z_BASE - Math.round(Math.abs(offset) * 10);
+
+            card.style.transform =
+                `translate3d(0, ${translateY}px, 0) rotateZ(${rotateZ}deg) scale(${scale})`;
+            card.style.zIndex = zIndex;
+        });
+    }, []);
+
+    // RAF-throttled scroll handler
+    const handleCarouselScroll = useCallback(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        // Seamless loop logic
+        const singleSetWidth = baseLandmarkImages.length * (CARD_WIDTH + CARD_GAP);
+        
+        // If we scrolled past the first set, seamlessly jump back one set
+        if (carousel.scrollLeft > singleSetWidth * 1.5) {
+            carousel.scrollLeft -= singleSetWidth;
+        } else if (carousel.scrollLeft < singleSetWidth * 0.5) {
+            // If we scrolled backwards too far, seamlessly jump forward one set
+            carousel.scrollLeft += singleSetWidth;
+        }
+
+        if (rafId.current) return; // Skip if frame already pending
+        rafId.current = requestAnimationFrame(() => {
+            applyArcTransforms();
+            rafId.current = null;
+        });
+    }, [applyArcTransforms]);
+
+    // ── IntersectionObserver: track which cards are visible ──
+    useEffect(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const idx = Number(entry.target.dataset.idx);
+                    if (entry.isIntersecting) {
+                        visibleCards.current.add(idx);
+                        entry.target.classList.add('arc-card--active');
+                    } else {
+                        visibleCards.current.delete(idx);
+                        entry.target.classList.remove('arc-card--active');
+                        // Reset transform for off-screen cards
+                        entry.target.style.transform = '';
+                        entry.target.style.zIndex = '';
+                    }
+                });
+                // Recalculate after visibility changes
+                applyArcTransforms();
+            },
+            {
+                root: carousel,
+                rootMargin: '0px 250px', // buffer ~1 card beyond viewport
+                threshold: 0,
+            }
+        );
+
+        cardRefs.current.forEach((card) => {
+            if (card) observer.observe(card);
+        });
+
+        return () => observer.disconnect();
+    }, [applyArcTransforms]);
+
+    // ── Auto-scroll loop ──
+    useEffect(() => {
+        const scrollLoop = () => {
+            const carousel = carouselRef.current;
+            if (carousel && !isHovered.current) {
+                // Increment scroll
+                carousel.scrollLeft += AUTO_SCROLL_SPEED;
+            }
+            autoScrollRafId.current = requestAnimationFrame(scrollLoop);
+        };
+        
+        autoScrollRafId.current = requestAnimationFrame(scrollLoop);
+        
+        return () => {
+            if (autoScrollRafId.current) cancelAnimationFrame(autoScrollRafId.current);
+        };
+    }, []);
+
+    // ── Scroll listener with RAF throttle ──
+    useEffect(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        carousel.addEventListener('scroll', handleCarouselScroll, { passive: true });
+
+        // Initial calculation
+        applyArcTransforms();
+
+        return () => {
+            carousel.removeEventListener('scroll', handleCarouselScroll);
+            if (rafId.current) {
+                cancelAnimationFrame(rafId.current);
+                rafId.current = null;
+            }
+        };
+    }, [handleCarouselScroll, applyArcTransforms]);
+
+    // ── Debounced resize ──
+    useEffect(() => {
+        const handleResize = () => {
+            if (resizeTimer.current) clearTimeout(resizeTimer.current);
+            resizeTimer.current = setTimeout(() => {
+                applyArcTransforms();
+            }, 300);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            if (resizeTimer.current) clearTimeout(resizeTimer.current);
+        };
+    }, [applyArcTransforms]);
+
+    // Scroll carousel to center of the middle set on mount
+    useEffect(() => {
+        const carousel = carouselRef.current;
+        if (!carousel) return;
+
+        // Small delay to ensure layout is ready
+        const timer = setTimeout(() => {
+            const singleSetWidth = baseLandmarkImages.length * (CARD_WIDTH + CARD_GAP);
+            // Start in the middle of the second set
+            const startPos = singleSetWidth + (singleSetWidth / 2) - (carousel.clientWidth / 2);
+            carousel.scrollLeft = Math.max(0, startPos);
+            applyArcTransforms();
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [applyArcTransforms]);
+
+    // Side padding so first/last card can reach center
+    const sidePadding =
+        typeof window !== 'undefined'
+            ? Math.max(window.innerWidth / 2 - CARD_WIDTH / 2, 100)
+            : 400;
+
     return (
-        <section ref={heroRef} className="w-full min-h-[85vh] lg:min-h-[1000px] flex flex-col items-center justify-start pt-10 overflow-hidden relative">
-            {/* Background Image g */}
-            <img 
-                src={hero} 
-                alt="" 
-                className="absolute pointer-events-none max-w-none"
-                style={{
-                    width: '1870px',
-                    height: '1390px',
-                    left: '-250px',
-                    bottom: '-150px',
-                    opacity: 1
-                }}
+        <section className="w-full flex flex-col items-center justify-start pt-16 pb-0 relative overflow-hidden">
+
+            {/* ── Floating Cards ── absolute ke section, di luar area teks ── */}
+            {/* Top-left: 30+ Budaya Betawi */}
+            <img
+                src={cardfly1}
+                alt="30+ Budaya Betawi"
+                className="hidden lg:block select-none absolute z-20"
+                style={{ left: '10%', top: '1%', width: 250, animation: 'float-card-1 8s ease-in-out infinite' }}
             />
-            <div className="flex flex-col px-4 md:px-6 items-center justify-center text-center mt-8 mb-12 relative z-10">
-       
-                <div className="flex items-center justify-center whitespace-nowrap gap-1 sm:gap-2 md:gap-4 lg:gap-5 xl:gap-6 text-2xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-[50px] font-extrabold text-black tracking-tight leading-[1.2] md:leading-[1.1]">
+            {/* Top-right: 50+ Kuliner Khas */}
+            <img
+                src={cardfly2}
+                alt="50+ Kuliner Khas"
+                className="hidden lg:block selecg-none absolute z-20"
+                style={{ right: '10%', top: '1%', width: 250, animation: 'float-card-2 9s ease-in-out infinite' }}
+            />
+            {/* Bottom-left: 6 Kota Sejarah */}
+            <img
+                src={cardfly3}
+                alt="6 Kota Sejarah"
+                className="hidden lg:block select-none absolute z-20"
+                style={{ left: '8%', top: '35%', width: 250, animation: 'float-card-3 8.5s ease-in-out infinite' }}
+            />
+            {/* Bottom-right: 200+ Landmark */}
+            <img
+                src={cardfly4}
+                alt="200+ Landmark"
+                className="hidden lg:block select-none absolute z-20"
+                style={{ right: '8%', top: '35%', width: 250, animation: 'float-card-4 9.5s ease-in-out infinite' }}
+            />
+
+            {/* ── Konten Tengah ── */}
+            <div className="relative z-10 flex flex-col items-center w-full max-w-4xl px-6 text-center">
+
+                {/* Badge */}
+                <div
+                    className="inline-flex items-center gap-2 items-center rounded-full px-4 py-2 text-xs md:text-sm font-semibold bg-gray-50 mb-6 anim-fade-up"
+                >
+                   <img src={component2} alt="Star" className="mr-1" />
+                    <p className="text-indigo-950">
+                        Jelajahi Sejarah, Budaya &amp; Kuliner
+                    </p>
+                </div>
+
+                {/* Judul Baris 1 */}
+                <div className="flex items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
                     <span>Dari Jejak</span>
-                    {/* Pembungkus untuk gambar*/}
                     <div
                         ref={containerRef}
-                        className="flex items-center justify-center h-6 sm:h-8 md:h-12 lg:h-16 xl:h-24 transition-[width] duration-500 ease-in-out"
+                        className="flex items-center justify-center h-10 sm:h-12 md:h-16 lg:h-[80px] transition-[width] duration-500 ease-in-out"
                     >
                         <img
                             ref={imgRef}
@@ -302,60 +349,91 @@ const Hero = () => {
                     <span>Menuju</span>
                 </div>
 
-                {/* Baris Kedua */}
-                <div className="mt-2 md:mt-4 lg:mt-5 xl:mt-6 text-2xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-[50px] font-extrabold text-black tracking-tight leading-[1.2] md:leading-[1.1]">
-                    Jakarta Kota Digital
+                {/* Judul Baris 2 */}
+                <div className="mt-2 flex items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
+                    <span>Jakarta</span>
+                    <div className="bg-blue-100 text-blue-600 rounded-sm px-2 py-1 flex items-center justify-center">
+                        <ArrowRight size={20} strokeWidth={3} className="md:w-6 md:h-6" />
+                    </div>
+                    <span className="overflow-hidden">Kota Digital</span>
                 </div>
-            </div>
 
-            {/* Search Bar and Cards Section */}
-            <div
-                className="w-full relative mt-16 flex flex-col items-center justify-start flex-1 w-full"
-            >
-                {/* Search Bar Overlapping */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-3/4 max-w-[684px] z-10">
-                    <div className="bg-white/70 backdrop-blur-lg backdrop-saturate-150 rounded-3xl flex items-center px-6 py-3 mt-8 md:py-4 shadow-[3px_3px_3px_rgba(0,0,0,0.1)] border border-black/10 focus-within:bg-white/60 focus-within:ring-2 focus-within:ring-white/80 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400 shrink-0 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
+                {/* Subtitle */}
+                <p
+                    className="mt-5 text-sm md:text-[15px]  max-w-sm md:max-w-md leading-relaxed anim-fade-in"
+                    style={{ animationDelay: '0.35s' }}
+                >
+                    Telusuri perjalanan panjang jakarta dari masa ke masa<br className="hidden md:block" />
+                    dan temukan cerita di setiap sudut kotanya.
+                </p>
+
+                {/* Search Bar */}
+                <div
+                    className="mt-7 w-full max-w-[520px] anim-fade-up"
+                    style={{ animationDelay: '0.55s' }}
+                >
+                    <div className="bg-white rounded-2xl flex items-center px-5 py-5 shadow-[0_4px_24px_rgba(0,0,0,0.10)] border border-gray-200 focus-within:ring-2 focus-within:ring-gray-300 transition-all duration-300 group">
+                        <Search className="text-gray-400 mr-3 shrink-0 transition-colors" size={18} />
                         <input
                             type="text"
                             placeholder="Jelajahi Sejarah, budaya, kuliner, dll"
-                            className="w-full bg-transparent outline-none text-gray-900 placeholder-gray-500 text-base md:text-lg font-medium"
+                            className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm md:text-base"
                         />
                     </div>
                 </div>
+            </div>
 
-
-                <div ref={cardsRef} className="absolute left-1/2 -translate-x-1/2 translate-y-1/3 w-full max-w-6xl px-4 z-10">
-                    <div className="flex flex-col md:flex-row items-stretch justify-center gap-4 md:gap-3">
-                        {timelineCards.map((card, index) => {
-                            const isVisible = index < visibleCardCount;
-
-                            return (
-                                <div
-                                    key={card.title}
-                                    aria-hidden={!isVisible}
-                                    className={`card-reveal w-full md:w-[281px] ${card.positionClass} shrink-0 bg-white/70 backdrop-blur-xs backdrop-saturate-150 rounded-[20px] p-[25px] border border-white/70 shadow-[0_8px_32px_rgba(0,0,0,0.08)] flex flex-col gap-[10px] hover:bg-white/75 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-16 pointer-events-none'}`}
-                                    style={{ transitionDelay: isVisible ? `${index * 90}ms` : '0ms' }}
-                                >
-                                    <h3 className="text-xl font-bold text-black">{card.title}</h3>
-                                    <p className="text-sm text-black leading-relaxed">
-                                        {card.description}
-                                    </p>
-                                    <a href="#" className="mt-auto inline-flex items-center justify-center gap-2 bg-red-500 hover:bg-red-700 text-white text-sm font-semibold py-2.5 px-5 rounded-full transition-colors duration-200">
-                                        Mulai Jelajah
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-                                    </a>
-                                </div>
-                            );
-                        })}
-                    </div>
+            {/* ── Arc Coverflow Carousel ── */}
+            <div
+                className="w-full mt-10 overflow-hidden"
+                style={{ perspective: '1200px' }}
+            >
+                <div
+                    ref={carouselRef}
+                    className="arc-carousel select-none flex items-end overflow-x-scroll"
+                    style={{
+                        gap: CARD_GAP,
+                        paddingLeft: sidePadding,
+                        paddingRight: sidePadding,
+                        paddingBottom: ARC_MAX_TRANSLATE_Y + 50,
+                        paddingTop: ARC_MAX_TRANSLATE_Y + 10,
+                        maskImage:
+                            'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                        WebkitMaskImage:
+                            'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                        // Optional: remove smooth behavior during auto scroll to prevent stutter
+                        scrollBehavior: 'auto'
+                    }}
+                    onMouseEnter={() => { isHovered.current = true; }}
+                    onMouseLeave={() => { isHovered.current = false; }}
+                    onTouchStart={() => { isHovered.current = true; }}
+                    onTouchEnd={() => { isHovered.current = false; }}
+                >
+                    {landmarkImages.map((src, i) => (
+                        <div
+                            key={i}
+                            ref={(el) => { cardRefs.current[i] = el; }}
+                            data-idx={i}
+                            className="arc-card shrink-0 rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.18)] border-[3px] border-white cursor-grab active:cursor-grabbing"
+                            style={{
+                                width: CARD_WIDTH,
+                                height: CARD_HEIGHT,
+                            }}
+                        >
+                            <img
+                                src={src}
+                                alt={`Landmark ${i + 1}`}
+                                className="w-full h-full object-cover pointer-events-none"
+                                draggable={false}
+                                loading="lazy"
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
-        
         </section>
     );
 };
 
 export default Hero;
+

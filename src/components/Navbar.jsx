@@ -81,7 +81,7 @@ const Navbar = () => {
                                 <a
                                     key={i}
                                     href={link.href}
-                                    className="relative text-black font-medium hover:text-red-600 transition-colors py-1 nav-link-animated"
+                                    className="relative text-black font-medium hover:text-blue-600 transition-colors py-1 nav-link-animated"
                                 >
                                     {link.label}
                                 </a>
@@ -106,7 +106,7 @@ const Navbar = () => {
                             {/* Tombol Menu Burger (Mobile) */}
                             <button
                                 onClick={toggleMobileMenu}
-                                className={`lg:hidden relative w-7 h-7 flex items-center justify-center text-gray-800 hover:text-red-600 transition-colors focus:outline-none ${isMobileMenuOpen ? 'burger-open' : ''}`}
+                                className={`lg:hidden relative w-7 h-7 flex items-center justify-center text-gray-800 hover:text-blue-600 transition-colors focus:outline-none ${isMobileMenuOpen ? 'burger-open' : ''}`}
                                 aria-label="Toggle menu"
                             >
                                 <span className="burger-line burger-line-top" />
@@ -123,7 +123,7 @@ const Navbar = () => {
                                 <a
                                     key={i}
                                     href={link.href}
-                                    className="mobile-link w-full text-center py-3 text-gray-900 font-medium hover:text-red-600 hover:bg-white/30 text-lg"
+                                    className="mobile-link w-full text-center py-3 text-gray-900 font-medium hover:text-blue-600 hover:bg-white/30 text-lg"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.label}

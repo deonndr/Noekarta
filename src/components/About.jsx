@@ -1,123 +1,132 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
+import { useInView, motion } from 'motion/react';
 import TitleImage from '../assets/Apa_Itu_Jakarta.png';
-import landmark from '../assets/landmark.png';
-import landmark2 from '../assets/landmark2.png';
-import landmark3 from '../assets/landmark3.png';
-import landmark4 from '../assets/landmark4.png';
-import landmark5 from '../assets/landmark5.png';
+import landmarkjakarta1 from '../assets/card_about1.png';
+import landmarkjakarta2 from '../assets/card_about3.png';
+import landmarkjakarta3 from '../assets/card_about2.png';
+import landmarkjakarta4 from '../assets/card_about4.png';
+import component1 from '../assets/components/component1.png';
 
-const CARDS = [landmark, landmark2, landmark3, landmark4, landmark5];
-
-const About = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const AnimatedCounter = ({ value, duration = 2 }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((current) => (current + 1) % CARDS.length);
-    }, 3000);
+    if (isInView) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
+        setCount(progress * value);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+  }, [isInView, value, duration]);
 
-    return () => clearInterval(interval);
-  }, []);
+  const formattedCount = count.toFixed(2).replace('.', ',');
 
+  return <span ref={ref}>{formattedCount}</span>;
+};
+
+const About = () => {
   return (
-    <section className="  px-4 md:px-8 max-w-7xl mx-auto">
-      {/* Title Section */}
-      <div className="flex justify-center mb-[20px]">
-        <img src={TitleImage} alt="Apa Itu Jakarta" className="w-[500px] h-[120px] object-contain select-none" />
-      </div>
+    <section className="px-4 md:px-8 max-w-7xl mx-auto py-20">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* Left Column: Images Grid */}
+        <div className="flex gap-4">
+          {/* Left sub-column */}
+          <div className="flex-1 flex flex-col gap-4 mt-0">
+            {/* Stats Card */}
+            <div className="bg-white rounded-2xl p-5 border border-white">
+              <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">
+                <AnimatedCounter value={11.01} duration={2} /> juta jiwa
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">Penduduk Kota Jakarta</p>
+            </div>
+            
+            <div className="rounded-[20px] p-1.5 bg-white s">
+              <img 
+                src={landmarkjakarta1} 
+                alt="Jakarta 1" 
+                className="w-full h-[280px] object-cover select-none rounded-[14px]"
+              />
+            </div>
+            
+            <div className="rounded-[20px] p-1.5 bg-white s">
+              <img 
+                src={landmarkjakarta2} 
+                alt="Jakarta 2" 
+                className="w-full h-[180px] object-cover select-none rounded-[14px]"
+              />
+            </div>
+          </div>
 
-      <div className="grid grid-cols-1 mt-8 md:grid-cols-2 gap-12">
-        {/* text sama tombol */}
-        <div className="space-y-6 mt-12">
-          <h2 className="text-[40px] font-bold text-gray-900 leading-tight">
-            Jakarta, Kota sejarah<br />& inovasi
-          </h2>
-          <p className="text-black text-2xl leading-relaxed">
-            Dari pelabuhan Sunda Kelapa hingga pusat Inovasi digital Asia Tenggara,
-            Jakarta memadukan warisan budaya dan semanat modern untuk masa depan
-            yang lebih baik
-          </p>
-          <button className="flex items-center gap-2 px-4 py-4 border border-red-500 text-red-600 rounded-[15px] font-medium hover:bg-red-50 transition-colors">
-            Selengkapnya tentang Jakarta
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          {/* Right sub-column */}
+          <div className="flex-1 flex flex-col gap-4 pt-10">
+            <div className="rounded-[20px] p-1.5 bg-white s">
+              <img 
+                src={landmarkjakarta3} 
+                alt="Jakarta 3" 
+                className="w-full h-[260px] object-cover select-none rounded-[14px]"
+              />
+            </div>
+            
+            <div className="rounded-[20px] p-1.5 bg-white s">
+              <img 
+                src={landmarkjakarta4} 
+                alt="Jakarta 4" 
+                className="w-full h-[220px] object-cover select-none rounded-[14px]"
+              />
+            </div>
+          </div>
         </div>
 
-        {/* card image */}
-        <div className="relative h-[500px] md:h-[550px] w-full flex mt-8  overflow-hidden justify-center">
-          <div className="relative w-[321px] h-[462px]" style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}>
-            {CARDS.map((cardImg, index) => {
-              const len = CARDS.length;
-              let offset = index - activeIndex;
+        {/* Right Column: Text & CTA */}
+        <div className="relative flex flex-col justify-center space-y-5 lg:pl-10">
+          {/* Floating Decorations (component1) */}
+          <motion.img 
+            src={component1} 
+            alt="Decoration" 
+            className="absolute -top-30 left-[35%] w-[70px] h-[70px] object-contain select-none"
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img 
+            src={component1} 
+            alt="Decoration" 
+            className="absolute -top-6 right-[10%] w-[60px] h-[60px] object-contain select-none"
+            animate={{ y: [0, 20, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          />
 
-              if (offset > Math.floor(len / 2)) offset -= len;
-              if (offset < -Math.floor(len / 2)) offset += len;
+          <div className="flex justify-start mb-2 relative z-10">
+            <img 
+              src={TitleImage} 
+              alt="Apa Itu Jakarta" 
+              className="h-[65px] md:h-[75px] object-contain select-none" 
+            />
+          </div>
 
-              let translateX = 0;
-              let translateY = 0;
-              let translateZ = 0;
-              let rotateY = 0;
-              let zIndex = 10;
-              let opacity = 1;
-
-              if (offset === 0) {
-                // Tengah
-                translateX = 0;
-                translateY = 0;
-                translateZ = 0;
-                rotateY = 0;
-                zIndex = 20;
-                opacity = 1;
-              } else if (offset === -1) {
-                // Kiri
-                translateX = -160;
-                translateY = 15;
-                translateZ = -100;
-                rotateY = 20;
-                zIndex = 10;
-                opacity = 0.5;
-              } else if (offset === 1) {
-                // Kanan
-                translateX = 160;
-                translateY = 15;
-                translateZ = -100;
-                rotateY = -20;
-                zIndex = 10;
-                opacity = 0.5;
-              } else if (offset < -1) {
-                // Sembunyi di kiri
-                translateX = -250;
-                translateY = 30;
-                translateZ = -200;
-                rotateY = 40;
-                zIndex = 0;
-                opacity = 0;
-              } else if (offset > 1) {
-                // Sembunyi di kanan
-                translateX = 250;
-                translateY = 30;
-                translateZ = -200;
-                rotateY = -40;
-                zIndex = 0;
-                opacity = 0;
-              }
-
-              return (
-                <img
-                  key={index}
-                  src={cardImg}
-                  alt={`Jakarta landmark ${index + 1}`}
-                  className="absolute top-0 left-0 w-[321px] h-[462px] rounded-[20px] object-cover select-none transition-all duration-700 ease-in-out"
-                  style={{
-                    transform: `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
-                    zIndex,
-                    opacity,
-                  }}
-                  onClick={() => setActiveIndex(index)}
-                />
-              );
-            })}
+          <h2 className="text-[32px] md:text-[38px] font-bold text-gray-900 leading-tight relative z-10">
+            Jakarta, Kota sejarah<br />& inovasi
+          </h2>
+          
+          <p className="text-[#5B5B5B] text-lg md:text-xl leading-relaxed relative z-10 max-w-[90%]">
+            Dari pelabuhan Sunda Kelapa hingga pusat Inovasi digital Asia Tenggara,
+            Jakarta memadukan warisan budaya dan semangat modern untuk masa depan
+            yang lebih baik
+          </p>
+          
+          <div className="pt-2 relative z-10">
+            <button className="flex items-center gap-2 px-8 py-3.5 bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
+              Selengkapnya tentang Jakarta
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>

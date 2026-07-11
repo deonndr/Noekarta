@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Bookmark, Map as MapIcon, ChevronRight, ChevronLeft } from 'lucide-react';
 import { landmarks } from '../data/landmarks';
+import StreetViewPortal from './StreetViewPortal';
 
 // Fix Leaflet default icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -38,6 +39,7 @@ const LandmarkExplorer = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeLandmark, setActiveLandmark] = useState(null);
+    const [streetViewTarget, setStreetViewTarget] = useState(null);
     const scrollRef = useRef(null);
     const sectionRef = useRef(null);
     const defaultCenter = [-6.1700, 106.8250];
@@ -139,13 +141,17 @@ const LandmarkExplorer = () => {
                 <MapContainer
                     center={defaultCenter}
                     zoom={13}
+                    minZoom={11}
                     scrollWheelZoom={true}
                     className="w-full h-full"
                     style={{ minHeight: '350px' }}
+                    maxBounds={[[-6.3934, 106.6894], [-6.0831, 106.9734]]}
+                    maxBoundsViscosity={1.0}
                 >
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        noWrap={true}
                     />
                     {landmarks.map((landmark) => (
                         <Marker
@@ -165,6 +171,15 @@ const LandmarkExplorer = () => {
                                     />
                                     <p className="font-bold text-gray-900 text-sm">{landmark.title}</p>
                                     <p className="text-gray-500 text-xs">{landmark.description}</p>
+                                    <button 
+                                        onClick={() => setStreetViewTarget(landmark)}
+                                        className="mt-1 flex items-center justify-center gap-1.5 bg-red-600 text-white py-1.5 px-3 rounded-lg text-xs font-semibold hover:bg-red-700 hover:shadow-lg transition-all duration-300"
+                                    >
+                                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                        Lihat 360°
+                                    </button>
                                 </div>
                             </Popup>
                         </Marker>
@@ -201,6 +216,7 @@ const LandmarkExplorer = () => {
                     </button>
                 </div>
             </div>
+            {streetViewTarget && <StreetViewPortal landmark={streetViewTarget} onClose={() => setStreetViewTarget(null)} />}
         </section>
     );
 };

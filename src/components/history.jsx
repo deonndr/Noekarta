@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
-import historyBg from '../assets/history-background.png';
+import React, { useState } from 'react';
+import { ArrowUpRight, PartyPopper } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import historyTitle from '../assets/history-title.png';
-import history1 from '../assets/history1.png';
-import history2 from '../assets/history2.png';
-import history3 from '../assets/history3.png';
-import history4 from '../assets/history4.png';
-import history5 from '../assets/history5.png';
-import history6 from '../assets/history6.png';
+import history1 from '../assets/history-image1.png';
+import history2 from '../assets/history-image2.png';
+import history3 from '../assets/history-image3.png';
+import history4 from '../assets/history-image4.png';
+import history5 from '../assets/history-image5.png';
+import history6 from '../assets/history-image6.png';
 import title1 from '../assets/hero-title1.png';
 import title2 from '../assets/hero-title2.png';
 import title3 from '../assets/hero-title3.png';
@@ -17,242 +18,164 @@ import title6 from '../assets/hero-title6.png';
 const historyData = [
   {
     id: 1,
-    titleImg: title3,
+    name: 'Sunda Kelapa',
+    titleImg: title1,
     year: 'Abad ke-5',
-    desc: 'Pelabuhan rempah dan pusat perdagangan Nusantara',
+    desc: 'Pelabuhan bersejarah di Jakarta Utara yang terletak di muara Sungai Ciliwung. Dulunya merupakan pelabuhan utama Kerajaan Sunda, tempat ini kini beroperasi sebagai pusat kapal layar kayu tradisional (Pinisi) antarpulau dan menjadi salah satu destinasi wisata sejarah yang menarik di ibu kota.',
     img: history1,
+    
   },
   {
     id: 2,
+    name: 'Jayakarta',
     titleImg: title2,
-    year: '1527',
-    desc: 'Pelabuhan baru dimuara sungai Ciliwung yang mulai berkembang',
+    year: 'Tahun 1527',
+    desc: 'Jayakarta berkembang sebagai bandar perdagangan rempah-rempah yang penting. Namun, riwayatnya berakhir pada 1619 ketika VOC di bawah pimpinan Jan Pieterszoon Coen menaklukkan wilayah tersebut, meratakannya dengan tanah, dan membangun kota baru bernama Batavia di atasnya.',
     img: history2,
+
   },
   {
     id: 3,
-    titleImg: title1,
+    name: 'Batavia',
+    titleImg: title3,
     year: '1619 - 1942',
-    desc: 'Markas utama VOC dan pusat pemerintahan Hindia - Belanda',
+    desc: 'Batavia adalah nama lama untuk ibu kota Indonesia, Jakarta, pada masa penjajahan Belanda. Nama ini diberikan oleh Vereenigde Oostindische Compagnie (VOC) pada tahun 1619 setelah menaklukkan Jayakarta, dan diambil dari nama suku bangsa Jermanik kuno (Batavi) yang dianggap sebagai leluhur bangsa Belanda.',
     img: history3,
+
   },
   {
     id: 4,
+    name: 'Jakarta Merdeka',
     titleImg: title4,
-    year: '1945 - 1960-an',
-    desc: 'Ibu kota republik yang bangkit dan membenah diri',
+    year: '1945 - 90-an',
+    desc: 'Jakarta Merdeka adalah transformasi dari kota kolonial menjadi pusat perjuangan dan ibu kota. Setelah Proklamasi 1945, namanya diubah dari pendudukan Jepang (Jakarta Tokubetsu Shi) menjadi Jakarta. Di sinilah tempat Ir. Soekarno membacakan naskah proklamasi yang mengawali kedaulatan penuh Republik Indonesia.',
     img: history4,
+
   },
   {
     id: 5,
+    name: 'Jakarta Modern',
     titleImg: title5,
-    year: '1960 - 2000-an',
-    desc: 'Pertumbuhan gesit menjadi kota Metropolitan dan dinamis',
+    year: '1990 - 2000-an',
+    desc: 'Jakarta telah bertransformasi menjadi megapolitan modern berskala global. Kota ini menawarkan pesona futuristik melalui integrasi transportasi publik mutakhir seperti MRT dan LRT, kawasan hijau terpadu seperti Hutan Kota GBK, perpustakaan berkualitas digital di Perpustakaan Jakarta serta kemudahan mobilitas melalui aplikasi terintegrasi dari Transjakarta.',
     img: history5,
+
   },
   {
     id: 6,
+    name: 'Jakarta Digital',
     titleImg: title6,
-    year: '2000 - Saat ini',
-    desc: 'Menuju kota Cerdas, Terhubung dan berkelanjutan',
+    year: '2000 - Saat Ini',
+    desc: 'Jakarta Digital merujuk pada transformasi digital yang dilakukan oleh Pemerintah Provinsi DKI Jakarta untuk mengubah wajah birokrasi, tata kelola, dan layanan publik dari sistem manual ke dalam ekosistem terpadu berbasis teknologi.',
     img: history6,
+
   },
 ];
 
 const History = () => {
-  const scrollRef = useRef(null);
-  const [canScrollRight, setCanScrollRight] = useState(true);
   const [activeCard, setActiveCard] = useState(1);
 
-  const scrollTimeoutRef = useRef(null);
-  const isScrollingRef = useRef(false);
-
-  // Custom smooth scroll helper dengan durasi yang bisa diatur (1000ms default)
-  const smoothScrollTo = (container, targetLeft, duration = 1000) => {
-    const startLeft = container.scrollLeft;
-    const distance = targetLeft - startLeft;
-    let startTime = null;
-
-    // Easing fungsi: sangat lambat di awal dan di akhir (ease-in-out cubic)
-    const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-    const animation = (currentTime) => {
-      if (startTime === null) startTime = currentTime;
-      const timeElapsed = currentTime - startTime;
-      const progress = Math.min(timeElapsed / duration, 1);
-      
-      container.scrollLeft = startLeft + (distance * easeInOutCubic(progress));
-
-      if (timeElapsed < duration) {
-        requestAnimationFrame(animation);
-      }
-    };
-
-    requestAnimationFrame(animation);
-  };
-
-  const isHoverDevice = () => window.matchMedia && window.matchMedia('(hover: hover)').matches;
-
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
-      
-      // Mencegah hover trigger saat sedang scrolling
-      isScrollingRef.current = true;
-      
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 300); 
-    }
-  };
-
-  const handleCardHover = (id, event) => {
-    if (!isHoverDevice()) return;
-    if (isScrollingRef.current) return;
-    
-    setActiveCard(id);
-    scrollCardIntoView(event.currentTarget);
-  };
-
-  const handleCardClick = (id, event) => {
-    // Toggle: klik card yang sudah aktif → tutup (balik ke default)
-    if (activeCard === id) {
-      setActiveCard(1);
-      return;
-    }
-    setActiveCard(id);
-    scrollCardIntoView(event.currentTarget);
-  };
-
-  const handleContainerMouseLeave = () => {
-    if (!isHoverDevice()) return;
-    setActiveCard(1);
-  };
-
-  const scrollCardIntoView = (card) => {
-    const container = scrollRef.current;
-    if (container && card) {
-      const containerRect = container.getBoundingClientRect();
-      const cardRect = card.getBoundingClientRect();
-
-      const isFullyVisible = (
-        cardRect.left >= containerRect.left &&
-        cardRect.right <= containerRect.right
-      );
-
-      if (!isFullyVisible) {
-        let scrollAmount = 0;
-        
-        if (cardRect.right > containerRect.right) {
-          scrollAmount = cardRect.right - containerRect.right + 24;
-        } else if (cardRect.left < containerRect.left) {
-          scrollAmount = cardRect.left - containerRect.left - 24;
-        }
-
-        const targetLeft = container.scrollLeft + scrollAmount;
-        smoothScrollTo(container, targetLeft, 800);
-      }
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(handleScroll, 100);
-    window.addEventListener('resize', handleScroll);
-    return () => {
-      clearTimeout(timer);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, []);
+  const activeData = historyData.find(d => d.id === activeCard);
 
   return (
-    <section
-      id="history"
-      className="pt-[100px] pb-[100px] bg-[#AC1717] relative overflow-hidden"
-      style={{
-        backgroundImage: `url(${historyBg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <div className="container mx-auto px-4 md:px-8 max-w-[1511px]">
+    <section id="history" className="pt-24 pb-24 bg-[#FAFAFA] relative overflow-hidden">
+      <div className="container mx-auto px-4 md:px-8 max-w-[1200px]">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center lg:items-start">
+          
+          {/* Left Column */}
+          <div className="w-full lg:w-1/2 flex flex-col">
+            {/* Title */}
+            <div className="mb-8">
+              <img src={historyTitle} alt="Lorong Waktu digital" className="h-12 md:h-16 object-contain" />
+            </div>
 
-        {/* Header */}
-        <div className="flex flex-col items-center text-center mb-[80px]">
-          <img
-            src={historyTitle}
-            alt="Lorong Waktu digital"
-            className="h-14 md:h-20 mb-6 select-none object-contain"
-          />
-          <p className="text-white text-lg md:text-xl font-medium max-w-2xl">
-            Jelajahi perjalanan panjang Jakarta Dari masa ke masa
-          </p>
-        </div>
+            {/* Banner */}
+            <div className="bg-white border border-gray-100 rounded-2xl p-5 flex items-center gap-4 mb-10 shadow-sm w-full md:w-[90%]">
+              <PartyPopper className="text-[#2563EB] shrink-0" size={24} />
+              <p className="text-gray-800 font-medium">
+                Setiap era membentuk cerita, setiap cerita membentuk Jakarta.
+              </p>
+            </div>
 
-        <div className="relative w-full">
-          {/* Carousel */}
-          <div
-            ref={scrollRef}
-            onScroll={handleScroll}
-            onMouseLeave={handleContainerMouseLeave}
-            className="flex overflow-x-auto pb-12 pt-4 px-4 -mx-4 gap-6 hide-scrollbar"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {historyData.map((item) => {
-              const isActive = activeCard === item.id;
-              return (
-                <div
-                  key={item.id}
-                  onMouseEnter={(e) => handleCardHover(item.id, e)}
-                  onClick={(e) => handleCardClick(item.id, e)}
-                  className={`relative min-w-[280px] md:min-w-[320px] h-[480px] bg-white rounded-[24px] cursor-pointer transition-shadow duration-500 flex-shrink-0 ${isActive ? 'shadow-[0_20px_40px_rgb(0,0,0,0.12)]' : 'shadow-[0_4px_20px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]'}`}
+            {/* List */}
+            <div className="flex flex-col w-full md:w-[90%]">
+              {historyData.map((item) => {
+                const isActive = activeCard === item.id;
+                return (
+                  <div key={item.id} className="relative">
+                    {item.id > 1 && <div className="h-px bg-gray-200 w-full" />}
+                    <div
+                      onClick={() => setActiveCard(item.id)}
+                      className={`flex items-center justify-between py-4 px-6 cursor-pointer transition-all rounded-r-xl ${
+                        isActive ? 'bg-[#F0F5FF]' : 'hover:bg-gray-50'
+                      }`}
+                    >
+                      {isActive && (
+                        <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#0F285C] rounded-r-full" />
+                      )}
+                      <div className="flex items-center gap-6">
+                        <span className={`text-lg font-medium ${isActive ? 'text-[#0F285C]' : 'text-gray-400'}`}>
+                          0{item.id}
+                        </span>
+                        <span className={`text-xl font-semibold ${isActive ? 'text-[#0F285C]' : 'text-gray-700'}`}>
+                          {item.name}
+                        </span>
+                      </div>
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-md ${isActive ? 'bg-blue-800 text-white' : 'bg-[#0F285C] text-white'}`}>
+                        <ArrowUpRight size={18} />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start pt-10 lg:pt-0">
+            <div className="relative w-full max-w-[506px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeData.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  {/* Image Container */}
-                  <div className={`absolute transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-0 ${isActive ? 'top-5 left-5 right-5 bottom-[calc(100%-190px)]' : 'top-0 left-0 right-0 bottom-0'}`}>
-                    <img
-                      src={item.img}
-                      alt={`History ${item.id}`}
-                      className={`w-full h-full select-none object-cover transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isActive ? 'rounded-[16px]' : 'rounded-[24px]'}`}
-                    />
-                    <div className={`absolute inset-0 bg-black/10 transition-all duration-500 pointer-events-none ${isActive ? 'opacity-0 rounded-[16px]' : 'opacity-100 rounded-[24px]'}`}></div>
-                  </div>
-
-                  {/* Nomor */}
-                  <div className={`absolute top-5 left-5 w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#e5252a] font-bold text-lg shadow-md transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-10 ${isActive ? 'opacity-0 scale-75' : 'opacity-100 scale-100'}`}>
-                    {item.id}
-                  </div>
-
-                  {/* Container kontent */}
-                  <div className={`absolute top-[190px] left-0 right-0 bottom-0 p-6 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-10 flex flex-col justify-start ${isActive ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
-                    <div className="relative inline-block self-start mb-3">
-                      <img src={item.titleImg} alt={`Title ${item.id}`} className="h-10 select-none md:h-12 object-contain" />
+                  {/* Image with Pre-shaped Blob */}
+                  <div className="relative aspect-[506/489] w-full mb-10 flex items-center justify-center">
+                    {/* Badge */}
+                    <div className="absolute bottom-2 left-2 md:bottom-6 md:left-10 w-20 h-20 md:w-[90px] md:h-[90px] bg-[#0F285C] text-white rounded-full flex items-center justify-center text-2xl md:text-[32px] font-bold z-10 border-[6px] border-[#FAFAFA]" style={{ boxShadow: '0px 4px 10px rgba(0,0,0,0.1)' }}>
+                      0{activeData.id}
                     </div>
-
-                    <div className="mt-2 mb-3">
-                      <span className="inline-block text-[20px] font-bold text-gray-900 pb-1">
-                        {item.year}
-                      </span>
+                    
+                    <div className="w-full h-full transition-all duration-1000 ease-in-out drop-shadow-[6px_4px_4px_rgba(0,0,0,0.25)]">
+                      <img 
+                        src={activeData.img} 
+                        alt={activeData.name}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
-
-                    <p className="text-[20px] text-gray-800 font-medium leading-relaxed">
-                      {item.desc}
-                    </p>
                   </div>
-                </div>
-              );
-            })}
+
+                  {/* Title & Badge */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+                    <img src={activeData.titleImg} alt={activeData.name} className="h-10 md:h-12 object-contain object-left" />
+                    <span className="bg-[#E5EDFF] ms-auto text-[#0F285C] px-5 py-2 rounded-xl text-sm font-semibold w-fit">
+                      {activeData.year}
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-700 leading-relaxed text-[15px] md:text-[16px]">
+                    {activeData.desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
-          {/* efek blur kanan*/}
-          <div
-            className={`absolute top-3  rounded-xl -right-6 bg-gradient-to-l from-[#AC1717] via-[#AC1717]/80 to-transparent bottom-11 w-32 md:w-48 pointer-events-none transition-opacity duration-500 hidden md:flex items-center justify-end pr-2 md:pr-4 ${canScrollRight ? 'opacity-100' : 'opacity-0'}`}
-          >
-          </div>
         </div>
-
       </div>
     </section>
   );
