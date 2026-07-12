@@ -118,7 +118,7 @@ const LandmarkExplorer = () => {
                                     loading="lazy"
                                 />
                                 <div className="absolute top-2 right-2 bg-white w-7 h-7 rounded-full flex items-center justify-center shadow-md">
-                                    <Bookmark className="w-3.5 h-3.5 text-red-500" />
+                                    <Bookmark className="w-3.5 h-3.5 text-blue-800" />
                                 </div>
                             </div>
                             <h3 className="font-semibold text-center text-gray-900 pb-1 text-sm md:text-base">
@@ -137,7 +137,7 @@ const LandmarkExplorer = () => {
             </div>
 
             {/* Map Preview Section */}
-            <div className="relative w-full h-[350px] md:h-[380px] rounded-[24px] overflow-hidden border border-red-400 bg-gray-100 shadow-sm">
+            <div className="relative w-full h-[350px] md:h-[380px] rounded-[24px] overflow-hidden border border-blue-400 bg-gray-100 shadow-sm">
                 <MapContainer
                     center={defaultCenter}
                     zoom={13}

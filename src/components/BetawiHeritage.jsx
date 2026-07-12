@@ -6,6 +6,7 @@ import betawi2 from '../assets/betawi2.png';
 import betawi3 from '../assets/betawi3.png';
 import betawi4 from '../assets/betawi4.png';
 import betawi5 from '../assets/betawi5.png';
+import component2 from '../assets/components/component2.png';
 
 const betawiData = [
   {
@@ -357,33 +358,38 @@ const BetawiHeritage = () => {
   const [selectedCard, setSelectedCard] = useState(null);
 
   return (
-    <section className="py-18 bg-white">
+    <section className="py-18 ">
       <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div className="flex flex-col md:flex-row md:justify-between mb-5 gap-4">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-2">
-              Betawi Heritage Hub
-            </h2>
-            <p className="text-gray-900 text-lg">
-              Kenali budaya Betawi yang kaya akan tradisi dan <br /> kearifan lokal.
+            <div className="inline-flex items-center gap-3 bg-[#E6EFFB] px-5 py-2.5 rounded-xl mb-4">
+              <img src={component2} alt="icon" className="w-6 h-6 object-contain" />
+              <h2 className="text-2xl md:text-3xl ml-3 font-ancizar font-semibold text-indigo-900">
+                Betawi Heritage Hub
+              </h2>
+            </div>
+            <p className="text-gray-800 text-lg font-medium max-w-lg leading-relaxed">
+              Kenali budaya Betawi yang kaya akan tradisi dan kearifan lokal.
             </p>
           </div>
-          <a
-            href="#"
-            className="text-[#e5252a] font-semibold hover:text-red-700 transition-colors flex items-center gap-1 group whitespace-nowrap"
-          >
-            Lihat Semua Budaya
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <div className="flex md:items-center">
+            <a
+              href="#"
+              className="text-indigo-900 mt-auto font-semibold hover:text-indigo-700 transition-colors flex items-center gap-1 group whitespace-nowrap text-lg"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
+              Lihat Semua Budaya
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
         </div>
 
         {/* Cards Carousel */}
@@ -398,11 +404,10 @@ const BetawiHeritage = () => {
               whileHover={{ y: -6 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="bg-white rounded-[20px] pt-[10px] pr-[10px] pb-[15px] pl-[10px] flex flex-col gap-[15px] cursor-pointer flex-shrink-0 snap-start"
+              className="bg-white rounded-[20px] p-2.5 shadow-lg flex flex-col gap-4 cursor-pointer flex-shrink-0 snap-start border border-gray-100"
               style={{
                 width: '245px',
                 height: '313px',
-                boxShadow: '0 0 7px 0 rgba(0,0,0,0.25)',
               }}
             >
               <motion.div
@@ -410,15 +415,31 @@ const BetawiHeritage = () => {
                 transition={{
                   layout: { type: 'spring', stiffness: 250, damping: 26, mass: 0.9 },
                 }}
-                className="relative rounded-xl overflow-hidden select-none flex-1"
+                className="relative rounded-xl overflow-hidden select-none flex-1 flex flex-col"
               >
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-full rounded-lg h-full object-cover object-top"
-                />
+                {item.id === 5 ? (
+                  <div className="flex-1 border border-gray-200  rounded-lg flex flex-col overflow-hidden">
+                    {[
+                      { label: 'Enyak / Nyak', value: 'Ibu' },
+                      { label: 'Babe', value: 'Ayah' },
+                      { label: 'Ngelebog', value: 'Makan' },
+                      { label: 'Bodong', value: 'Bohong' },
+                    ].map((row, i) => (
+                      <div key={i} className="flex flex-1 border-b border-gray-200 last:border-b-0 text-[11px]">
+                        <div className="w-1/2 px-1 py-1 border-r border-gray-200 flex items-center text-center justify-center text-gray-700">{row.label}</div>
+                        <div className="w-1/2 px-1 py-1 flex items-center text-center justify-center text-gray-700">{row.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full rounded-lg h-full object-cover object-top"
+                  />
+                )}
               </motion.div>
-              <h3 className="text-center font-semibold text-gray-900 text-lg">{item.title}</h3>
+              <h3 className="text-center font-semibold text-indigo-900 text-[17px] mb-1">{item.title}</h3>
             </motion.div>
           ))}
         </div>

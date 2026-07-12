@@ -48,7 +48,7 @@ const Navbar = () => {
 
     const navLinks = [
         { label: 'Beranda', href: '#' },
-        { label: 'Beranda', href: '#' },
+        { label: 'Tentang Jakarta', href: '#' },
         { label: 'Beranda', href: '#' },
         { label: 'Beranda', href: '#' },
     ];

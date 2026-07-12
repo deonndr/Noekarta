@@ -98,12 +98,12 @@ const History = () => {
             </div>
 
             {/* List */}
-            <div className="flex flex-col w-full md:w-[90%]">
+            <div className="flex font-ancizar flex-col w-full md:w-[90%]">
               {historyData.map((item) => {
                 const isActive = activeCard === item.id;
                 return (
                   <div key={item.id} className="relative">
-                    {item.id > 1 && <div className="h-px bg-gray-200 w-full" />}
+                    {item.id > 1 && <div className="h-px  bg-gray-200 w-full" />}
                     <div
                       onClick={() => setActiveCard(item.id)}
                       className={`flex items-center justify-between py-4 px-6 cursor-pointer transition-all rounded-r-xl ${
@@ -111,17 +111,17 @@ const History = () => {
                       }`}
                     >
                       {isActive && (
-                        <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#0F285C] rounded-r-full" />
+                        <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-blue-800 rounded-r-full" />
                       )}
                       <div className="flex items-center gap-6">
-                        <span className={`text-lg font-medium ${isActive ? 'text-[#0F285C]' : 'text-gray-400'}`}>
+                        <span className={`text-lg font-medium ${isActive ? 'text-indigo-950' : 'text-gray-400'}`}>
                           0{item.id}
                         </span>
                         <span className={`text-xl font-semibold ${isActive ? 'text-[#0F285C]' : 'text-gray-700'}`}>
                           {item.name}
                         </span>
                       </div>
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-md ${isActive ? 'bg-blue-800 text-white' : 'bg-[#0F285C] text-white'}`}>
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-md ${isActive ? 'bg-blue-800 text-white' : 'bg-indigo-950 text-white'}`}>
                         <ArrowUpRight size={18} />
                       </div>
                     </div>
@@ -145,7 +145,7 @@ const History = () => {
                   {/* Image with Pre-shaped Blob */}
                   <div className="relative aspect-[506/489] w-full mb-10 flex items-center justify-center">
                     {/* Badge */}
-                    <div className="absolute bottom-2 left-2 md:bottom-6 md:left-10 w-20 h-20 md:w-[90px] md:h-[90px] bg-[#0F285C] text-white rounded-full flex items-center justify-center text-2xl md:text-[32px] font-bold z-10 border-[6px] border-[#FAFAFA]" style={{ boxShadow: '0px 4px 10px rgba(0,0,0,0.1)' }}>
+                    <div className="absolute bottom-2 left-2 md:bottom-6 md:left-10 w-20 h-20 md:w-[90px] md:h-[90px] bg-indigo-950 text-white rounded-full flex items-center justify-center text-2xl md:text-[32px] font-bold z-10 border-[6px] border-[#FAFAFA]" style={{ boxShadow: '0px 4px 10px rgba(0,0,0,0.1)' }}>
                       0{activeData.id}
                     </div>
                     
@@ -161,13 +161,13 @@ const History = () => {
                   {/* Title & Badge */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
                     <img src={activeData.titleImg} alt={activeData.name} className="h-10 md:h-12 object-contain object-left" />
-                    <span className="bg-[#E5EDFF] ms-auto text-[#0F285C] px-5 py-2 rounded-xl text-sm font-semibold w-fit">
+                    <span className="bg-[#E5EDFF] shadow-xl ms-auto text-indigo-900 px-5 py-2 rounded-xl text-sm font-semibold w-fit">
                       {activeData.year}
                     </span>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-700 leading-relaxed text-[15px] md:text-[16px]">
+                  <p className="text-black leading-relaxed text-[15px] md:text-[16px]">
                     {activeData.desc}
                   </p>
                 </motion.div>

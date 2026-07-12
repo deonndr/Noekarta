@@ -156,7 +156,7 @@ const Hero = () => {
 
         // Seamless loop logic
         const singleSetWidth = baseLandmarkImages.length * (CARD_WIDTH + CARD_GAP);
-        
+
         // If we scrolled past the first set, seamlessly jump back one set
         if (carousel.scrollLeft > singleSetWidth * 1.5) {
             carousel.scrollLeft -= singleSetWidth;
@@ -219,9 +219,9 @@ const Hero = () => {
             }
             autoScrollRafId.current = requestAnimationFrame(scrollLoop);
         };
-        
+
         autoScrollRafId.current = requestAnimationFrame(scrollLoop);
-        
+
         return () => {
             if (autoScrollRafId.current) cancelAnimationFrame(autoScrollRafId.current);
         };
@@ -324,14 +324,14 @@ const Hero = () => {
                 <div
                     className="inline-flex items-center gap-2 items-center rounded-full px-4 py-2 text-xs md:text-sm font-semibold bg-gray-50 mb-6 anim-fade-up"
                 >
-                   <img src={component2} alt="Star" className="mr-1" />
+                    <img src={component2} alt="Star" className="mr-1" />
                     <p className="text-indigo-950">
                         Jelajahi Sejarah, Budaya &amp; Kuliner
                     </p>
                 </div>
 
                 {/* Judul Baris 1 */}
-                <div className="flex items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
+                <div className="flex font-ancizar items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
                     <span>Dari Jejak</span>
                     <div
                         ref={containerRef}
@@ -350,7 +350,7 @@ const Hero = () => {
                 </div>
 
                 {/* Judul Baris 2 */}
-                <div className="mt-2 flex items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
+                <div className="mt-2 flex font-ancizar items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
                     <span>Jakarta</span>
                     <div className="bg-blue-100 text-blue-600 rounded-sm px-2 py-1 flex items-center justify-center">
                         <ArrowRight size={20} strokeWidth={3} className="md:w-6 md:h-6" />

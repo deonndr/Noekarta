@@ -46,41 +46,41 @@ const About = () => {
               <h3 className="text-2xl font-bold text-gray-900 whitespace-nowrap">
                 <AnimatedCounter value={11.01} duration={2} /> juta jiwa
               </h3>
-              <p className="text-sm text-gray-500 mt-1">Penduduk Kota Jakarta</p>
+              <p className="text-sm text-gray-500 whitespace-nowrap mt-1">Penduduk Kota Jakarta</p>
             </div>
             
-            <div className="rounded-[20px] p-1.5 bg-white s">
+            <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
               <img 
                 src={landmarkjakarta1} 
                 alt="Jakarta 1" 
-                className="w-full h-[280px] object-cover select-none rounded-[14px]"
+                className="w-full h-[394px] object-cover border border-white  select-none rounded-[14px]"
               />
             </div>
             
-            <div className="rounded-[20px] p-1.5 bg-white s">
+            <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
               <img 
                 src={landmarkjakarta2} 
                 alt="Jakarta 2" 
-                className="w-full h-[180px] object-cover select-none rounded-[14px]"
+                className="w-full h-[176px] object-cover select-none rounded-[14px]"
               />
             </div>
           </div>
 
           {/* Right sub-column */}
           <div className="flex-1 flex flex-col gap-4 pt-10">
-            <div className="rounded-[20px] p-1.5 bg-white s">
+            <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
               <img 
-                src={landmarkjakarta3} 
+                src={landmarkjakarta4} 
                 alt="Jakarta 3" 
-                className="w-full h-[260px] object-cover select-none rounded-[14px]"
+                className="w-full h-[319px] object-cover select-none rounded-[14px]"
               />
             </div>
             
-            <div className="rounded-[20px] p-1.5 bg-white s">
+            <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
               <img 
-                src={landmarkjakarta4} 
+                src={landmarkjakarta3} 
                 alt="Jakarta 4" 
-                className="w-full h-[220px] object-cover select-none rounded-[14px]"
+                className="w-full h-[250px] object-cover select-none rounded-[14px]"
               />
             </div>
           </div>
@@ -123,7 +123,7 @@ const About = () => {
           </p>
           
           <div className="pt-2 relative z-10">
-            <button className="flex items-center gap-2 px-8 py-3.5 bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
+            <button className="flex items-center gap-2 px-8 py-3.5 cursor-pointer bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
               Selengkapnya tentang Jakarta
               <ChevronRight className="w-5 h-5" />
             </button>

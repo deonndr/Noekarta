@@ -17,6 +17,15 @@ body::-webkit-scrollbar {
 .font-poppins {
     font-family: 'Poppins', sans-serif;
 }
+.font-ancizar {
+    font-family: 'Ancizar', serif;
+}
+
+/* warna kustom */
+.color-primary1 {
+    color: #0F285C;
+}
+
 
 /* Animasi Navbar  */
 

@@ -5,6 +5,8 @@ import kuliner2 from '../assets/kuliner2.png';
 import kuliner3 from '../assets/kuliner3.png';
 import kuliner4 from '../assets/kuliner4.png';
 import kuliner5 from '../assets/kuliner5.png';
+import cardfly from '../assets/cardfly2.svg';
+import component1 from '../assets/components/component1.png';
 
 const kulinerData = [
   {
@@ -37,17 +39,23 @@ const kulinerData = [
     img: kuliner5,
     desc: 'disajikan pada acara khusus Seperti upacara pernikahan',
   },
+  {
+    id: 6,
+    title: 'Roti Buaya',
+    img: kuliner5,
+    desc: 'disajikan pada acara khusus Seperti upacara pernikahan',
+  },
 ];
 
 /* Bookmark Icon SVG */
 const BookmarkIcon = () => (
   <svg
-    width="16"
-    height="16"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="2.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -65,105 +73,117 @@ const KulinerJakarta = () => {
   };
 
   return (
-    <section className="pb-16 bg-white">
+    <section className="py-20 bg-[#fafafa]">
       <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Column */}
+          <div className="lg:col-span-4 mb-10 relative flex flex-col justify-center h-full">
+            {/* cardfly animation */}
+            <div className="relative mb-6 h-[80px] w-full">
+               <img
+                  src={cardfly}
+                  alt="50+ Kuliner Khas"
+                  className="absolute bottom-10 left-0 select-none z-20 w-[250px]"
+                  style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
+               />
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-gray-900 mb-6 leading-tight tracking-tight font-ancizar">
               Kuliner Jakarta
             </h2>
-            <p className="text-gray-900 text-lg">
+            <p className="text-gray-700 text-xl lg:text-2xl mb-10 max-w-md">
               Cicipi kuliner khas Betawi dan Jakarta
             </p>
+            
+            <a href="#" className="bg-[#0f285e] hover:bg-[#0a1b40] text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center w-fit gap-2 transition-colors">
+              Lihat Semua Kuliner
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+
+            {/* component1 decorations */}
+            <div className="absolute -bottom-1 left-5 w-[80px] h-[80px]">
+              <motion.img 
+                src={component1} 
+                alt="Decoration" 
+                className="w-full h-full object-contain select-none opacity-50"
+                animate={{ y: [0, -15, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </div>
+            <div className="absolute -bottom-10 left-40 w-[60px] h-[60px]">
+              <motion.img 
+                src={component1} 
+                alt="Decoration" 
+                className="w-full h-full object-contain select-none opacity-50"
+                animate={{ y: [0, 20, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              />
+            </div>
           </div>
-          <a
-            href="#"
-            className="text-[#e5252a] font-semibold hover:text-red-700 transition-colors flex items-center gap-1 group whitespace-nowrap"
-          >
-            Lihat Semua Kuliner
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        </div>
 
-        {/* Cards Carousel */}
-        <div
-          className="flex overflow-x-auto gap-4 md:gap-6 pb-8 pt-4 px-2 -mx-2 snap-x snap-mandatory"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {kulinerData.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
-              whileHover={{ y: -6 }}
-              whileTap={{ scale: 0.97 }}
-              className="bg-white rounded-[20px] flex flex-col flex-shrink-0 snap-start"
-              style={{
-                width: '245px',
-                padding: '10px 10px 15px 10px',
-                gap: '15px',
-                boxShadow: '0 0 7px 0 rgba(0,0,0,0.25)',
-              }}
-            >
-              {/* Image */}
+          {/* Right Column: Cards Grid */}
+          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-4 lg:gap-5 justify-items-center md:justify-items-center lg:justify-items-start w-full">
+            {kulinerData.map((item) => (
               <div
-                className="relative rounded-[14px] overflow-hidden select-none"
-                style={{ height: '170px' }}
+                key={item.id}
+                className="bg-white flex flex-col overflow-hidden hover:-translate-y-1 transition-transform duration-300 w-full max-w-[245px]"
+                style={{
+                  height: '323px',
+                  borderRadius: '20px',
+                  padding: '10px 10px 15px 10px',
+                  gap: '15px',
+                  boxShadow: '0px 0px 7px 0px rgba(0,0,0,0.25)',
+                }}
               >
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                  draggable="false"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="flex flex-col gap-2 px-1" style={{ flex: 1 }}>
-                <h3 className="font-bold text-gray-900 text-base leading-tight">
-                  {item.title}
-                </h3>
-                <p className="text-gray-500 text-xs leading-relaxed" style={{ fontSize: '12px' }}>
-                  {item.desc}
-                </p>
-              </div>
-
-              {/* Save Button */}
-              <div className="px-1">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => toggleSave(item.id)}
-                  className="flex items-center gap-2 cursor-pointer"
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '10px',
-                    border: `1.5px solid ${savedItems.includes(item.id) ? '#e5252a' : '#e5252a'}`,
-                    backgroundColor: savedItems.includes(item.id) ? '#fef2f2' : 'transparent',
-                    color: '#e5252a',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    fontFamily: 'inherit',
-                    transition: 'background-color 0.2s ease',
-                  }}
+                {/* Image */}
+                <div
+                  className="relative rounded-[12px] overflow-hidden select-none"
+                  style={{ height: '140px' }}
                 >
-                  <BookmarkIcon />
-                  {savedItems.includes(item.id) ? 'Tersimpan' : 'Simpan ke Inventory'}
-                </motion.button>
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    draggable="false"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col gap-1 px-1" style={{ flex: 1 }}>
+                  <h3 className="font-bold text-gray-900 text-[15px] leading-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-500 text-[12px] leading-relaxed line-clamp-3">
+                    {item.desc}
+                  </p>
+                </div>
+
+                {/* Save Button */}
+                <div className="px-1 mt-auto">
+                  <button
+                    onClick={() => toggleSave(item.id)}
+                    className="flex items-center justify-center gap-1.5 cursor-pointer w-full transition-colors"
+                    style={{
+                      padding: '8px',
+                      borderRadius: '8px',
+                      border: '1px solid #3b82f6',
+                      backgroundColor: savedItems.includes(item.id) ? '#eff6ff' : 'transparent',
+                      color: '#3b82f6',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    <BookmarkIcon />
+                    {savedItems.includes(item.id) ? 'Tersimpan' : 'Simpan ke Inventory'}
+                  </button>
+                </div>
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
+          
         </div>
       </div>
     </section>
