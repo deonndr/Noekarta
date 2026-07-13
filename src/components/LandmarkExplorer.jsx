@@ -5,6 +5,7 @@ import L from 'leaflet';
 import { Bookmark, Map as MapIcon, ChevronRight, ChevronLeft } from 'lucide-react';
 import { landmarks } from '../data/landmarks';
 import StreetViewPortal from './StreetViewPortal';
+import cardfly from '../assets/cardfly4.svg';
 
 // Fix Leaflet default icon
 delete L.Icon.Default.prototype._getIconUrl;
@@ -46,10 +47,10 @@ const LandmarkExplorer = () => {
 
     useLayoutEffect(() => {
         if (location.state?.scrollToLandmarkExplorer && sectionRef.current) {
-            
+
             // Scroll instantly before the browser paints the first frame
             sectionRef.current.scrollIntoView({ behavior: 'instant', block: 'start' });
-            
+
             // If Lenis is already initialized, sync it immediately
             if (window.lenis) {
                 window.lenis.scrollTo(sectionRef.current, { immediate: true });
@@ -73,21 +74,23 @@ const LandmarkExplorer = () => {
     };
 
     return (
-        <section ref={sectionRef} id="landmark-explorer" className="w-full py-16 px-4 md:px-8 max-w-7xl mx-auto font-poppins relative z-10 bg-white">
+        <section ref={sectionRef} id="landmark-explorer" className="w-full py-16 px-4 md:px-8 max-w-7xl mx-auto font-poppins relative z-10">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                 <div>
-                    <h2 className="text-3xl md:text-[32px] font-bold text-gray-900 mb-2">
+                    <h2 className="text-3xl md:text-[32px] font-ancizar font-bold text-gray-900 mb-2">
                         Jakarta Landmark Explorer
                     </h2>
-                    <p className="text-gray-600 text-lg">
+                    <p className=" text-lg">
                         Temukan Landmark Iconik Jakarta dan simpan favoritmu
                     </p>
                 </div>
-                <button onClick={handleOpenMap} className="flex items-center justify-center gap-2 px-6 py-2.5 border border-red-500 text-red-500 rounded-full font-medium hover:bg-red-50 transition-colors shrink-0">
-                    Lihat Semua Landmark
-                    <ChevronRight className="w-4 h-4" />
-                </button>
+                <img src={cardfly}
+                    alt="landmark"
+                    className="select-none w-[230px]"
+                    style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
+
+                />
             </div>
 
             {/* Horizontal Scroll */}
@@ -171,7 +174,7 @@ const LandmarkExplorer = () => {
                                     />
                                     <p className="font-bold text-gray-900 text-sm">{landmark.title}</p>
                                     <p className="text-gray-500 text-xs">{landmark.description}</p>
-                                    <button 
+                                    <button
                                         onClick={() => setStreetViewTarget(landmark)}
                                         className="mt-1 flex items-center justify-center gap-1.5 bg-red-600 text-white py-1.5 px-3 rounded-lg text-xs font-semibold hover:bg-red-700 hover:shadow-lg transition-all duration-300"
                                     >

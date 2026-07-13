@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { ChevronLeft, MapPin } from 'lucide-react';
@@ -43,6 +43,7 @@ const LandmarkPage = () => {
     const navigate = useNavigate();
     const [activeLandmark, setActiveLandmark] = useState(null);
     const [streetViewTarget, setStreetViewTarget] = useState(null);
+    const markerRefs = useRef({});
     const defaultCenter = [-6.1700, 106.8250];
 
     const handleBack = () => {
@@ -53,6 +54,13 @@ const LandmarkPage = () => {
         setActiveLandmark(landmark);
     };
 
+    useEffect(() => {
+        if (activeLandmark) {
+            const marker = markerRefs.current[activeLandmark.id];
+            if (marker) marker.openPopup();
+        }
+    }, [activeLandmark]);
+
     return (
         <div className="h-screen bg-white font-poppins flex flex-col overflow-hidden">
             {/* Custom Header*/}
@@ -61,7 +69,7 @@ const LandmarkPage = () => {
                     {/* Back Button */}
                     <button
                         onClick={handleBack}
-                        className="flex items-center gap-2 text-gray-700 hover:text-red-600 font-medium transition-colors"
+                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
                     >
                         <ChevronLeft className="w-5 h-5" />
                         <span className="text-sm md:text-base">Kembali</span>
@@ -72,11 +80,6 @@ const LandmarkPage = () => {
                         <img src={logo} alt="Noekarta" className="h-8 w-auto" />
                     </a>
 
-                    {/* Title Right */}
-                    <div className="flex items-center gap-2 text-gray-500 text-sm">
-                        <MapPin className="w-4 h-4 text-red-500" />
-                        <span className="hidden md:inline">Jakarta Landmark Explorer</span>
-                    </div>
                 </div>
             </header>
 
@@ -153,6 +156,7 @@ const LandmarkPage = () => {
                                 key={landmark.id}
                                 position={landmark.position}
                                 icon={redIcon}
+                                ref={(ref) => { markerRefs.current[landmark.id] = ref; }}
                                 eventHandlers={{
                                     click: () => handleLandmarkClick(landmark),
                                 }}

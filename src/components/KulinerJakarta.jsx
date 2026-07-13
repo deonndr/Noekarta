@@ -5,6 +5,7 @@ import kuliner2 from '../assets/kuliner2.png';
 import kuliner3 from '../assets/kuliner3.png';
 import kuliner4 from '../assets/kuliner4.png';
 import kuliner5 from '../assets/kuliner5.png';
+import kuliner6 from '../assets/kuliner6.jpg';
 import cardfly from '../assets/cardfly2.svg';
 import component1 from '../assets/components/component1.png';
 
@@ -41,9 +42,9 @@ const kulinerData = [
   },
   {
     id: 6,
-    title: 'Roti Buaya',
-    img: kuliner5,
-    desc: 'disajikan pada acara khusus Seperti upacara pernikahan',
+    title: 'Es Selendang Mayang',
+    img: kuliner6,
+    desc: 'kue kenyal dari tepung beras, santan, dan air gula merah',
   },
 ];
 
