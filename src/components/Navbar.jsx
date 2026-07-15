@@ -49,8 +49,10 @@ const Navbar = () => {
     const navLinks = [
         { label: 'Beranda', href: '#' },
         { label: 'Tentang Jakarta', href: '#' },
-        { label: 'Beranda', href: '#' },
-        { label: 'Beranda', href: '#' },
+        { label: 'Sejarah', href: '#' },
+        { label: 'Budaya', href: '#' },
+        { label: 'Kuliner', href: '#' },
+        { label: 'NoeQuiz', href: '#' },
     ];
 
     return (
@@ -76,7 +78,7 @@ const Navbar = () => {
                         </div>
 
                         {/* Tautan Navigasi (Desktop) */}
-                        <div className="hidden lg:flex items-center gap-8 lg:gap-12 absolute left-1/2 -translate-x-1/2">
+                        <div className="hidden whitespace-nowrap lg:flex items-center gap-8 lg:gap-12 absolute left-1/2 -translate-x-1/2">
                             {navLinks.map((link, i) => (
                                 <a
                                     key={i}

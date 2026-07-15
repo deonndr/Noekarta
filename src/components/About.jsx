@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { useInView, motion } from 'motion/react';
 import TitleImage from '../assets/Apa_Itu_Jakarta.png';
@@ -34,6 +35,7 @@ const AnimatedCounter = ({ value, duration = 2 }) => {
 };
 
 const About = () => {
+  const navigate = useNavigate();
   return (
     <section className="px-4 md:px-8 max-w-7xl mx-auto py-20">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -112,7 +114,7 @@ const About = () => {
             />
           </div>
 
-          <h2 className="text-[32px] md:text-[38px] font-bold text-gray-900 leading-tight relative z-10">
+          <h2 className="text-[32px] md:text-[38px] font-ancizar font-bold text-gray-900 leading-tight relative z-10">
             Jakarta, Kota sejarah<br />& inovasi
           </h2>
           
@@ -123,7 +125,7 @@ const About = () => {
           </p>
           
           <div className="pt-2 relative z-10">
-            <button className="flex items-center gap-2 px-8 py-3.5 cursor-pointer bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
+            <button onClick={() => navigate('/apa-itu-jakarta')} className="flex items-center gap-2 px-8 py-3.5 cursor-pointer bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
               Selengkapnya tentang Jakarta
               <ChevronRight className="w-5 h-5" />
             </button>

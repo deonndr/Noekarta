@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import logo from '../assets/logo-noekarta2.png';
 
 gsap.registerPlugin(useGSAP);
 
 const StreetViewPortal = ({ landmark, onClose }) => {
-    const [showIframe, setShowIframe] = useState(false);
+    const [loadedUrl, setLoadedUrl] = useState('');
     
     const containerRef = useRef(null);
     const overlayRef = useRef(null);
@@ -19,13 +20,15 @@ const StreetViewPortal = ({ landmark, onClose }) => {
     
     const isClosingRef = useRef(false);
 
+    // Gunakan koordinat khusus Street View jika ada, kalau tidak gunakan koordinat pin
+    const svLat = landmark?.streetViewPosition ? landmark.streetViewPosition[0] : landmark?.position[0];
+    const svLng = landmark?.streetViewPosition ? landmark.streetViewPosition[1] : landmark?.position[1];
+    const streetViewUrl = landmark ? `https://maps.google.com/maps?q=${svLat},${svLng}&layer=c&cbll=${svLat},${svLng}&cbp=12,0,0,0,0&output=svembed` : '';
+    const iframeLoaded = loadedUrl === streetViewUrl;
+
     useEffect(() => {
         if (landmark) {
             isClosingRef.current = false;
-            const timer = setTimeout(() => setShowIframe(true), 1000);
-            return () => clearTimeout(timer);
-        } else {
-            setShowIframe(false);
         }
     }, [landmark]);
 
@@ -70,21 +73,17 @@ const StreetViewPortal = ({ landmark, onClose }) => {
     }, { dependencies: [landmark], scope: containerRef });
 
     useGSAP(() => {
-        if (showIframe) {
+        if (iframeLoaded) {
+            // Once iframe is fully loaded, transition background and iframe
             gsap.to(bgImageRef.current, { opacity: 0, scale: 1.2, duration: 1.5, ease: 'power2.inOut' });
             if (iframeRef.current) {
-                gsap.fromTo(iframeRef.current, { opacity: 0 }, { opacity: 1, duration: 1, delay: 0.3, ease: 'power2.inOut' });
+                gsap.fromTo(iframeRef.current, { opacity: 0 }, { opacity: 1, duration: 1, ease: 'power2.inOut' });
             }
         } else {
             gsap.set(bgImageRef.current, { opacity: 1, scale: 1 });
+            if (iframeRef.current) gsap.set(iframeRef.current, { opacity: 0 });
         }
-    }, { dependencies: [showIframe], scope: containerRef });
-
-    // Gunakan koordinat khusus Street View jika ada, kalau tidak gunakan koordinat pin
-    const svLat = landmark?.streetViewPosition ? landmark.streetViewPosition[0] : landmark?.position[0];
-    const svLng = landmark?.streetViewPosition ? landmark.streetViewPosition[1] : landmark?.position[1];
-
-    const streetViewUrl = landmark ? `https://maps.google.com/maps?q=${svLat},${svLng}&layer=c&cbll=${svLat},${svLng}&cbp=12,0,0,0,0&output=svembed` : '';
+    }, { dependencies: [iframeLoaded], scope: containerRef });
 
     if (typeof document === 'undefined' || !landmark) return null;
 
@@ -105,29 +104,40 @@ const StreetViewPortal = ({ landmark, onClose }) => {
                 />
 
                 {/* Google Street View iframe */}
-                {showIframe && (
-                    <iframe
-                        ref={iframeRef}
-                        src={streetViewUrl}
-                        className="absolute inset-0 w-full h-full z-10 border-0"
-                        allowFullScreen
-                        loading="lazy"
-                    ></iframe>
+                <iframe
+                    ref={iframeRef}
+                    src={streetViewUrl}
+                    className="absolute -top-[140px] left-0 w-full h-[calc(100%+140px)] z-10 border-0"
+                    allowFullScreen
+                    loading="eager"
+                    allow="fullscreen"
+                    onLoad={() => setLoadedUrl(streetViewUrl)}
+                ></iframe>
+
+                {/* Loading Spinner */}
+                {!iframeLoaded && (
+                    <div className="absolute inset-0 z-[15] flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none text-white">
+                        <Loader2 className="w-10 h-10 animate-spin text-blue-500 mb-4" />
+                        <p className="text-sm font-medium tracking-wide">Memuat Panorama 360°...</p>
+                    </div>
                 )}
 
                 {/* UI Overlay */}
                 <div className="absolute top-0 left-0 right-0 p-4 md:p-6 z-20 flex justify-between items-start pointer-events-none">
                     <div
                         ref={uiRef}
-                        className="bg-black/60 backdrop-blur-md px-5 py-3 rounded-2xl text-white pointer-events-auto shadow-2xl border border-white/10 max-w-md"
+                        className="bg-black/60 backdrop-blur-md px-5 py-4 md:px-6 md:py-5 rounded-2xl text-white pointer-events-auto shadow-2xl border border-white/10 max-w-md"
                     >
-                        <h2 className="text-lg md:text-xl font-bold flex items-center gap-3">
-                            {landmark.title}
-                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider bg-red-600 px-2 py-0.5 rounded text-white">
+                        <img src={logo} alt="Noekarta" className="mb-4 h-6 select-none object-contain md:h-7" />
+                        <div className="flex flex-wrap items-center gap-3">
+                            <h2 className="text-lg md:text-xl font-bold leading-tight">
+                                {landmark.title}
+                            </h2>
+                            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider bg-red-600 px-2 py-0.5 rounded text-white shrink-0">
                                 360° Street View
                             </span>
-                        </h2>
-                        <p className="text-xs text-gray-300 mt-1 hidden md:block leading-relaxed">
+                        </div>
+                        <p className="text-xs text-gray-300 mt-2 hidden md:block leading-relaxed">
                             {landmark.description}
                         </p>
                     </div>
@@ -135,10 +145,10 @@ const StreetViewPortal = ({ landmark, onClose }) => {
                     <button
                         ref={btnRef}
                         onClick={handleClose}
-                        className="bg-white/10 hover:bg-red-600 backdrop-blur-md text-white p-3 rounded-full shadow-lg transition-colors pointer-events-auto flex items-center justify-center cursor-pointer border border-white/20 group"
+                        className="bg-white/10 hover:bg-red-600 backdrop-blur-md text-white p-3 md:p-4 rounded-full shadow-lg transition-colors pointer-events-auto flex items-center justify-center cursor-pointer border border-white/20 group shrink-0"
                         title="Tutup Street View"
                     >
-                        <X className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <X className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform" />
                     </button>
                 </div>
             </div>

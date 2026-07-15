@@ -136,27 +136,14 @@ body::-webkit-scrollbar {
     background-color: rgba(0,0,0,0.3);
 }
 
-/* ── Arc Coverflow Carousel ── */
-.arc-carousel {
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    -webkit-overflow-scrolling: touch;
+/* ── 3D Cylinder Carousel ── */
+.cylinder-card {
+    transition: filter 0.3s ease, box-shadow 0.3s ease;
 }
 
-.arc-carousel::-webkit-scrollbar {
-    display: none;
-}
-
-.arc-card {
-    contain: layout style paint;
-    transform-origin: bottom center;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-.arc-card--active {
-    will-change: transform;
+.cylinder-card:hover {
+    filter: brightness(1.15);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* ── Hero Native Animations ── */

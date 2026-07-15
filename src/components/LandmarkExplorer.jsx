@@ -97,7 +97,7 @@ const LandmarkExplorer = () => {
             <div className="relative mb-8">
                 <button
                     onClick={() => scroll('left')}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_15px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200 hover:bg-red-50 hover:text-red-500 cursor-pointer"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_15px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200  hover:text-blue-500 cursor-pointer"
                 >
                     <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -133,7 +133,7 @@ const LandmarkExplorer = () => {
 
                 <button
                     onClick={() => scroll('right')}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_15px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200 hover:bg-red-50 hover:text-red-500 cursor-pointer"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_15px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200  hover:text-blue-500 cursor-pointer"
                 >
                     <ChevronRight className="w-5 h-5" />
                 </button>

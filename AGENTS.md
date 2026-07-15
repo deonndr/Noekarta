@@ -37,14 +37,14 @@ src/
 │   └── ui/marquee-effect.jsx — Dead code (never imported; uses `framer-motion` + `@motionone/utils` — not installed; imports `cn` from `../../lib/utils` — doesn't exist)
 ├── pages/LandmarkPage.jsx — Full-page map explorer (own header, no Navbar)
 ├── routes/ features/ lib/ — Empty scaffolding; `src/lib/utils.js` does not exist
-└── assets/               — ~67 images imported as ES module defaults
+└── assets/               — 72 images imported as ES module defaults
 ```
 
 ## Conventions & quirks
 
 - **Exports:** default export for components, named export for `landmarks` array.
 - **Navigation back:** `LandmarkPage` navigates with `navigate('/', { state: { scrollToLandmarkExplorer: true } })`; `LandmarkExplorer` reads via `useLocation()` + `scrollIntoView` + Lenis sync in `useLayoutEffect`.
-- **Navbar:** `navLinks` array is placeholder — `'Beranda'`, `'Tentang Jakarta'`, `'Beranda'`, `'Beranda'` all pointing to `#`.
+- **Navbar:** `navLinks` array is placeholder — `'Beranda'`, `'Tentang Jakarta'`, `'Sejarah'`, `'Budaya'`, `'Kuliner'`, `'NoeQuiz'` all pointing to `#`.
 - **GSAP scroll sections:** `App.jsx` wraps each content section in `<div className="gsap-section">` for GSAP ScrollTrigger opacity/y animations.
 - **history.jsx** is the only lowercase-named component; imports `hero-title*.png` as `title1`–`title6`.
 - **CSS:** Global scrollbar hidden (`html, body { scrollbar-width: none }`) — modals needing scrollbars must override (e.g. `.betawi-modal-scroll` sets `scrollbar-width: thin`); Hero arc coverflow carousel uses custom CSS classes (`.arc-carousel`, `.arc-card`, `.arc-card--active`) defined in `index.css`; floating card keyframes (`float-card-1` through `float-card-4`) also live there.

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, PartyPopper } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import historyTitle from '../assets/history-title.png';
@@ -72,13 +72,111 @@ const historyData = [
   },
 ];
 
+const imageCache = new Map();
+
+const preloadImage = (src, priority = 'auto') => {
+  if (!src || typeof Image === 'undefined') return Promise.resolve();
+  if (imageCache.has(src)) return imageCache.get(src);
+
+  const image = new Image();
+  image.decoding = 'async';
+  image.fetchPriority = priority;
+
+  const promise = new Promise((resolve) => {
+    image.onload = resolve;
+    image.onerror = resolve;
+  }).then(() => {
+    if (image.decode) {
+      return image.decode().catch(() => undefined);
+    }
+    return undefined;
+  });
+
+  image.src = src;
+  imageCache.set(src, promise);
+  return promise;
+};
+
+const preloadHistoryAssets = (item, priority = 'auto') => (
+  Promise.all([
+    preloadImage(item.img, priority),
+    preloadImage(item.titleImg, priority),
+  ])
+);
+
 const History = () => {
   const [activeCard, setActiveCard] = useState(1);
+  const sectionRef = useRef(null);
 
   const activeData = historyData.find(d => d.id === activeCard);
 
+  const handleSelectCard = useCallback((item) => {
+    preloadHistoryAssets(item, 'high');
+    setActiveCard(item.id);
+  }, []);
+
+  useEffect(() => {
+    const activeIndex = historyData.findIndex((item) => item.id === activeCard);
+    [activeIndex, activeIndex + 1, activeIndex - 1].forEach((index) => {
+      const item = historyData[index];
+      if (item) preloadHistoryAssets(item, index === activeIndex ? 'high' : 'low');
+    });
+  }, [activeCard]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const idleIds = [];
+    const timeoutIds = [];
+    let started = false;
+
+    const schedulePreload = () => {
+      if (started) return;
+      started = true;
+
+      historyData.forEach((item, index) => {
+        const preload = () => preloadHistoryAssets(item, index < 2 ? 'high' : 'low');
+
+        if ('requestIdleCallback' in window) {
+          const id = window.requestIdleCallback(preload, { timeout: 1200 + index * 180 });
+          idleIds.push(id);
+          return;
+        }
+
+        const id = window.setTimeout(preload, index * 120);
+        timeoutIds.push(id);
+      });
+    };
+
+    if (!('IntersectionObserver' in window) || !sectionRef.current) {
+      schedulePreload();
+      return () => {
+        idleIds.forEach((id) => window.cancelIdleCallback?.(id));
+        timeoutIds.forEach((id) => window.clearTimeout(id));
+      };
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          schedulePreload();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '900px 0px' }
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => {
+      observer.disconnect();
+      idleIds.forEach((id) => window.cancelIdleCallback?.(id));
+      timeoutIds.forEach((id) => window.clearTimeout(id));
+    };
+  }, []);
+
   return (
-    <section id="history" className="pt-24 pb-24 bg-[#FAFAFA] relative overflow-hidden">
+    <section ref={sectionRef} id="history" className="pt-24 pb-24 bg-[#FAFAFA] relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-8 max-w-[1200px]">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center lg:items-start">
           
@@ -105,7 +203,9 @@ const History = () => {
                   <div key={item.id} className="relative">
                     {item.id > 1 && <div className="h-px  bg-gray-200 w-full" />}
                     <div
-                      onClick={() => setActiveCard(item.id)}
+                      onPointerEnter={() => preloadHistoryAssets(item, 'high')}
+                      onFocus={() => preloadHistoryAssets(item, 'high')}
+                      onClick={() => handleSelectCard(item)}
                       className={`flex items-center justify-between py-4 px-6 cursor-pointer transition-all rounded-r-xl ${
                         isActive ? 'bg-[#F0F5FF]' : 'hover:bg-gray-50'
                       }`}
@@ -154,13 +254,23 @@ const History = () => {
                         src={activeData.img} 
                         alt={activeData.name}
                         className="w-full h-full object-contain"
+                        width="506"
+                        height="489"
+                        decoding="async"
+                        fetchPriority="high"
                       />
                     </div>
                   </div>
 
                   {/* Title & Badge */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-                    <img src={activeData.titleImg} alt={activeData.name} className="h-10 md:h-12 object-contain object-left" />
+                    <img
+                      src={activeData.titleImg}
+                      alt={activeData.name}
+                      className="h-10 md:h-12 object-contain object-left"
+                      decoding="async"
+                      fetchPriority="high"
+                    />
                     <span className="bg-[#E5EDFF] shadow-xl ms-auto text-indigo-900 px-5 py-2 rounded-xl text-sm font-semibold w-fit">
                       {activeData.year}
                     </span>

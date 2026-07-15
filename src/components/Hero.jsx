@@ -37,34 +37,34 @@ const baseLandmarkImages = Object.keys(imageModules)
     })
     .map(key => imageModules[key]);
 
-// Duplicate for seamless infinite loop (3 sets to be safe)
-const landmarkImages = [...baseLandmarkImages, ...baseLandmarkImages, ...baseLandmarkImages];
-
-// ── Arc geometry constants ──
-const ARC_MAX_ROTATE = 15;     // max rotateZ in degrees
-const ARC_MAX_TRANSLATE_Y = 40; // max Y drop in px for arc curve
-const ARC_MIN_SCALE = 0.85;    // scale at edges
-const ARC_Z_BASE = 20;         // base z-index for center card
-const CARD_WIDTH = 200;
-const CARD_HEIGHT = 260;
-const CARD_GAP = 16;
-const AUTO_SCROLL_SPEED = 1;   // px per frame
+// ── 3D Cylinder Carousel constants ──
+const TOTAL_ITEMS = baseLandmarkImages.length;
+const CARD_WIDTH = 220;
+const CARD_HEIGHT = 300;
+const CYLINDER_PADDING = 50;   // extra spacing between cards on the cylinder wall
+const AUTO_ROTATE_SPEED = 0.12; // degrees per frame
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [opacity, setOpacity] = useState(1);
+    const [windowWidth, setWindowWidth] = useState(
+        typeof window !== 'undefined' ? window.innerWidth : 1200
+    );
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const containerRef = useRef(null);
     const imgRef = useRef(null);
     const fadeTimeoutRef = useRef(null);
 
-    // Arc carousel refs
-    const carouselRef = useRef(null);
-    const cardRefs = useRef([]);
-    const visibleCards = useRef(new Set());
-    const rafId = useRef(null);
-    const autoScrollRafId = useRef(null);
-    const resizeTimer = useRef(null);
+    // 3D Cylinder carousel refs
+    const cylinderRef = useRef(null);
+    const rotationRef = useRef(0);
+    const autoRotateRafId = useRef(null);
     const isHovered = useRef(false);
 
     const updateContainerWidth = useCallback((imgW, imgH) => {
@@ -118,171 +118,66 @@ const Hero = () => {
         updateContainerWidth(e.target.naturalWidth, e.target.naturalHeight);
     };
 
-    // ── Arc Coverflow: calculate & apply transforms ──
-    const applyArcTransforms = useCallback(() => {
-        const carousel = carouselRef.current;
-        if (!carousel) return;
+    // ── Calculate dynamic dimensions ──
+    let currentCardWidth = CARD_WIDTH;
+    let currentCardHeight = CARD_HEIGHT;
+    if (windowWidth <= 768) {
+        currentCardWidth = 180;
+        currentCardHeight = 245;
+    }
+    if (windowWidth <= 480) {
+        currentCardWidth = 140;
+        currentCardHeight = 190;
+    }
 
-        const scrollLeft = carousel.scrollLeft;
-        const containerWidth = carousel.clientWidth;
-        const centerX = scrollLeft + containerWidth / 2;
+    // ── Calculate cylinder radius ──
+    const getRadius = useCallback(() => {
+        // Add slightly more padding on very small screens for a better gap
+        const padding = windowWidth <= 480 ? CYLINDER_PADDING + 10 : CYLINDER_PADDING;
+        return Math.round((currentCardWidth / 2) / Math.tan(Math.PI / TOTAL_ITEMS)) + padding;
+    }, [currentCardWidth, windowWidth]);
 
-        // Only process visible cards + small buffer
-        visibleCards.current.forEach((idx) => {
-            const card = cardRefs.current[idx];
-            if (!card) return;
+    // ── Auto-rotation loop ──
+    useEffect(() => {
+        const rotateLoop = () => {
+            if (!isHovered.current && cylinderRef.current) {
+                rotationRef.current += AUTO_ROTATE_SPEED;
+                cylinderRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
+            }
+            autoRotateRafId.current = requestAnimationFrame(rotateLoop);
+        };
 
-            const cardCenterX = card.offsetLeft + card.offsetWidth / 2;
-            // Normalize offset: -1 (far left) to +1 (far right)
-            const halfContainer = containerWidth / 2;
-            const rawOffset = (cardCenterX - centerX) / halfContainer;
-            const offset = Math.max(-1, Math.min(1, rawOffset));
+        autoRotateRafId.current = requestAnimationFrame(rotateLoop);
 
-            const rotateZ = offset * ARC_MAX_ROTATE;
-            const translateY = Math.abs(offset) * ARC_MAX_TRANSLATE_Y;
-            const scale = 1 - Math.abs(offset) * (1 - ARC_MIN_SCALE);
-            const zIndex = ARC_Z_BASE - Math.round(Math.abs(offset) * 10);
-
-            card.style.transform =
-                `translate3d(0, ${translateY}px, 0) rotateZ(${rotateZ}deg) scale(${scale})`;
-            card.style.zIndex = zIndex;
-        });
+        return () => {
+            if (autoRotateRafId.current) cancelAnimationFrame(autoRotateRafId.current);
+        };
     }, []);
 
-    // RAF-throttled scroll handler
-    const handleCarouselScroll = useCallback(() => {
-        const carousel = carouselRef.current;
-        if (!carousel) return;
+    // ── Click handler: rotate clicked card to front ──
+    const handleCardClick = useCallback((index) => {
+        const targetAngle = -(360 / TOTAL_ITEMS) * index;
+        // Find the shortest rotation path
+        const currentMod = rotationRef.current % 360;
+        let diff = targetAngle - currentMod;
+        if (diff > 180) diff -= 360;
+        if (diff < -180) diff += 360;
+        const finalAngle = rotationRef.current + diff;
 
-        // Seamless loop logic
-        const singleSetWidth = baseLandmarkImages.length * (CARD_WIDTH + CARD_GAP);
+        // Animate to target
+        if (cylinderRef.current) {
+            cylinderRef.current.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            cylinderRef.current.style.transform = `rotateY(${finalAngle}deg)`;
+            rotationRef.current = finalAngle;
 
-        // If we scrolled past the first set, seamlessly jump back one set
-        if (carousel.scrollLeft > singleSetWidth * 1.5) {
-            carousel.scrollLeft -= singleSetWidth;
-        } else if (carousel.scrollLeft < singleSetWidth * 0.5) {
-            // If we scrolled backwards too far, seamlessly jump forward one set
-            carousel.scrollLeft += singleSetWidth;
+            // Remove transition after animation completes
+            setTimeout(() => {
+                if (cylinderRef.current) {
+                    cylinderRef.current.style.transition = 'none';
+                }
+            }, 850);
         }
-
-        if (rafId.current) return; // Skip if frame already pending
-        rafId.current = requestAnimationFrame(() => {
-            applyArcTransforms();
-            rafId.current = null;
-        });
-    }, [applyArcTransforms]);
-
-    // ── IntersectionObserver: track which cards are visible ──
-    useEffect(() => {
-        const carousel = carouselRef.current;
-        if (!carousel) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const idx = Number(entry.target.dataset.idx);
-                    if (entry.isIntersecting) {
-                        visibleCards.current.add(idx);
-                        entry.target.classList.add('arc-card--active');
-                    } else {
-                        visibleCards.current.delete(idx);
-                        entry.target.classList.remove('arc-card--active');
-                        // Reset transform for off-screen cards
-                        entry.target.style.transform = '';
-                        entry.target.style.zIndex = '';
-                    }
-                });
-                // Recalculate after visibility changes
-                applyArcTransforms();
-            },
-            {
-                root: carousel,
-                rootMargin: '0px 250px', // buffer ~1 card beyond viewport
-                threshold: 0,
-            }
-        );
-
-        cardRefs.current.forEach((card) => {
-            if (card) observer.observe(card);
-        });
-
-        return () => observer.disconnect();
-    }, [applyArcTransforms]);
-
-    // ── Auto-scroll loop ──
-    useEffect(() => {
-        const scrollLoop = () => {
-            const carousel = carouselRef.current;
-            if (carousel && !isHovered.current) {
-                // Increment scroll
-                carousel.scrollLeft += AUTO_SCROLL_SPEED;
-            }
-            autoScrollRafId.current = requestAnimationFrame(scrollLoop);
-        };
-
-        autoScrollRafId.current = requestAnimationFrame(scrollLoop);
-
-        return () => {
-            if (autoScrollRafId.current) cancelAnimationFrame(autoScrollRafId.current);
-        };
     }, []);
-
-    // ── Scroll listener with RAF throttle ──
-    useEffect(() => {
-        const carousel = carouselRef.current;
-        if (!carousel) return;
-
-        carousel.addEventListener('scroll', handleCarouselScroll, { passive: true });
-
-        // Initial calculation
-        applyArcTransforms();
-
-        return () => {
-            carousel.removeEventListener('scroll', handleCarouselScroll);
-            if (rafId.current) {
-                cancelAnimationFrame(rafId.current);
-                rafId.current = null;
-            }
-        };
-    }, [handleCarouselScroll, applyArcTransforms]);
-
-    // ── Debounced resize ──
-    useEffect(() => {
-        const handleResize = () => {
-            if (resizeTimer.current) clearTimeout(resizeTimer.current);
-            resizeTimer.current = setTimeout(() => {
-                applyArcTransforms();
-            }, 300);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            if (resizeTimer.current) clearTimeout(resizeTimer.current);
-        };
-    }, [applyArcTransforms]);
-
-    // Scroll carousel to center of the middle set on mount
-    useEffect(() => {
-        const carousel = carouselRef.current;
-        if (!carousel) return;
-
-        // Small delay to ensure layout is ready
-        const timer = setTimeout(() => {
-            const singleSetWidth = baseLandmarkImages.length * (CARD_WIDTH + CARD_GAP);
-            // Start in the middle of the second set
-            const startPos = singleSetWidth + (singleSetWidth / 2) - (carousel.clientWidth / 2);
-            carousel.scrollLeft = Math.max(0, startPos);
-            applyArcTransforms();
-        }, 100);
-
-        return () => clearTimeout(timer);
-    }, [applyArcTransforms]);
-
-    // Side padding so first/last card can reach center
-    const sidePadding =
-        typeof window !== 'undefined'
-            ? Math.max(window.innerWidth / 2 - CARD_WIDTH / 2, 100)
-            : 400;
 
     return (
         <section className="w-full flex flex-col items-center justify-start pt-16 pb-0 relative overflow-hidden">
@@ -299,7 +194,7 @@ const Hero = () => {
             <img
                 src={cardfly2}
                 alt="50+ Kuliner Khas"
-                className="hidden lg:block selecg-none absolute z-20"
+                className="hidden lg:block select-none absolute z-20"
                 style={{ right: '10%', top: '1%', width: 250, animation: 'float-card-2 9s ease-in-out infinite' }}
             />
             {/* Bottom-left: 6 Kota Sejarah */}
@@ -383,52 +278,71 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* ── Arc Coverflow Carousel ── */}
+            {/* ── 3D Cylinder Concave Carousel ── */}
             <div
-                className="w-full mt-10 overflow-hidden"
-                style={{ perspective: '1200px' }}
+                className="carousel-container w-full mt-6 select-none"
+                style={{
+                    perspective: '900px',
+                    height: '340px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                }}
             >
                 <div
-                    ref={carouselRef}
-                    className="arc-carousel select-none flex items-end overflow-x-scroll"
+                    ref={cylinderRef}
                     style={{
-                        gap: CARD_GAP,
-                        paddingLeft: sidePadding,
-                        paddingRight: sidePadding,
-                        paddingBottom: ARC_MAX_TRANSLATE_Y + 50,
-                        paddingTop: ARC_MAX_TRANSLATE_Y + 10,
-                        maskImage:
-                            'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
-                        WebkitMaskImage:
-                            'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
-                        // Optional: remove smooth behavior during auto scroll to prevent stutter
-                        scrollBehavior: 'auto'
+                        position: 'relative',
+                        width: 0,
+                        height: 0,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        transformStyle: 'preserve-3d',
                     }}
                     onMouseEnter={() => { isHovered.current = true; }}
                     onMouseLeave={() => { isHovered.current = false; }}
                     onTouchStart={() => { isHovered.current = true; }}
                     onTouchEnd={() => { isHovered.current = false; }}
                 >
-                    {landmarkImages.map((src, i) => (
-                        <div
-                            key={i}
-                            ref={(el) => { cardRefs.current[i] = el; }}
-                            data-idx={i}
-                            className="arc-card shrink-0 rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.18)] border-[3px] border-white cursor-grab active:cursor-grabbing"
-                            style={{
-                                width: CARD_WIDTH,
-                                height: CARD_HEIGHT,
-                            }}
-                        >
-                            <img
-                                src={src}
-                                alt={`Landmark ${i + 1}`}
-                                className="w-full h-full object-cover pointer-events-none"
-                                draggable={false}
-                                loading="lazy"
-                            />
-                        </div>
-                    ))}
+                    {baseLandmarkImages.map((src, i) => {
+                        const angle = (360 / TOTAL_ITEMS) * i;
+                        const radius = getRadius();
+                        return (
+                            <div
+                                key={i}
+                                className="cylinder-card"
+                                style={{
+                                    position: 'absolute',
+                                    width: currentCardWidth,
+                                    height: currentCardHeight,
+                                    left: -(currentCardWidth / 2),
+                                    top: -(currentCardHeight / 2),
+                                    borderRadius: '1rem',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 20px 40px -12px rgba(0,0,0,0.35)',
+                                    border: '3px solid rgba(255,255,255,0.8)',
+                                    cursor: 'pointer',
+                                    backfaceVisibility: 'hidden',
+                                    WebkitBackfaceVisibility: 'hidden',
+                                    transform: `rotateY(${angle}deg) translateZ(${-radius}px)`,
+                                }}
+                                onClick={() => handleCardClick(i)}
+                            >
+                                <img
+                                    src={src}
+                                    alt={`Landmark ${i + 1}`}
+                                    className="w-full h-full object-cover pointer-events-none"
+                                    draggable={false}
+                                    loading="lazy"
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

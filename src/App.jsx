@@ -10,7 +10,9 @@ import LandmarkExplorer from './components/LandmarkExplorer';
 import History from './components/history';
 import BetawiHeritage from './components/BetawiHeritage';
 import KulinerJakarta from './components/KulinerJakarta';
+import NoeQuiz from './components/NoeQuiz';
 import LandmarkPage from './pages/LandmarkPage';
+import ApaItuJakartaPage from './pages/ApaItuJakartaPage';
 import 'lenis/dist/lenis.css';
 import './index.css';
 
@@ -80,6 +82,7 @@ function LandingPage() {
       <div className="gsap-section"><BetawiHeritage /></div>
       <div className="gsap-section"><KulinerJakarta /></div>
       <div className="gsap-section"><LandmarkExplorer /></div>
+      <div className="gsap-section"><NoeQuiz /></div>
     </div>
   );
 }
@@ -90,6 +93,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/landmark-explorer" element={<LandmarkPage />} />
+        <Route path="/apa-itu-jakarta" element={<ApaItuJakartaPage />} />
       </Routes>
     </BrowserRouter>
   );
