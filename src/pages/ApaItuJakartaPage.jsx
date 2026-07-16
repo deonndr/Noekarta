@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronDown, Globe } from 'lucide-react';
 import logo from '../assets/logo-noekarta.png';
 import bgImage from '../assets/bg-pageApaItuJakarta.png';
-import card1 from '../assets/card_about1.png';
 import card3 from '../assets/card_about3.png';
 import card4 from '../assets/card_about4.png';
 import card5 from '../assets/card-about5.jpg';
 import card2 from '../assets/card_about2.png'; // Used for the bottom section image
+import jakartaDroneVideo from '../assets/vid/drone_jakarta.webm';
 
 const ApaItuJakartaPage = () => {
   const navigate = useNavigate();
@@ -111,21 +111,20 @@ const ApaItuJakartaPage = () => {
       <section className="px-4 md:px-8 max-w-auto pb-28 mx-auto">
         <div className=" rounded-[32px]  p-6 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center ">
 
-          {/* Left: Image with blue tag */}
+          {/* Left: Video with blue tag */}
           <div className="w-full lg:w-1/2 relative rounded-[24px]  group">
             <div className="w-full h-[350px] md:h-[450px] overflow-hidden rounded-[24px]">
-              <img
-                src={card5}
-                alt="Jakarta City"
-                className="w-full h-full object-cover select-none transition-transform duration-700 group-hover:scale-105"
-              /> 
-              <div className="absolute inset-0 bg-black/40 rounded-[24px]"></div>
-              {/* Play Button Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50">
-                  <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[14px] border-l-white border-b-[8px] border-b-transparent ml-1"></div>
-                </div>
-              </div>
+              <video
+                src={jakartaDroneVideo}
+                poster={card5}
+                className="w-full h-full object-cover "
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-label="Video drone Jakarta"
+              />
               {/* Tag */}
               <div className="absolute top-6 -left-6 z-10 bg-blue-950 text-white py-6 px-12 rounded-2xl shadow-lg">
                 <div className="font-semibold text-lg leading-tight">661 km²</div>

@@ -195,3 +195,70 @@ body::-webkit-scrollbar {
     opacity: 0;
     animation: hero-fade-in 0.8s ease-out forwards;
 }
+
+/* NoeQuiz tutorial modal */
+@keyframes noequiz-orbit-spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes noequiz-controller-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+
+@keyframes noequiz-step-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(8, 62, 147, 0.22);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 7px rgba(8, 62, 147, 0);
+    }
+}
+
+.noequiz-controller-orbit {
+    position: relative;
+    display: grid;
+    width: 70px;
+    height: 70px;
+    place-items: center;
+    animation: noequiz-controller-breathe 2.6s ease-in-out infinite;
+}
+
+.noequiz-controller-orbit::before,
+.noequiz-controller-orbit::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 9999px;
+    border: 1.5px solid #0A4BB3;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.noequiz-controller-orbit::before {
+    width: 62px;
+    height: 62px;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    animation: noequiz-orbit-spin 2.8s linear infinite;
+}
+
+.noequiz-controller-orbit::after {
+    width: 52px;
+    height: 52px;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: noequiz-orbit-spin 2s linear infinite reverse;
+}
+
+.noequiz-step-ring {
+    animation: noequiz-step-pulse 2.8s ease-in-out infinite;
+}
+
+.noequiz-step-number {
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35), 0 6px 14px rgba(8, 62, 147, 0.2);
+}
