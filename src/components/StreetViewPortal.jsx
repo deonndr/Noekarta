@@ -9,7 +9,7 @@ gsap.registerPlugin(useGSAP);
 
 const StreetViewPortal = ({ landmark, onClose }) => {
     const [loadedUrl, setLoadedUrl] = useState('');
-    
+
     const containerRef = useRef(null);
     const overlayRef = useRef(null);
     const portalRef = useRef(null);
@@ -17,7 +17,7 @@ const StreetViewPortal = ({ landmark, onClose }) => {
     const iframeRef = useRef(null);
     const uiRef = useRef(null);
     const btnRef = useRef(null);
-    
+
     const isClosingRef = useRef(false);
 
     // Gunakan koordinat khusus Street View jika ada, kalau tidak gunakan koordinat pin
@@ -35,13 +35,13 @@ const StreetViewPortal = ({ landmark, onClose }) => {
     const handleClose = () => {
         if (isClosingRef.current) return;
         isClosingRef.current = true;
-        
+
         const tl = gsap.timeline({ onComplete: onClose });
 
         tl.to(uiRef.current, { y: -30, opacity: 0, duration: 0.3, ease: 'power2.in' }, 0)
-          .to(btnRef.current, { scale: 0, rotation: 90, duration: 0.3, ease: 'power2.in' }, 0)
-          .to(portalRef.current, { scale: 0.8, opacity: 0, borderRadius: '32px', duration: 0.6, ease: 'power3.inOut' }, 0.1)
-          .to(overlayRef.current, { opacity: 0, duration: 0.4, ease: 'power2.inOut' }, 0.2);
+            .to(btnRef.current, { scale: 0, rotation: 90, duration: 0.3, ease: 'power2.in' }, 0)
+            .to(portalRef.current, { scale: 0.8, opacity: 0, borderRadius: '32px', duration: 0.6, ease: 'power3.inOut' }, 0.1)
+            .to(overlayRef.current, { opacity: 0, duration: 0.4, ease: 'power2.inOut' }, 0.2);
     };
 
     useGSAP(() => {
@@ -66,9 +66,9 @@ const StreetViewPortal = ({ landmark, onClose }) => {
         // 3. UI and Btn entrance
         gsap.set(uiRef.current, { y: -30, opacity: 0 });
         gsap.set(btnRef.current, { scale: 0, rotation: -90 });
-        
+
         tl.to(uiRef.current, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0.6)
-          .to(btnRef.current, { scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.5)' }, 0.7);
+            .to(btnRef.current, { scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.5)' }, 0.7);
 
     }, { dependencies: [landmark], scope: containerRef });
 
@@ -91,7 +91,7 @@ const StreetViewPortal = ({ landmark, onClose }) => {
         <div ref={containerRef} className="fixed inset-0 z-[99999] flex items-center justify-center overflow-hidden">
             {/* Overlay bg */}
             <div ref={overlayRef} className="absolute inset-0 bg-black"></div>
-            
+
             <div
                 ref={portalRef}
                 className="relative w-full h-full bg-black overflow-hidden"

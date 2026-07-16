@@ -23,7 +23,7 @@ const historyData = [
     year: 'Abad ke-5',
     desc: 'Pelabuhan bersejarah di Jakarta Utara yang terletak di muara Sungai Ciliwung. Dulunya merupakan pelabuhan utama Kerajaan Sunda, tempat ini kini beroperasi sebagai pusat kapal layar kayu tradisional (Pinisi) antarpulau dan menjadi salah satu destinasi wisata sejarah yang menarik di ibu kota.',
     img: history1,
-    
+
   },
   {
     id: 2,
@@ -179,7 +179,7 @@ const History = () => {
     <section ref={sectionRef} id="history" className="pt-24 pb-24 bg-[#FAFAFA] relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-8 max-w-[1200px]">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center lg:items-start">
-          
+
           {/* Left Column */}
           <div className="w-full lg:w-1/2 flex flex-col">
             {/* Title */}
@@ -206,9 +206,8 @@ const History = () => {
                       onPointerEnter={() => preloadHistoryAssets(item, 'high')}
                       onFocus={() => preloadHistoryAssets(item, 'high')}
                       onClick={() => handleSelectCard(item)}
-                      className={`flex items-center justify-between py-4 px-6 cursor-pointer transition-all rounded-r-xl ${
-                        isActive ? 'bg-[#F0F5FF]' : 'hover:bg-gray-50'
-                      }`}
+                      className={`flex items-center justify-between py-4 px-6 cursor-pointer transition-all rounded-r-xl ${isActive ? 'bg-[#F0F5FF]' : 'hover:bg-gray-50'
+                        }`}
                     >
                       {isActive && (
                         <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-blue-800 rounded-r-full" />
@@ -248,10 +247,10 @@ const History = () => {
                     <div className="absolute bottom-2 left-2 md:bottom-6 md:left-10 w-20 h-20 md:w-[90px] md:h-[90px] bg-indigo-950 text-white rounded-full flex items-center justify-center text-2xl md:text-[32px] font-bold z-10 border-[6px] border-[#FAFAFA]" style={{ boxShadow: '0px 4px 10px rgba(0,0,0,0.1)' }}>
                       0{activeData.id}
                     </div>
-                    
+
                     <div className="w-full h-full transition-all duration-1000 ease-in-out drop-shadow-[6px_4px_4px_rgba(0,0,0,0.25)]">
-                      <img 
-                        src={activeData.img} 
+                      <img
+                        src={activeData.img}
                         alt={activeData.name}
                         className="w-full h-full object-contain"
                         width="506"

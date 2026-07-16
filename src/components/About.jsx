@@ -50,19 +50,19 @@ const About = () => {
               </h3>
               <p className="text-sm text-gray-500 whitespace-nowrap mt-1">Penduduk Kota Jakarta</p>
             </div>
-            
+
             <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
-              <img 
-                src={landmarkjakarta1} 
-                alt="Jakarta 1" 
+              <img
+                src={landmarkjakarta1}
+                alt="Jakarta 1"
                 className="w-full h-[394px] object-cover border border-white  select-none rounded-[14px]"
               />
             </div>
-            
+
             <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
-              <img 
-                src={landmarkjakarta2} 
-                alt="Jakarta 2" 
+              <img
+                src={landmarkjakarta2}
+                alt="Jakarta 2"
                 className="w-full h-[176px] object-cover select-none rounded-[14px]"
               />
             </div>
@@ -71,17 +71,17 @@ const About = () => {
           {/* Right sub-column */}
           <div className="flex-1 flex flex-col gap-4 pt-10">
             <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
-              <img 
-                src={landmarkjakarta4} 
-                alt="Jakarta 3" 
+              <img
+                src={landmarkjakarta4}
+                alt="Jakarta 3"
                 className="w-full h-[319px] object-cover select-none rounded-[14px]"
               />
             </div>
-            
+
             <div className="rounded-[20px] p-1.5 border border-white shadow-lg bg-white ">
-              <img 
-                src={landmarkjakarta3} 
-                alt="Jakarta 4" 
+              <img
+                src={landmarkjakarta3}
+                alt="Jakarta 4"
                 className="w-full h-[250px] object-cover select-none rounded-[14px]"
               />
             </div>
@@ -91,39 +91,39 @@ const About = () => {
         {/* Right Column: Text & CTA */}
         <div className="relative flex flex-col justify-center space-y-5 lg:pl-10">
           {/* Floating Decorations (component1) */}
-          <motion.img 
-            src={component1} 
-            alt="Decoration" 
+          <motion.img
+            src={component1}
+            alt="Decoration"
             className="absolute -top-30 left-[35%] w-[70px] h-[70px] object-contain select-none"
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.img 
-            src={component1} 
-            alt="Decoration" 
+          <motion.img
+            src={component1}
+            alt="Decoration"
             className="absolute -top-6 right-[10%] w-[60px] h-[60px] object-contain select-none"
             animate={{ y: [0, 20, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           />
 
           <div className="flex justify-start mb-2 relative z-10">
-            <img 
-              src={TitleImage} 
-              alt="Apa Itu Jakarta" 
-              className="h-[65px] md:h-[75px] object-contain select-none" 
+            <img
+              src={TitleImage}
+              alt="Apa Itu Jakarta"
+              className="h-[65px] md:h-[75px] object-contain select-none"
             />
           </div>
 
           <h2 className="text-[32px] md:text-[38px] font-ancizar font-bold text-gray-900 leading-tight relative z-10">
             Jakarta, Kota sejarah<br />& inovasi
           </h2>
-          
+
           <p className="text-[#5B5B5B] text-lg md:text-xl leading-relaxed relative z-10 max-w-[90%]">
             Dari pelabuhan Sunda Kelapa hingga pusat Inovasi digital Asia Tenggara,
             Jakarta memadukan warisan budaya dan semangat modern untuk masa depan
             yang lebih baik
           </p>
-          
+
           <div className="pt-2 relative z-10">
             <button onClick={() => navigate('/apa-itu-jakarta')} className="flex items-center gap-2 px-8 py-3.5 cursor-pointer bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
               Selengkapnya tentang Jakarta

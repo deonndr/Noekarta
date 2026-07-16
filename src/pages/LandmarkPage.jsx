@@ -100,11 +100,10 @@ const LandmarkPage = () => {
                                 <button
                                     key={landmark.id}
                                     onClick={() => handleLandmarkClick(landmark)}
-                                    className={`flex items-center gap-4 p-3 rounded-[14px] text-left transition-all duration-300 border ${
-                                        isActive
+                                    className={`flex items-center gap-4 p-3 rounded-[14px] text-left transition-all duration-300 border ${isActive
                                             ? 'bg-red-50 border-red-300 shadow-sm'
                                             : 'bg-white border-gray-100 hover:border-red-200 hover:bg-red-50/40'
-                                    }`}
+                                        }`}
                                 >
                                     {/* Thumbnail */}
                                     <div className="w-16 h-16 rounded-[10px] overflow-hidden shrink-0">
@@ -171,7 +170,7 @@ const LandmarkPage = () => {
                                         />
                                         <p className="font-bold text-gray-900 text-sm">{landmark.title}</p>
                                         <p className="text-gray-500 text-xs">{landmark.description}</p>
-                                        <button 
+                                        <button
                                             onClick={() => setStreetViewTarget(landmark)}
                                             className="mt-1 flex items-center justify-center gap-1.5 bg-red-600 text-white py-1.5 px-3 rounded-lg text-xs font-semibold hover:bg-red-700 hover:shadow-lg transition-all duration-300"
                                         >
@@ -217,11 +216,10 @@ const LandmarkPage = () => {
                                     <button
                                         key={landmark.id}
                                         onClick={() => handleLandmarkClick(landmark)}
-                                        className={`flex flex-col gap-3 p-3 rounded-2xl text-left transition-all duration-300 border bg-white shrink-0 w-[260px] snap-center shadow-lg ${
-                                            isActive
+                                        className={`flex flex-col gap-3 p-3 rounded-2xl text-left transition-all duration-300 border bg-white shrink-0 w-[260px] snap-center shadow-lg ${isActive
                                                 ? 'border-red-400 ring-4 ring-red-50'
                                                 : 'border-gray-100 opacity-95 hover:opacity-100'
-                                        }`}
+                                            }`}
                                     >
                                         <div className="w-full h-32 rounded-xl overflow-hidden shrink-0 relative">
                                             <img

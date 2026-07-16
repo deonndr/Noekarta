@@ -77,26 +77,26 @@ const KulinerJakarta = () => {
     <section className="py-20 bg-[#fafafa]">
       <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
+
           {/* Left Column */}
           <div className="lg:col-span-4 mb-10 relative flex flex-col justify-center h-full">
             {/* cardfly animation */}
             <div className="relative mb-6 h-[80px] w-full">
-               <img
-                  src={cardfly}
-                  alt="50+ Kuliner Khas"
-                  className="absolute bottom-10 left-0 select-none z-20 w-[250px]"
-                  style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
-               />
+              <img
+                src={cardfly}
+                alt="50+ Kuliner Khas"
+                className="absolute bottom-10 left-0 select-none z-20 w-[250px]"
+                style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
+              />
             </div>
-            
+
             <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-gray-900 mb-6 leading-tight tracking-tight font-ancizar">
               Kuliner Jakarta
             </h2>
             <p className="text-gray-700 text-xl lg:text-2xl mb-10 max-w-md">
               Cicipi kuliner khas Betawi dan Jakarta
             </p>
-            
+
             <a href="#" className="bg-[#0f285e] hover:bg-[#0a1b40] text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center w-fit gap-2 transition-colors">
               Lihat Semua Kuliner
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,18 +106,18 @@ const KulinerJakarta = () => {
 
             {/* component1 decorations */}
             <div className="absolute -bottom-1 left-5 w-[80px] h-[80px]">
-              <motion.img 
-                src={component1} 
-                alt="Decoration" 
+              <motion.img
+                src={component1}
+                alt="Decoration"
                 className="w-full h-full object-contain select-none opacity-50"
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
             </div>
             <div className="absolute -bottom-10 left-40 w-[60px] h-[60px]">
-              <motion.img 
-                src={component1} 
-                alt="Decoration" 
+              <motion.img
+                src={component1}
+                alt="Decoration"
                 className="w-full h-full object-contain select-none opacity-50"
                 animate={{ y: [0, 20, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -184,7 +184,7 @@ const KulinerJakarta = () => {
               </div>
             ))}
           </div>
-          
+
         </div>
       </div>
     </section>
