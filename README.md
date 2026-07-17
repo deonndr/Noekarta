@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./src/assets/logo-noekarta2.png" alt="Logo Noekarta" width="240" />
+  <img src="./src/assets/logo-noekarta2.webp" alt="Logo Noekarta" width="240" />
 </p>
 
 <h1 align="center">Noekarta</h1>
