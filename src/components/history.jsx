@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, PartyPopper } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import historyTitle from '../assets/history-title.png';
-import history1 from '../assets/history-image1.png';
-import history2 from '../assets/history-image2.png';
-import history3 from '../assets/history-image3.png';
-import history4 from '../assets/history-image4.png';
-import history5 from '../assets/history-image5.png';
-import history6 from '../assets/history-image6.png';
-import title1 from '../assets/hero-title1.png';
-import title2 from '../assets/hero-title2.png';
-import title3 from '../assets/hero-title3.png';
-import title4 from '../assets/hero-title4.png';
-import title5 from '../assets/hero-title5.png';
-import title6 from '../assets/hero-title6.png';
+import historyTitle from '../assets/history-title.webp';
+import history1 from '../assets/history-image1.webp';
+import history2 from '../assets/history-image2.webp';
+import history3 from '../assets/history-image3.webp';
+import history4 from '../assets/history-image4.webp';
+import history5 from '../assets/history-image5.webp';
+import history6 from '../assets/history-image6.webp';
+import title1 from '../assets/hero-title1.webp';
+import title2 from '../assets/hero-title2.webp';
+import title3 from '../assets/hero-title3.webp';
+import title4 from '../assets/hero-title4.webp';
+import title5 from '../assets/hero-title5.webp';
+import title6 from '../assets/hero-title6.webp';
 
 const historyData = [
   {

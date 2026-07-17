@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronDown, Globe } from 'lucide-react';
-import logo from '../assets/logo-noekarta.png';
-import bgImage from '../assets/bg-pageApaItuJakarta.png';
-import card3 from '../assets/card_about3.png';
-import card4 from '../assets/card_about4.png';
-import card5 from '../assets/card-about5.jpg';
-import card2 from '../assets/card_about2.png'; // Used for the bottom section image
+import logo from '../assets/logo-noekarta.webp';
+import bgImage from '../assets/bg-pageApaItuJakarta.webp';
+import card3 from '../assets/card_about3.webp';
+import card4 from '../assets/card_about4.webp';
+import card5 from '../assets/card-about5.webp';
+import card2 from '../assets/card_about2.webp'; // Used for the bottom section image
 import jakartaDroneVideo from '../assets/vid/drone_jakarta.webm';
+import Seo from '../components/Seo';
 
 const ApaItuJakartaPage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ const ApaItuJakartaPage = () => {
 
   return (
     <div className="min-h-screen bg-white font-poppins font-sans">
+      <Seo
+        title="Apa Itu Jakarta"
+        description="Kenali Jakarta sebagai jantung Indonesia: pusat pemerintahan, ekonomi, budaya, dan kehidupan metropolitan."
+      />
       {/* Header */}
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100 h-[72px] flex items-center shrink-0">
         <div className="w-full px-4 md:px-8 flex items-center justify-between relative max-w-[1440px] mx-auto">
@@ -122,7 +127,7 @@ const ApaItuJakartaPage = () => {
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="metadata"
                 aria-label="Video drone Jakarta"
               />
               {/* Tag */}

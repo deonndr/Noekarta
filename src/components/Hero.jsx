@@ -1,16 +1,16 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Search, Star, ArrowRight } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Search, ArrowRight } from 'lucide-react';
 
 // impor component
-import component2 from '../assets/components/starcomponent.png';
+import component2 from '../assets/components/starcomponent.webp';
 
 // impor gambar judul
-import img1 from '../assets/hero-title1.png';
-import img2 from '../assets/hero-title2.png';
-import img3 from '../assets/hero-title3.png';
-import img4 from '../assets/hero-title4.png';
-import img5 from '../assets/hero-title5.png';
-import img6 from '../assets/hero-title6.png';
+import img1 from '../assets/hero-title1.webp';
+import img2 from '../assets/hero-title2.webp';
+import img3 from '../assets/hero-title3.webp';
+import img4 from '../assets/hero-title4.webp';
+import img5 from '../assets/hero-title5.webp';
+import img6 from '../assets/hero-title6.webp';
 
 // impor gambar floating cards
 import cardfly1 from '../assets/cardfly1.svg';
@@ -28,11 +28,11 @@ const titleFrames = [
 ];
 
 // Load all landmark images 1-20
-const imageModules = import.meta.glob('../assets/landmarkjakarta*.png', { eager: true, import: 'default' });
+const imageModules = import.meta.glob('../assets/landmarkjakarta*.webp', { eager: true, import: 'default' });
 const baseLandmarkImages = Object.keys(imageModules)
     .sort((a, b) => {
-        const numA = parseInt(a.match(/landmarkjakarta(\d+)\.png/)[1], 10);
-        const numB = parseInt(b.match(/landmarkjakarta(\d+)\.png/)[1], 10);
+        const numA = parseInt(a.match(/landmarkjakarta(\d+)\.webp/)[1], 10);
+        const numB = parseInt(b.match(/landmarkjakarta(\d+)\.webp/)[1], 10);
         return numA - numB;
     })
     .map(key => imageModules[key]);
@@ -66,6 +66,22 @@ const Hero = () => {
     const rotationRef = useRef(0);
     const autoRotateRafId = useRef(null);
     const isHovered = useRef(false);
+    const isAnimatingRef = useRef(false);
+
+    const heroRef = useRef(null);
+    const [isHeroVisible, setIsHeroVisible] = useState(true);
+
+    useEffect(() => {
+        if (!heroRef.current) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsHeroVisible(entry.isIntersecting);
+            },
+            { threshold: 0.05 }
+        );
+        observer.observe(heroRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     const updateContainerWidth = useCallback((imgW, imgH) => {
         if (!containerRef.current) return;
@@ -119,16 +135,19 @@ const Hero = () => {
     };
 
     // ── Calculate dynamic dimensions ──
-    let currentCardWidth = CARD_WIDTH;
-    let currentCardHeight = CARD_HEIGHT;
-    if (windowWidth <= 768) {
-        currentCardWidth = 180;
-        currentCardHeight = 245;
-    }
-    if (windowWidth <= 480) {
-        currentCardWidth = 140;
-        currentCardHeight = 190;
-    }
+    const { currentCardWidth, currentCardHeight } = useMemo(() => {
+        let width = CARD_WIDTH;
+        let height = CARD_HEIGHT;
+        if (windowWidth <= 768) {
+            width = 180;
+            height = 245;
+        }
+        if (windowWidth <= 480) {
+            width = 140;
+            height = 190;
+        }
+        return { currentCardWidth: width, currentCardHeight: height };
+    }, [windowWidth]);
 
     // ── Calculate cylinder radius ──
     const getRadius = useCallback(() => {
@@ -139,8 +158,10 @@ const Hero = () => {
 
     // ── Auto-rotation loop ──
     useEffect(() => {
+        if (!isHeroVisible) return;
+
         const rotateLoop = () => {
-            if (!isHovered.current && cylinderRef.current) {
+            if (!isHovered.current && !isAnimatingRef.current && cylinderRef.current) {
                 rotationRef.current += AUTO_ROTATE_SPEED;
                 cylinderRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
             }
@@ -152,10 +173,13 @@ const Hero = () => {
         return () => {
             if (autoRotateRafId.current) cancelAnimationFrame(autoRotateRafId.current);
         };
-    }, []);
+    }, [isHeroVisible]);
 
     // ── Click handler: rotate clicked card to front ──
     const handleCardClick = useCallback((index) => {
+        if (isAnimatingRef.current) return;
+        isAnimatingRef.current = true;
+
         const targetAngle = -(360 / TOTAL_ITEMS) * index;
         // Find the shortest rotation path
         const currentMod = rotationRef.current % 360;
@@ -175,12 +199,13 @@ const Hero = () => {
                 if (cylinderRef.current) {
                     cylinderRef.current.style.transition = 'none';
                 }
+                isAnimatingRef.current = false;
             }, 850);
         }
     }, []);
 
     return (
-        <section className="w-full flex flex-col items-center justify-start pt-16 pb-0 relative overflow-hidden">
+        <section ref={heroRef} className="w-full flex flex-col items-center justify-start pt-16 pb-0 relative overflow-hidden">
 
             {/* ── Floating Cards ── absolute ke section, di luar area teks ── */}
             {/* Top-left: 30+ Budaya Betawi */}
@@ -188,28 +213,28 @@ const Hero = () => {
                 src={cardfly1}
                 alt="30+ Budaya Betawi"
                 className="hidden lg:block select-none absolute z-20"
-                style={{ left: '10%', top: '1%', width: 250, animation: 'float-card-1 8s ease-in-out infinite' }}
+                style={{ left: '10%', top: '1%', width: 250, animation: isHeroVisible ? 'float-card-1 8s ease-in-out infinite' : 'none' }}
             />
             {/* Top-right: 50+ Kuliner Khas */}
             <img
                 src={cardfly2}
                 alt="50+ Kuliner Khas"
                 className="hidden lg:block select-none absolute z-20"
-                style={{ right: '10%', top: '1%', width: 250, animation: 'float-card-2 9s ease-in-out infinite' }}
+                style={{ right: '10%', top: '1%', width: 250, animation: isHeroVisible ? 'float-card-2 9s ease-in-out infinite' : 'none' }}
             />
             {/* Bottom-left: 6 Kota Sejarah */}
             <img
                 src={cardfly3}
                 alt="6 Kota Sejarah"
                 className="hidden lg:block select-none absolute z-20"
-                style={{ left: '8%', top: '35%', width: 250, animation: 'float-card-3 8.5s ease-in-out infinite' }}
+                style={{ left: '8%', top: '35%', width: 250, animation: isHeroVisible ? 'float-card-3 8.5s ease-in-out infinite' : 'none' }}
             />
             {/* Bottom-right: 200+ Landmark */}
             <img
                 src={cardfly4}
                 alt="200+ Landmark"
                 className="hidden lg:block select-none absolute z-20"
-                style={{ right: '8%', top: '35%', width: 250, animation: 'float-card-4 9.5s ease-in-out infinite' }}
+                style={{ right: '8%', top: '35%', width: 250, animation: isHeroVisible ? 'float-card-4 9.5s ease-in-out infinite' : 'none' }}
             />
 
             {/* ── Konten Tengah ── */}
@@ -303,6 +328,7 @@ const Hero = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         transformStyle: 'preserve-3d',
+                        willChange: 'transform',
                     }}
                     onMouseEnter={() => { isHovered.current = true; }}
                     onMouseLeave={() => { isHovered.current = false; }}
@@ -330,6 +356,7 @@ const Hero = () => {
                                     backfaceVisibility: 'hidden',
                                     WebkitBackfaceVisibility: 'hidden',
                                     transform: `rotateY(${angle}deg) translateZ(${-radius}px)`,
+                                    willChange: 'transform',
                                 }}
                                 onClick={() => handleCardClick(i)}
                             >

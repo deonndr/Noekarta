@@ -1,23 +1,22 @@
-import img1 from '../assets/landmarkjakarta1.png';
-import img2 from '../assets/landmarkjakarta2.png';
-import img3 from '../assets/landmarkjakarta3.png';
-import img4 from '../assets/landmarkjakarta4.png';
-import img6 from '../assets/landmarkjakarta6.png';
-import img7 from '../assets/landmarkjakarta7.png';
-import img8 from '../assets/landmarkjakarta8.png';
-import img9 from '../assets/landmarkjakarta9.png';
-import img11 from '../assets/landmarkjakarta11.png';
-import img12 from '../assets/landmarkjakarta12.png';
-import img13 from '../assets/landmarkjakarta13.png';
-import img14 from '../assets/landmarkjakarta14.png';
-import img15 from '../assets/landmarkjakarta15.png';
-import img16 from '../assets/landmarkjakarta16.png';
-import img17 from '../assets/landmarkjakarta17.png';
-import img18 from '../assets/landmarkjakarta18.png';
-import img20 from '../assets/landmarkjakarta20.png';
+import img1 from '../assets/landmarkjakarta1.webp';
+import img2 from '../assets/landmarkjakarta2.webp';
+import img3 from '../assets/landmarkjakarta3.webp';
+import img4 from '../assets/landmarkjakarta4.webp';
+import img6 from '../assets/landmarkjakarta6.webp';
+import img7 from '../assets/landmarkjakarta7.webp';
+import img8 from '../assets/landmarkjakarta8.webp';
+import img9 from '../assets/landmarkjakarta9.webp';
+import img11 from '../assets/landmarkjakarta11.webp';
+import img12 from '../assets/landmarkjakarta12.webp';
+import img13 from '../assets/landmarkjakarta13.webp';
+import img14 from '../assets/landmarkjakarta14.webp';
+import img15 from '../assets/landmarkjakarta15.webp';
+import img16 from '../assets/landmarkjakarta16.webp';
+import img17 from '../assets/landmarkjakarta17.webp';
+import img18 from '../assets/landmarkjakarta18.webp';
+import img20 from '../assets/landmarkjakarta20.webp';
 
 
-const U = (id) => `https://images.unsplash.com/${id}?w=400&h=260&fit=crop`;
 
 export const landmarks = [
     { id: 1, title: 'Monas', image: img1, position: [-6.175392, 106.827153], description: 'Monumen Nasional, ikon utama kota Jakarta yang menjulang setinggi 132 meter.' },

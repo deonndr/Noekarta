@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import betawi1 from '../assets/betawi1.png';
-import betawi2 from '../assets/betawi2.png';
-import betawi3 from '../assets/betawi3.png';
-import betawi4 from '../assets/betawi4.png';
-import betawi5 from '../assets/betawi5.png';
-import component2 from '../assets/components/component2.png';
+import betawi1 from '../assets/betawi1.webp';
+import betawi2 from '../assets/betawi2.webp';
+import betawi3 from '../assets/betawi3.webp';
+import betawi4 from '../assets/betawi4.webp';
+import betawi5 from '../assets/betawi5.webp';
+import component2 from '../assets/components/component2.webp';
 
 const betawiData = [
   {

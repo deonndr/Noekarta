@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -11,8 +11,10 @@ import History from './components/history';
 import BetawiHeritage from './components/BetawiHeritage';
 import KulinerJakarta from './components/KulinerJakarta';
 import NoeQuiz from './components/NoeQuiz';
-import LandmarkPage from './pages/LandmarkPage';
-import ApaItuJakartaPage from './pages/ApaItuJakartaPage';
+import Seo from './components/Seo';
+
+const LandmarkPage = lazy(() => import('./pages/LandmarkPage'));
+const ApaItuJakartaPage = lazy(() => import('./pages/ApaItuJakartaPage'));
 import 'lenis/dist/lenis.css';
 import './index.css';
 
@@ -23,7 +25,7 @@ function LandingPage() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.9,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
     });
@@ -52,12 +54,12 @@ function LandingPage() {
       gsap.fromTo(sec, 
         { 
           opacity: 0, 
-          y: 70 
+          y: 40 
         },
         {
           opacity: 1,
           y: 0,
-          duration: 1.2,
+          duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sec,
@@ -75,6 +77,10 @@ function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] font-poppins" ref={containerRef}>
+      <Seo
+        title="Jelajahi Jakarta"
+        description="Jelajahi sejarah, budaya Betawi, kuliner khas, landmark, dan cerita Jakarta melalui pengalaman interaktif dari Noekarta."
+      />
       <Navbar />
       <Hero />
       <div className="gsap-section"><About /></div>
@@ -90,11 +96,17 @@ function LandingPage() {
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/landmark-explorer" element={<LandmarkPage />} />
-        <Route path="/apa-itu-jakarta" element={<ApaItuJakartaPage />} />
-      </Routes>
+      <Suspense fallback={
+        <div className="h-screen w-screen bg-[#FAFAFA] flex flex-col items-center justify-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/landmark-explorer" element={<LandmarkPage />} />
+          <Route path="/apa-itu-jakarta" element={<ApaItuJakartaPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

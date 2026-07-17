@@ -1,40 +1,12 @@
-import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
 import { Bookmark, Map as MapIcon, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useInView } from 'motion/react';
 import { landmarks } from '../data/landmarks';
 import StreetViewPortal from './StreetViewPortal';
 import cardfly from '../assets/cardfly4.svg';
 
-// Fix Leaflet default icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
-
-// Custom red marker icon
-const redIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-});
-
-// Fly-to controller
-const MapController = ({ position, zoom }) => {
-    const map = useMap();
-    useEffect(() => {
-        if (position) {
-            map.flyTo(position, zoom || 16, { duration: 1.5 });
-        }
-    }, [position, zoom, map]);
-    return null;
-};
+const LandmarkMap = lazy(() => import('./LandmarkMap'));
 
 const LandmarkExplorer = () => {
     const navigate = useNavigate();
@@ -43,7 +15,31 @@ const LandmarkExplorer = () => {
     const [streetViewTarget, setStreetViewTarget] = useState(null);
     const scrollRef = useRef(null);
     const sectionRef = useRef(null);
+    const isSectionInView = useInView(sectionRef, { margin: '200px' });
     const defaultCenter = [-6.1700, 106.8250];
+
+    const [isMapVisible, setIsMapVisible] = useState(false);
+    const mapContainerRef = useRef(null);
+
+    useEffect(() => {
+        if (!mapContainerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsMapVisible(true);
+                    observer.disconnect();
+                }
+            },
+            {
+                rootMargin: '300px 0px',
+                threshold: 0.01,
+            }
+        );
+
+        observer.observe(mapContainerRef.current);
+        return () => observer.disconnect();
+    }, []);
 
     useLayoutEffect(() => {
         if (location.state?.scrollToLandmarkExplorer && sectionRef.current) {
@@ -88,8 +84,7 @@ const LandmarkExplorer = () => {
                 <img src={cardfly}
                     alt="landmark"
                     className="select-none w-[230px]"
-                    style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
-
+                    style={{ animation: isSectionInView ? 'float-card-2 9s ease-in-out infinite' : 'none' }}
                 />
             </div>
 
@@ -140,57 +135,28 @@ const LandmarkExplorer = () => {
             </div>
 
             {/* Map Preview Section */}
-            <div className="relative w-full h-[350px] md:h-[380px] rounded-[24px] overflow-hidden border border-blue-400 bg-gray-100 shadow-sm">
-                <MapContainer
-                    center={defaultCenter}
-                    zoom={13}
-                    minZoom={11}
-                    scrollWheelZoom={true}
-                    className="w-full h-full"
-                    style={{ minHeight: '350px' }}
-                    maxBounds={[[-6.3934, 106.6894], [-6.0831, 106.9734]]}
-                    maxBoundsViscosity={1.0}
-                >
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        noWrap={true}
-                    />
-                    {landmarks.map((landmark) => (
-                        <Marker
-                            key={landmark.id}
-                            position={landmark.position}
-                            icon={redIcon}
-                            eventHandlers={{
-                                click: () => setActiveLandmark(landmark),
-                            }}
-                        >
-                            <Popup>
-                                <div className="flex flex-col gap-2 min-w-[160px]">
-                                    <img
-                                        src={landmark.image}
-                                        alt={landmark.title}
-                                        className="w-full h-24 object-cover rounded-lg"
-                                    />
-                                    <p className="font-bold text-gray-900 text-sm">{landmark.title}</p>
-                                    <p className="text-gray-500 text-xs">{landmark.description}</p>
-                                    <button
-                                        onClick={() => setStreetViewTarget(landmark)}
-                                        className="mt-1 flex items-center justify-center gap-1.5 bg-red-600 text-white py-1.5 px-3 rounded-lg text-xs font-semibold hover:bg-red-700 hover:shadow-lg transition-all duration-300"
-                                    >
-                                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                        </svg>
-                                        Lihat 360°
-                                    </button>
-                                </div>
-                            </Popup>
-                        </Marker>
-                    ))}
-                    {activeLandmark && (
-                        <MapController position={activeLandmark.position} zoom={16} />
+            <div ref={mapContainerRef} className="relative w-full h-[350px] md:h-[380px] rounded-[24px] overflow-hidden border border-blue-400 bg-gray-100 shadow-sm">
+                <Suspense fallback={
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50/50 backdrop-blur-[1px] z-[999] pointer-events-none">
+                        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+                        <p className="text-sm font-semibold text-gray-700 tracking-wide">Memuat Peta...</p>
+                    </div>
+                }>
+                    {isMapVisible ? (
+                        <LandmarkMap
+                            landmarks={landmarks}
+                            activeLandmark={activeLandmark}
+                            setActiveLandmark={setActiveLandmark}
+                            setStreetViewTarget={setStreetViewTarget}
+                            defaultCenter={defaultCenter}
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
+                            <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+                            <p className="text-sm font-semibold text-gray-700 tracking-wide">Mempersiapkan Peta...</p>
+                        </div>
                     )}
-                </MapContainer>
+                </Suspense>
 
                 {/* Active landmark pill */}
                 {activeLandmark && (
@@ -211,7 +177,7 @@ const LandmarkExplorer = () => {
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000]">
                     <button
                         onClick={handleOpenMap}
-                        className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.15)] font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.15)] font-semibold text-gray-900 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                         <MapIcon className="w-5 h-5 text-gray-700" />
                         Buka Peta Interaktif

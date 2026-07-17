@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { useInView, motion } from 'motion/react';
-import TitleImage from '../assets/Apa_Itu_Jakarta.png';
-import landmarkjakarta1 from '../assets/card_about1.png';
-import landmarkjakarta2 from '../assets/card_about3.png';
-import landmarkjakarta3 from '../assets/card_about2.png';
-import landmarkjakarta4 from '../assets/card_about4.png';
-import component1 from '../assets/components/component1.png';
+import TitleImage from '../assets/Apa_Itu_Jakarta.webp';
+import landmarkjakarta1 from '../assets/card_about1.webp';
+import landmarkjakarta2 from '../assets/card_about3.webp';
+import landmarkjakarta3 from '../assets/card_about2.webp';
+import landmarkjakarta4 from '../assets/card_about4.webp';
+import component1 from '../assets/components/component1.webp';
 
 const AnimatedCounter = ({ value, duration = 2 }) => {
   const [count, setCount] = useState(0);
@@ -95,14 +95,16 @@ const About = () => {
             src={component1}
             alt="Decoration"
             className="absolute -top-30 left-[35%] w-[70px] h-[70px] object-contain select-none"
-            animate={{ y: [0, -15, 0] }}
+            whileInView={{ y: [0, -15, 0] }}
+            viewport={{ once: false }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.img
             src={component1}
             alt="Decoration"
             className="absolute -top-6 right-[10%] w-[60px] h-[60px] object-contain select-none"
-            animate={{ y: [0, 20, 0] }}
+            whileInView={{ y: [0, 20, 0] }}
+            viewport={{ once: false }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           />
 

@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import logo from '../assets/logo-noekarta2.png';
+import logo from '../assets/logo-noekarta2.webp';
 
 gsap.registerPlugin(useGSAP);
 

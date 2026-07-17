@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
-import maskot from '../assets/noekarta-maskot.png';
-import titleImage from '../assets/noequiz-title.png';
-import component3 from '../assets/components/component3.png';
-import component5 from '../assets/components/component5.png';
+import maskot from '../assets/noekarta-maskot.webp';
+import titleImage from '../assets/noequiz-title.webp';
+import component3 from '../assets/components/component3.webp';
+import component5 from '../assets/components/component5.webp';
 
 const tutorialSteps = [
   'Tekan pos aktif pertama, yaitu "Sejarah Batavia", untuk memulai permainan.',

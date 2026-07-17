@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import kuliner1 from '../assets/kuliner1.png';
-import kuliner2 from '../assets/kuliner2.png';
-import kuliner3 from '../assets/kuliner3.png';
-import kuliner4 from '../assets/kuliner4.png';
-import kuliner5 from '../assets/kuliner5.png';
-import kuliner6 from '../assets/kuliner6.jpg';
+import { useState, useRef } from 'react';
+import { useInView, motion } from 'motion/react';
+import kuliner1 from '../assets/kuliner1.webp';
+import kuliner2 from '../assets/kuliner2.webp';
+import kuliner3 from '../assets/kuliner3.webp';
+import kuliner4 from '../assets/kuliner4.webp';
+import kuliner5 from '../assets/kuliner5.webp';
+import kuliner6 from '../assets/kuliner6.webp';
 import cardfly from '../assets/cardfly2.svg';
-import component1 from '../assets/components/component1.png';
+import component1 from '../assets/components/component1.webp';
 
 const kulinerData = [
   {
@@ -66,6 +66,8 @@ const BookmarkIcon = () => (
 
 const KulinerJakarta = () => {
   const [savedItems, setSavedItems] = useState([]);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { margin: '200px' });
 
   const toggleSave = (id) => {
     setSavedItems((prev) =>
@@ -74,7 +76,7 @@ const KulinerJakarta = () => {
   };
 
   return (
-    <section className="py-20 bg-[#fafafa]">
+    <section ref={sectionRef} className="py-20 bg-[#fafafa]">
       <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 
@@ -86,7 +88,7 @@ const KulinerJakarta = () => {
                 src={cardfly}
                 alt="50+ Kuliner Khas"
                 className="absolute bottom-10 left-0 select-none z-20 w-[250px]"
-                style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
+                style={{ animation: isInView ? 'float-card-2 9s ease-in-out infinite' : 'none' }}
               />
             </div>
 
@@ -110,7 +112,8 @@ const KulinerJakarta = () => {
                 src={component1}
                 alt="Decoration"
                 className="w-full h-full object-contain select-none opacity-50"
-                animate={{ y: [0, -15, 0] }}
+                whileInView={{ y: [0, -15, 0] }}
+                viewport={{ once: false }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
             </div>
@@ -119,7 +122,8 @@ const KulinerJakarta = () => {
                 src={component1}
                 alt="Decoration"
                 className="w-full h-full object-contain select-none opacity-50"
-                animate={{ y: [0, 20, 0] }}
+                whileInView={{ y: [0, 20, 0] }}
+                viewport={{ once: false }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               />
             </div>

@@ -4,8 +4,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { ChevronLeft, MapPin } from 'lucide-react';
 import L from 'leaflet';
 import { landmarks } from '../data/landmarks';
-import logo from '../assets/logo-noekarta.png';
+import logo from '../assets/logo-noekarta.webp';
 import StreetViewPortal from '../components/StreetViewPortal';
+import Seo from '../components/Seo';
 
 const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/f87171/ffffff?text=Image+Not+Available';
 
@@ -63,6 +64,10 @@ const LandmarkPage = () => {
 
     return (
         <div className="h-screen bg-white font-poppins flex flex-col overflow-hidden">
+            <Seo
+                title="Landmark Jakarta"
+                description="Temukan landmark ikonik Jakarta dan jelajahi lokasinya melalui peta interaktif Noekarta."
+            />
             {/* Custom Header*/}
             <header className="w-full bg-white border-b border-gray-100 shadow-sm z-50 relative">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between gap-4">
