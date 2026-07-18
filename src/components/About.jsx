@@ -127,7 +127,7 @@ const About = () => {
           </p>
 
           <div className="pt-2 relative z-10">
-            <button onClick={() => navigate('/apa-itu-jakarta')} className="flex items-center gap-2 px-8 py-3.5 cursor-pointer bg-[#1455e6] text-white rounded-[12px] font-medium hover:bg-blue-700 transition-colors">
+            <button onClick={() => navigate('/apa-itu-jakarta')} className="flex items-center gap-2 px-8 py-3.5 cursor-pointer bg-indigo-950 text-white rounded-[12px] font-medium hover:bg-indigo-900 transition-colors">
               Selengkapnya tentang Jakarta
               <ChevronRight className="w-5 h-5" />
             </button>

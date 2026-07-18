@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronDown, Globe } from 'lucide-react';
+import { motion } from 'motion/react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
 import logo from '../assets/logo-noekarta.webp';
-import bgImage from '../assets/bg-pageApaItuJakarta.webp';
-import card3 from '../assets/card_about3.webp';
-import card4 from '../assets/card_about4.webp';
+import heroBackground from '../assets/bg-ApaItuJakarta.webp';
+import heroTitle from '../assets/title.pageApaItuJakarta.webp';
+import heroForeground from '../assets/bgtrans-ApaItuJakarta.webp';
 import card5 from '../assets/card-about5.webp';
-import card2 from '../assets/card_about2.webp'; // Used for the bottom section image
 import jakartaDroneVideo from '../assets/vid/drone_jakarta.webm';
 import Seo from '../components/Seo';
 
@@ -15,6 +17,25 @@ const ApaItuJakartaPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.05,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+    });
+    const updateLenis = (time) => lenis.raf(time * 1000);
+
+    window.lenis = lenis;
+    gsap.ticker.add(updateLenis);
+    gsap.ticker.lagSmoothing(0, 0);
+
+    return () => {
+      gsap.ticker.remove(updateLenis);
+      lenis.destroy();
+      if (window.lenis === lenis) window.lenis = undefined;
+    };
   }, []);
 
   const handleBack = () => {
@@ -53,67 +74,41 @@ const ApaItuJakartaPage = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative w-full h-[600px] md:h-[650px] flex flex-col items-center justify-start pt-20 px-4">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <img src={bgImage} alt="Jakarta Background" className="w-full select-none h-full object-cover" />
-        </div>
+      {/* Hero: the title is intentionally sandwiched between the city backdrop and foreground skyline. */}
+      <section className="px-4 pt-4 md:px-8 md:pt-7">
+        <div className="relative mx-auto aspect-[2/1] w-full max-w-[1506px] overflow-hidden rounded-[28px] md:rounded-[48px]">
+          <img
+            src={heroBackground}
+            alt="Pemandangan kota Jakarta"
+            className="absolute inset-0 h-full brightness-75 w-full select-none object-cover"
+          />
 
-        {/* Text Content */}
-        <div className="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-ancizar tracking-wide">
-            Jakarta, Jantung Indonesia
-          </h1>
-          <p className="text-gray-100 text-sm md:text-base lg:text-lg max-w-3xl leading-relaxed text-center">
-            Jakarta Merupakan Ibu Kota Indonesia Sekaligus Pusat Pemerintahan, Ekonomi, Bisnis,
-            Dan Teknologi. Dengan Jumlah Penduduk Lebih Dari 10 Juta Jiwa, Jakarta Menjadi Kota
-            Metropolitan Terbesar Di Indonesia Yang Dihuni Oleh Masyarakat Dari Berbagai Suku
-            Dan Budaya.
-          </p>
-        </div>
-
-        {/* Floating Cards Grid */}
-        <div className="relative z-20 w-full  max-w-6xl mt-20 md:mt-24 lg:mt-10">
-          <div className="flex flex-row flex-wrap md:flex-nowrap  lg:flex-nowrap justify-center items-end gap-4 md:gap-6 lg:gap-4 px-4 translate-y-24 md:translate-y-32">
-
-            {/* Card 1: Food */}
-            <div className="rounded-[20px] p-2  self-end mb-4 lg:mb-18  transform hover:-translate-y-2 transition-transform duration-300">
-              <img src={card2} alt="Food" className="w-[140px] shadow-lg select-none md:w-[180px] lg:w-[287px] h-[140px] md:h-[180px] lg:h-[224px] object-cover rounded-[14px]" />
-            </div>
-
-            {/* Middle Column: Stats + Monas */}
-            <div className="flex flex-col gap-4 self-start transform -translate-y-8 lg:translate-y-1">
-              <div className="bg-white rounded-[20px] p-5  min-w-[200px] md:min-w-[240px] text-center transform hover:-translate-y-2 transition-transform duration-300">
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 whitespace-nowrap">
-                  11,01 juta jiwa
-                </h3>
-                <p className="text-xs md:text-sm text-gray-500 whitespace-nowrap mt-1 font-medium">Penduduk Kota Jakarta</p>
-              </div>
-              <div className="rounded-[20px] p-2  w-full h-[120px] md:h-[140px] lg:w-[325px] lg:h-[169px] transform hover:-translate-y-2 transition-transform duration-300">
-                <img src={card3} alt="Monas" className="w-full shadow-lg select-none h-full object-cover rounded-[14px]" />
-              </div>
-            </div>
-
-            {/* Card 4: Stadium */}
-            <div className="rounded-[20px] p-2   self-end mb-4 lg:mb-18 transform hover:-translate-y-2 transition-transform duration-300">
-              <img src={card4} alt="Stadium" className="shadow-lg w-[130px] select-none md:w-[160px] lg:w-[244px] h-[150px] md:h-[190px] lg:h-[253px] object-cover rounded-[14px]" />
-            </div>
-
-            {/* Card 5: Cityscape */}
-            <div className="rounded-[20px] p-2   self-end mb-10 lg:mb-28 transform hover:-translate-y-2 transition-transform duration-300">
-              <img src={card5} alt="Cityscape" className="shadow-lg select-none w-[100px] md:w-[130px] lg:w-[202px] h-[100px] md:h-[130px] lg:h-[169px] object-cover rounded-[14px]" />
-            </div>
-
+          <div className="absolute left-1/2 top-[31%] z-10 w-[78%] -translate-x-1/2 md:top-[18%] md:w-[76%]">
+            <motion.img
+              src={heroTitle}
+              alt="Kota Jakarta"
+              className="block w-full select-none"
+              initial={{ opacity: 0, y: 72, filter: 'blur(7px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{
+                duration: 2.35,
+                delay: 0.15,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            />
           </div>
+
+          <img
+            src={heroForeground}
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-20 h-full w-full select-none object-cover"
+          />
         </div>
       </section>
 
-      {/* Bottom Section Spacer for the floating cards */}
-      <div className="h-40 md:h-56"></div>
-
       {/* Content Section */}
-      <section className="px-4 md:px-8 max-w-auto pb-28 mx-auto">
+      <section className="mx-auto max-w-[1440px] px-4 pb-28 pt-12 md:px-8 md:pt-20">
         <div className=" rounded-[32px]  p-6 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center ">
 
           {/* Left: Video with blue tag */}

@@ -82,7 +82,7 @@ const Navbar = () => {
                                 <a
                                     key={i}
                                     href={link.href}
-                                    className="relative text-black font-medium hover:text-blue-600 transition-colors py-1 nav-link-animated"
+                                    className="relative text-black font-medium hover:text-indigo-800 transition-colors py-1 nav-link-animated"
                                 >
                                     {link.label}
                                 </a>
