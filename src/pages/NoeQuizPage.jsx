@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, Flag, LockKeyhole, MapPin, X, ArrowLeft, ChevronLeft, Globe, Menu } from 'lucide-react';
+import { Check, Flag, LockKeyhole, X, ArrowLeft, ChevronLeft, Globe, Menu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -12,7 +12,6 @@ import component5 from '../assets/components/component5.webp';
 import component6 from '../assets/components/component6.webp';
 import component7 from '../assets/components/component7.webp';
 import logoNoekarta from '../assets/logo-noekarta.webp';
-import quizBackground from '../assets/background-noequiz.webp';
 
 import component8 from '../assets/components/component8.webp';
 import component9 from '../assets/components/component9.webp';
@@ -221,6 +220,7 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
       } else {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setModalState('quiz');
       }
     }
@@ -233,6 +233,7 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
         return () => clearTimeout(timer);
       } else {
         // Auto submit if time runs out
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setHasSubmitted(true);
         if (selectedOption) {
           onAnswer(dummyQuestion.options.find(o => o.id === selectedOption)?.isCorrect || false);
@@ -244,10 +245,6 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
   }, [modalState, timeLeft, hasSubmitted, selectedOption, onAnswer, dummyQuestion.options]);
 
   if (!station) return null;
-
-  const radius = 38;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (timeLeft / 20) * circumference;
 
   return createPortal(
     <AnimatePresence>

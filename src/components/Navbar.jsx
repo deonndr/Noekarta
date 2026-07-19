@@ -92,7 +92,7 @@ const Navbar = () => {
                         {/* Sisi Kanan Bahasa + Menu Burger */}
                         <div className="flex items-center gap-4">
                             {/* pilih bahasa */}
-                            <button className="flex items-center gap-1.5 text-gray-800 hover:text-black font-medium transition-colors focus:outline-none">
+                            <button className="hidden lg:flex items-center gap-1.5 text-gray-800 hover:text-black font-medium transition-colors focus:outline-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="12" cy="12" r="10" />
                                     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
@@ -118,18 +118,32 @@ const Navbar = () => {
                     </div>
 
                     {/* Overlay Menu Mobile */}
-                    <div className={`mobile-menu absolute left-0 w-full shadow-lg z-50 lg:hidden ${isMobileMenuOpen ? 'menu-open' : ''} ${isScrolled ? 'top-full mt-3 rounded-2xl border border-white/60 bg-white/40 backdrop-blur-xl backdrop-saturate-150 overflow-hidden' : 'bg-white top-full border-t border-gray-100'}`}>
-                        <div className="flex flex-col items-center gap-1 py-6">
+                    <div className={`mobile-menu absolute top-full left-0 w-full shadow-lg z-50 lg:hidden mt-3 rounded-2xl border border-white/40 bg-white/20 backdrop-blur-xl backdrop-saturate-150 overflow-hidden ${isMobileMenuOpen ? 'menu-open' : ''}`}>
+                        <div className="flex flex-col items-center gap-1 py-4">
                             {navLinks.map((link, i) => (
                                 <a
                                     key={i}
                                     href={link.href}
-                                    className="mobile-link w-full text-center py-3 text-gray-900 font-medium hover:text-blue-600 hover:bg-white/30 text-lg"
+                                    className="mobile-link w-full text-center py-2 px-4 mx-2 rounded-xl text-gray-900 font-medium hover:text-blue-700 hover:bg-white/30 transition-all duration-200 text-base"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.label}
                                 </a>
                             ))}
+
+                            {/* Pembatas halus */}
+                            <div className="w-4/5 h-[1px] bg-white/30 my-2" />
+
+                            {/* Language Switcher di Mobile Drawer */}
+                            <div className="flex items-center gap-3 py-1">
+                                <button className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-800/90 text-white shadow-sm transition-all cursor-pointer backdrop-blur-sm">
+                                    ID
+                                </button>
+                                <span className="text-white/40 text-xs">|</span>
+                                <button className="px-3 py-1 text-xs font-medium rounded-full text-gray-700 hover:bg-white/30 transition-all cursor-pointer">
+                                    EN
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </nav>

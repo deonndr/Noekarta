@@ -11,6 +11,7 @@ import History from './components/history';
 import BetawiHeritage from './components/BetawiHeritage';
 import KulinerJakarta from './components/KulinerJakarta';
 import NoeQuiz from './components/NoeQuiz';
+import Footer from './components/Footer';
 import Seo from './components/Seo';
 
 const LandmarkPage = lazy(() => import('./pages/LandmarkPage'));
@@ -90,6 +91,7 @@ function LandingPage({ completedStations = [] }) {
       <div className="gsap-section"><KulinerJakarta /></div>
       <div className="gsap-section"><LandmarkExplorer /></div>
       <div className="gsap-section"><NoeQuiz completedStations={completedStations} /></div>
+      <Footer />
     </div>
   );
 }

@@ -139,20 +139,22 @@ const Hero = () => {
         let width = CARD_WIDTH;
         let height = CARD_HEIGHT;
         if (windowWidth <= 768) {
-            width = 180;
-            height = 245;
+            // tablet — kartu lebih kecil agar curve keliatan
+            width = 90;
+            height = 130;
         }
         if (windowWidth <= 480) {
-            width = 140;
-            height = 190;
+            // phone — lebih kecil lagi
+            width = 70;
+            height = 100;
         }
         return { currentCardWidth: width, currentCardHeight: height };
     }, [windowWidth]);
 
     // ── Calculate cylinder radius ──
     const getRadius = useCallback(() => {
-        // Add slightly more padding on very small screens for a better gap
-        const padding = windowWidth <= 480 ? CYLINDER_PADDING + 10 : CYLINDER_PADDING;
+        // Tighter padding on mobile keeps cards closer, makes curve more visible
+        const padding = windowWidth <= 480 ? 12 : windowWidth <= 768 ? 20 : CYLINDER_PADDING;
         return Math.round((currentCardWidth / 2) / Math.tan(Math.PI / TOTAL_ITEMS)) + padding;
     }, [currentCardWidth, windowWidth]);
 
@@ -205,7 +207,7 @@ const Hero = () => {
     }, []);
 
     return (
-        <section ref={heroRef} className="w-full flex flex-col items-center justify-start pt-16 pb-0 relative overflow-hidden">
+        <section ref={heroRef} className="w-full flex flex-col items-center justify-start pt-6 md:pt-16 pb-0 relative overflow-hidden">
 
             {/* ── Floating Cards ── absolute ke section, di luar area teks ── */}
             {/* Top-left: 30+ Budaya Betawi */}
@@ -238,24 +240,24 @@ const Hero = () => {
             />
 
             {/* ── Konten Tengah ── */}
-            <div className="relative z-10 flex flex-col items-center w-full max-w-4xl px-6 text-center">
+            <div className="relative z-10 flex flex-col items-center w-full max-w-4xl px-4 md:px-6 text-center">
 
                 {/* Badge */}
                 <div
-                    className="inline-flex items-center gap-2 items-center rounded-full px-4 py-2 text-xs md:text-sm font-semibold bg-gray-50 mb-6 anim-fade-up"
+                    className="inline-flex items-center gap-1 md:gap-2 rounded-full px-2.5 py-1 md:px-4 md:py-2 text-[10px] md:text-sm font-semibold bg-gray-50 mb-3 md:mb-6 anim-fade-up"
                 >
-                    <img src={component2} alt="Star" className="mr-1" />
+                    <img src={component2} alt="Star" className="w-2.5 h-2.5 md:w-auto md:h-auto mr-0.5 md:mr-1" />
                     <p className="text-indigo-950">
                         Jelajahi Sejarah, Budaya &amp; Kuliner
                     </p>
                 </div>
 
                 {/* Judul Baris 1 */}
-                <div className="flex font-ancizar items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
+                <div className="flex flex-wrap md:flex-nowrap font-ancizar items-center justify-center md:whitespace-nowrap gap-1.5 md:gap-3 text-[clamp(20px,5.5vw,60px)] font-extrabold text-black tracking-tight leading-[1.2]">
                     <span>Dari Jejak</span>
                     <div
                         ref={containerRef}
-                        className="flex items-center justify-center h-10 sm:h-12 md:h-16 lg:h-[80px] transition-[width] duration-500 ease-in-out"
+                        className="flex items-center justify-center h-[clamp(28px,4vw,80px)] transition-[width] duration-500 ease-in-out"
                     >
                         <img
                             ref={imgRef}
@@ -270,34 +272,42 @@ const Hero = () => {
                 </div>
 
                 {/* Judul Baris 2 */}
-                <div className="mt-2 flex font-ancizar items-center justify-center whitespace-nowrap gap-2 md:gap-3 text-[28px] sm:text-[34px] md:text-[44px] lg:text-[60px] font-extrabold text-black tracking-tight leading-[1.15]">
+                <div className="mt-1 md:mt-2 flex flex-wrap md:flex-nowrap font-ancizar items-center justify-center md:whitespace-nowrap gap-1.5 md:gap-3 text-[clamp(20px,5.5vw,60px)] font-extrabold text-black tracking-tight leading-[1.2]">
                     <span>Jakarta</span>
-                    <div className="bg-blue-100 text-blue-600 rounded-sm px-2 py-1 flex items-center justify-center">
-                        <ArrowRight size={20} strokeWidth={3} className="md:w-6 md:h-6" />
+                    <div className="bg-blue-100 text-blue-600 rounded-sm px-1.5 py-0.5 md:px-2 md:py-1 flex items-center justify-center">
+                        <ArrowRight size={18} strokeWidth={3} className="md:w-6 md:h-6" />
                     </div>
                     <span className="overflow-hidden">Kota Digital</span>
                 </div>
 
-                {/* Subtitle */}
+                {/* Subtitle — Mobile: pendek & 1 baris */}
                 <p
-                    className="mt-5 text-sm md:text-[15px]  max-w-sm md:max-w-md leading-relaxed anim-fade-in"
+                    className="md:hidden mt-2 text-[11px] text-gray-500 leading-normal anim-fade-in"
                     style={{ animationDelay: '0.35s' }}
                 >
-                    Telusuri perjalanan panjang jakarta dari masa ke masa<br className="hidden md:block" />
+                    Jelajahi cerita Jakarta, dari masa ke masa.
+                </p>
+
+                {/* Subtitle — Desktop: full copy */}
+                <p
+                    className="hidden md:block mt-5 text-[15px] max-w-md leading-relaxed anim-fade-in"
+                    style={{ animationDelay: '0.35s' }}
+                >
+                    Telusuri perjalanan panjang jakarta dari masa ke masa<br />
                     dan temukan cerita di setiap sudut kotanya.
                 </p>
 
                 {/* Search Bar */}
                 <div
-                    className="mt-7 w-full max-w-[520px] anim-fade-up"
+                    className="mt-3 md:mt-7 w-full max-w-[260px] md:max-w-[520px] anim-fade-up"
                     style={{ animationDelay: '0.55s' }}
                 >
-                    <div className="bg-white rounded-2xl flex items-center px-5 py-5 shadow-[0_4px_24px_rgba(0,0,0,0.10)] border border-gray-200 focus-within:ring-2 focus-within:ring-gray-300 transition-all duration-300 group">
-                        <Search className="text-gray-400 mr-3 shrink-0 transition-colors" size={18} />
+                    <div className="bg-white rounded-xl md:rounded-2xl flex items-center px-3 py-2 md:px-5 md:py-5 shadow-[0_4px_24px_rgba(0,0,0,0.10)] border border-gray-200 focus-within:ring-2 focus-within:ring-gray-300 transition-all duration-300 group">
+                        <Search className="text-gray-400 mr-2 md:mr-3 shrink-0 transition-colors w-3 h-3 md:w-[18px] md:h-[18px]" />
                         <input
                             type="text"
                             placeholder="Jelajahi Sejarah, budaya, kuliner, dll"
-                            className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-sm md:text-base"
+                            className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-[10px] md:text-base"
                         />
                     </div>
                 </div>
@@ -307,15 +317,21 @@ const Hero = () => {
             <div
                 className="carousel-container w-full mt-6 select-none"
                 style={{
-                    perspective: '900px',
-                    height: '340px',
+                    // Tighter perspective on mobile = lebih kuat efek 3D-nya
+                    perspective: windowWidth <= 480 ? '500px' : windowWidth <= 768 ? '600px' : '900px',
+                    height: windowWidth <= 480 ? '130px' : windowWidth <= 768 ? '170px' : '340px',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     overflow: 'hidden',
                     position: 'relative',
-                    maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    // Narrower fade on mobile agar kartu di sisi tidak terpotong
+                    maskImage: windowWidth <= 768
+                        ? 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
+                        : 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+                    WebkitMaskImage: windowWidth <= 768
+                        ? 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)'
+                        : 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
                 }}
             >
                 <div
@@ -348,10 +364,16 @@ const Hero = () => {
                                     height: currentCardHeight,
                                     left: -(currentCardWidth / 2),
                                     top: -(currentCardHeight / 2),
-                                    borderRadius: '1rem',
+                                    // Sudut lebih kecil di mobile
+                                    borderRadius: windowWidth <= 480 ? '6px' : windowWidth <= 768 ? '8px' : '1rem',
                                     overflow: 'hidden',
-                                    boxShadow: '0 20px 40px -12px rgba(0,0,0,0.35)',
-                                    border: '3px solid rgba(255,255,255,0.8)',
+                                    boxShadow: '0 8px 20px -6px rgba(0,0,0,0.30)',
+                                    // Border tipis di mobile agar tidak dominan di kartu kecil
+                                    border: windowWidth <= 480
+                                        ? '1.5px solid rgba(255,255,255,0.85)'
+                                        : windowWidth <= 768
+                                            ? '2px solid rgba(255,255,255,0.85)'
+                                            : '3px solid rgba(255,255,255,0.8)',
                                     cursor: 'pointer',
                                     backfaceVisibility: 'hidden',
                                     WebkitBackfaceVisibility: 'hidden',
