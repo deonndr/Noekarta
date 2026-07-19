@@ -1,4 +1,4 @@
-import { useEffect, useRef, lazy, Suspense } from 'react';
+import { useEffect, useRef, lazy, Suspense, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -15,12 +15,13 @@ import Seo from './components/Seo';
 
 const LandmarkPage = lazy(() => import('./pages/LandmarkPage'));
 const ApaItuJakartaPage = lazy(() => import('./pages/ApaItuJakartaPage'));
+const NoeQuizPage = lazy(() => import('./pages/NoeQuizPage'));
 import 'lenis/dist/lenis.css';
 import './index.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function LandingPage() {
+function LandingPage({ completedStations = [] }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -88,12 +89,14 @@ function LandingPage() {
       <div className="gsap-section"><BetawiHeritage /></div>
       <div className="gsap-section"><KulinerJakarta /></div>
       <div className="gsap-section"><LandmarkExplorer /></div>
-      <div className="gsap-section"><NoeQuiz /></div>
+      <div className="gsap-section"><NoeQuiz completedStations={completedStations} /></div>
     </div>
   );
 }
 
 function App() {
+  const [completedStations, setCompletedStations] = useState([]);
+
   return (
     <BrowserRouter>
       <Suspense fallback={
@@ -102,9 +105,10 @@ function App() {
         </div>
       }>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage completedStations={completedStations} />} />
           <Route path="/landmark-explorer" element={<LandmarkPage />} />
           <Route path="/apa-itu-jakarta" element={<ApaItuJakartaPage />} />
+          <Route path="/noequiz" element={<NoeQuizPage completedStations={completedStations} setCompletedStations={setCompletedStations} />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
