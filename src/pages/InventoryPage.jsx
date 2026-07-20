@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Search } from 'lucide-react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
-import logo from '../assets/logo-noekarta.webp';
+import logo from '../assets/logo-noekarta1.webp';
 import Seo from '../components/Seo';
 import { allKulinerData } from '../data/kuliner';
 import { useInventory } from '../hooks/useInventory';

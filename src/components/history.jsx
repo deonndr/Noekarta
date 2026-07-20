@@ -82,12 +82,23 @@ const preloadImage = (src, priority = 'auto') => {
 const History = () => {
   const [activeCard, setActiveCard] = useState(1);
   const sectionRef = useRef(null);
+  const cardRef = useRef(null);
 
   const activeData = historyData.find(d => d.id === activeCard);
 
-  const handleSelectCard = useCallback((item) => {
+  const handleSelectCard = useCallback((item, scrollToCard = false) => {
     preloadImage(item.img, 'high');
     setActiveCard(item.id);
+
+    if (scrollToCard && window.innerWidth < 1024 && cardRef.current) {
+      setTimeout(() => {
+        if (window.lenis) {
+          window.lenis.scrollTo(cardRef.current, { offset: -80 });
+        } else {
+          cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 50);
+    }
   }, []);
 
   useEffect(() => {
@@ -199,7 +210,7 @@ const History = () => {
 
                     {/* Timeline Item Button */}
                     <button
-                      onClick={() => handleSelectCard(item)}
+                      onClick={() => handleSelectCard(item, true)}
                       onPointerEnter={() => preloadImage(item.img, 'high')}
                       className={`flex-1 flex items-center cursor-pointer justify-between p-4 md:p-5 rounded-2xl border transition-all duration-300 ${
                         isActive 
@@ -233,7 +244,7 @@ const History = () => {
           </div>
 
           {/* Right Column: Detail Card */}
-          <div className="w-full lg:w-[45%] flex flex-col lg:sticky lg:top-24 mt-8 lg:mt-0">
+          <div ref={cardRef} className="w-full lg:w-[45%] flex flex-col lg:sticky lg:top-24 mt-8 lg:mt-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeData.id}

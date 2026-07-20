@@ -66,7 +66,7 @@ const betawiData = [
   }
 ];
 
-// react-pageflip requires children to be wrapped with forwardRef
+// ── Desktop pages (original 2-page spread) ────────────────────────────────
 const ImagePage = forwardRef(({ img }, ref) => (
   <div
     ref={ref}
@@ -104,41 +104,103 @@ const TextPage = forwardRef(({ data }, ref) => (
       background: 'linear-gradient(to right, rgba(0,0,0,0.08), transparent)',
       zIndex: 1
     }} />
-
-    <img 
-      src={data.infoImg} 
+    <img
+      src={data.infoImg}
       alt=""
       className="select-none"
-      style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        display: 'block'
-      }}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
       draggable="false"
     />
   </div>
 ));
 TextPage.displayName = 'TextPage';
 
+// ── Mobile page (image top + text bottom, single page) ─────────────────────
+const CombinedPage = forwardRef(({ data }, ref) => (
+  <div
+    ref={ref}
+    style={{
+      width: '100%',
+      height: '100%',
+      background: '#ffffff',
+      overflow: 'hidden',
+      position: 'relative',
+      boxShadow: 'inset -4px 0 15px rgba(0,0,0,0.03)'
+    }}
+    className="flex flex-col"
+  >
+    {/* Spine shadow */}
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '4px',
+      height: '100%',
+      background: 'linear-gradient(to right, rgba(0,0,0,0.08), transparent)',
+      zIndex: 1
+    }} />
+    <div className="w-full aspect-[4/3] shrink-0 relative bg-gray-50">
+      <img
+        src={data.img}
+        alt={data.title}
+        className="absolute inset-0 w-full h-full object-cover select-none"
+        draggable="false"
+      />
+    </div>
+    <div className="flex-1 p-5 flex flex-col justify-center bg-white text-left">
+      <span className="text-[#0F285C] font-bold text-lg mb-1">0{data.id}</span>
+      <h3 className="text-[20px] font-bold text-gray-900 mb-2 leading-snug">{data.title}</h3>
+      <div className="w-8 h-[3px] bg-[#0F285C] mb-3 rounded-full" />
+      <p className="text-gray-600 text-[13px] leading-[1.6] mb-4 line-clamp-3">{data.desc}</p>
+      <div className="inline-block border border-[#0F285C] text-[#0F285C] px-3 py-1 rounded-full text-[12px] font-semibold w-fit">{data.badge}</div>
+    </div>
+  </div>
+));
+CombinedPage.displayName = 'CombinedPage';
+
+// ── Component ──────────────────────────────────────────────────────────────
 const BetawiHeritage = () => {
   const [currentItem, setCurrentItem] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
-  const book = useRef();
+  // Two book refs — one per breakpoint
+  const bookDesktop = useRef();
+  const bookMobile = useRef();
 
-  const flipNext = () => {
+  const isMobile = () => window.innerWidth < 768;
+
+  const handleNext = () => {
     if (isFlipping) return;
-    book.current?.pageFlip().flipNext();
+    if (isMobile()) {
+      bookMobile.current?.pageFlip().flipNext();
+    } else {
+      bookDesktop.current?.pageFlip().flipNext();
+    }
   };
 
-  const flipPrev = () => {
+  const handlePrev = () => {
     if (isFlipping) return;
-    book.current?.pageFlip().flipPrev();
+    if (isMobile()) {
+      bookMobile.current?.pageFlip().flipPrev();
+    } else {
+      bookDesktop.current?.pageFlip().flipPrev();
+    }
   };
 
-  const onFlip = (e) => {
-    const idx = Math.floor(e.data / 2);
-    setCurrentItem(idx);
+  const handleDotClick = (idx) => {
+    if (isFlipping || idx === currentItem) return;
+    if (isMobile()) {
+      bookMobile.current?.pageFlip().turnToPage(idx);
+    } else {
+      bookDesktop.current?.pageFlip().turnToPage(idx * 2);
+    }
+  };
+
+  const onFlipDesktop = (e) => {
+    setCurrentItem(Math.floor(e.data / 2));
+  };
+
+  const onFlipMobile = (e) => {
+    setCurrentItem(e.data);
   };
 
   const onChangeState = (e) => {
@@ -147,6 +209,12 @@ const BetawiHeritage = () => {
     } else if (e.data === 'read') {
       setIsFlipping(false);
     }
+  };
+
+  const bookStyle = {
+    borderRadius: '24px',
+    boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)',
+    overflow: 'hidden'
   };
 
   return (
@@ -176,35 +244,7 @@ const BetawiHeritage = () => {
               <div className="text-sm text-gray-400 font-medium">
                 <span className="text-[#0F285C] font-bold text-lg">{String(currentItem + 1).padStart(2, '0')}</span>
                 <span className="mx-1">/</span>
-                <span>{String(betawiData.length).padStart(2, '0')}</span>
-              </div>
-
-              {/* Navigation buttons */}
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={flipPrev}
-                  disabled={isFlipping}
-                  className={`w-12 h-12 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center transition-all focus:outline-none ${
-                    isFlipping
-                      ? 'text-gray-200 border-gray-100 cursor-not-allowed opacity-40'
-                      : 'text-gray-400 hover:text-gray-700 hover:bg-white hover:shadow-sm hover:border-gray-300 cursor-pointer'
-                  }`}
-                  aria-label="Previous page"
-                >
-                  <ArrowLeft size={20} strokeWidth={2.5} />
-                </button>
-                <button
-                  onClick={flipNext}
-                  disabled={isFlipping}
-                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all focus:outline-none ${
-                    isFlipping
-                      ? 'bg-[#0F285C]/40 text-white/60 cursor-not-allowed'
-                      : 'bg-[#0F285C] text-white hover:bg-[#1E40AF] hover:shadow-lg cursor-pointer'
-                  }`}
-                  aria-label="Next page"
-                >
-                  <ArrowRight size={20} strokeWidth={2.5} />
-                </button>
+                <span>0{betawiData.length}</span>
               </div>
 
               {/* Dots */}
@@ -213,11 +253,7 @@ const BetawiHeritage = () => {
                   <button
                     key={idx}
                     disabled={isFlipping}
-                    onClick={() => {
-                      if (idx !== currentItem && !isFlipping) {
-                        book.current?.pageFlip().turnToPage(idx * 2);
-                      }
-                    }}
+                    onClick={() => handleDotClick(idx)}
                     className={`rounded-full transition-all duration-300 ${
                       idx === currentItem
                         ? 'bg-[#0F285C] w-2.5 h-2.5'
@@ -234,60 +270,96 @@ const BetawiHeritage = () => {
 
           {/* Right Column: Book */}
           <div className="w-full lg:w-[65%] flex justify-center">
+            <div className="flex w-full items-center gap-2 md:gap-3">
 
-            {/* Desktop Book */}
-            <div className="hidden md:block w-full">
-              <HTMLFlipBook
-                ref={book}
-                width={370}
-                height={500}
-                size="stretch"
-                minWidth={240}
-                maxWidth={420}
-                minHeight={380}
-                maxHeight={560}
-                showCover={false}
-                mobileScrollSupport={false}
-                onFlip={onFlip}
-                onChangeState={onChangeState}
-                drawShadow={true}
-                flippingTime={900}
-                useMouseEvents={false}
-                style={{
-                  borderRadius: '24px',
-                  boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)',
-                  overflow: 'hidden'
-                
-                }}
+              {/* Prev button */}
+              <button
+                onClick={handlePrev}
+                disabled={isFlipping}
+                className={`w-9 h-9 md:w-12 md:h-12 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center transition-all shrink-0 focus:outline-none ${
+                  isFlipping
+                    ? 'text-gray-200 border-gray-100 cursor-not-allowed opacity-40'
+                    : 'text-gray-400 hover:text-gray-700 hover:bg-white hover:shadow-sm hover:border-gray-300 cursor-pointer'
+                }`}
+                aria-label="Previous page"
               >
-                {betawiData.flatMap((item) => [
-                  <ImagePage key={`img-${item.id}`} img={item.img} />,
-                  <TextPage key={`txt-${item.id}`} data={item} />
-                ])}
-              </HTMLFlipBook>
-            </div>
+                <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+              </button>
 
-            {/* Mobile View */}
-            <div className="flex md:hidden w-full flex-col rounded-3xl overflow-hidden bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] h-[600px]">
-              <div className="h-[300px] shrink-0 relative bg-gray-100">
-                <img
-                  src={betawiData[currentItem].img}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover select-none"
-                />
-              </div>
-              <div className="flex-1 relative bg-white">
-                <div className="absolute inset-0 flex flex-col justify-center px-8 py-6">
-                  <span className="text-[#0F285C] font-bold text-xl mb-2">0{betawiData[currentItem].id}</span>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-snug line-clamp-2">{betawiData[currentItem].title}</h3>
-                  <div className="w-10 h-[3px] bg-[#0F285C] mb-4 rounded-full" />
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6">{betawiData[currentItem].desc}</p>
-                  <div className="inline-block border-[1.5px] border-[#0F285C] text-[#0F285C] px-5 py-2 rounded-full text-sm font-semibold w-fit">{betawiData[currentItem].badge}</div>
+              <div className="flex-1 w-full overflow-hidden">
+
+                {/* ── Desktop / iPad book (md+): original 2-page spread ── */}
+                <div className="hidden md:block w-full">
+                  <HTMLFlipBook
+                    ref={bookDesktop}
+                    width={370}
+                    height={500}
+                    size="stretch"
+                    minWidth={240}
+                    maxWidth={420}
+                    minHeight={380}
+                    maxHeight={560}
+                    showCover={false}
+                    mobileScrollSupport={false}
+                    onFlip={onFlipDesktop}
+                    onChangeState={onChangeState}
+                    drawShadow={true}
+                    flippingTime={900}
+                    useMouseEvents={false}
+                    style={bookStyle}
+                  >
+                    {betawiData.flatMap((item) => [
+                      <ImagePage key={`img-${item.id}`} img={item.img} />,
+                      <TextPage key={`txt-${item.id}`} data={item} />
+                    ])}
+                  </HTMLFlipBook>
                 </div>
-              </div>
-            </div>
 
+                {/* ── Mobile book (<md): CombinedPage with flip animation ── */}
+                <div className="block md:hidden w-full">
+                  <HTMLFlipBook
+                    ref={bookMobile}
+                    width={300}
+                    height={460}
+                    size="stretch"
+                    minWidth={200}
+                    maxWidth={380}
+                    minHeight={360}
+                    maxHeight={520}
+                    showCover={false}
+                    mobileScrollSupport={true}
+                    onFlip={onFlipMobile}
+                    onChangeState={onChangeState}
+                    drawShadow={true}
+                    flippingTime={900}
+                    useMouseEvents={false}
+                    style={bookStyle}
+                  >
+                    {betawiData.map((item) => (
+                      <CombinedPage key={`page-${item.id}`} data={item} />
+                    ))}
+                  </HTMLFlipBook>
+                </div>
+
+              </div>
+
+              {/* Next button */}
+              <button
+                onClick={handleNext}
+                disabled={isFlipping}
+                className={`w-9 h-9 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all shrink-0 focus:outline-none ${
+                  isFlipping
+                    ? 'bg-[#0F285C]/40 text-white/60 cursor-not-allowed'
+                    : 'bg-[#0F285C] text-white hover:bg-[#1E40AF] hover:shadow-lg cursor-pointer'
+                }`}
+                aria-label="Next page"
+              >
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" strokeWidth={2.5} />
+              </button>
+
+            </div>
           </div>
+
         </div>
       </div>
     </section>

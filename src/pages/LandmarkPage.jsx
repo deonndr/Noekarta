@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { ChevronLeft, MapPin } from 'lucide-react';
 import L from 'leaflet';
 import { landmarks } from '../data/landmarks';
-import logo from '../assets/logo-noekarta.webp';
+import logo from '../assets/logo-noekarta1.webp';
 import StreetViewPortal from '../components/StreetViewPortal';
 import Seo from '../components/Seo';
 

@@ -61,7 +61,7 @@ const KulinerJakarta = () => {
             </Link>
 
             {/* component1 decorations */}
-            <div className="absolute -bottom-1 left-5 w-[80px] h-[80px]">
+            <div className="hidden lg:block absolute -bottom-1 left-5 w-[80px] h-[80px]">
               <motion.img
                 src={component1}
                 alt="Decoration"
@@ -71,7 +71,7 @@ const KulinerJakarta = () => {
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
             </div>
-            <div className="absolute -bottom-10 left-40 w-[60px] h-[60px]">
+            <div className="hidden lg:block absolute -bottom-10 left-40 w-[60px] h-[60px]">
               <motion.img
                 src={component1}
                 alt="Decoration"

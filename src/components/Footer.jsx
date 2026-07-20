@@ -65,7 +65,7 @@ const Footer = () => {
       />
       
       {/* Layer 2: Monas Logo (Animated) */}
-      <div className="absolute right-0 -bottom-18 z-10 h-full w-[80%] max-w-[650px] flex items-end justify-end pointer-events-none">
+      <div className="absolute right-0 bottom-0 z-10 h-full w-[80%] max-w-[650px] flex items-end justify-end pointer-events-none">
         <img 
           ref={monasRef}
           src={monasLogo} 
@@ -131,7 +131,7 @@ const Footer = () => {
         <div className="mt-28 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8 items-end">
            <div className="col-span-1 lg:col-span-5">
              <p className="text-[13px] font-medium text-[#849bc5]">
-                © 2026 Noekarta Jaya Motor Abadi, Antrekkkkk one
+                © 2026 Noekarta SmartOne | All rights reserved.
              </p>
            </div>
            

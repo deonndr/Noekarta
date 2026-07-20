@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, Search } from 'lucide-react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
-import logo from '../assets/logo-noekarta.webp';
+import logo from '../assets/logo-noekarta1.webp';
 import cardfly from '../assets/cardfly2.svg';
 import Seo from '../components/Seo';
 import { allKulinerData } from '../data/kuliner';
@@ -99,22 +99,22 @@ const KulinerPage = () => {
             <main className="flex-1 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-10">
                 
                 {/* Title & Floating Card Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
-                    <div>
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 font-ancizar">
+                <div className="flex flex-row items-center justify-between mb-8 gap-4">
+                    <div className="flex-1">
+                        <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-2 md:mb-3 font-ancizar leading-tight">
                             Kuliner Jakarta
                         </h1>
-                        <p className="text-gray-700 text-lg md:text-xl">
+                        <p className="text-gray-700 text-sm md:text-xl">
                             Cicipi kuliner khas Betawi dan Jakarta
                         </p>
                     </div>
                     
                     {/* Floating Card Animation */}
-                    <div className="mt-8 md:mt-0 relative w-full md:w-[280px] h-[100px] flex justify-end">
+                    <div className="relative w-[140px] sm:w-[200px] md:w-[280px] h-[80px] md:h-[100px] flex justify-end shrink-0">
                         <img
                             src={cardfly}
                             alt="50+ Kuliner Khas"
-                            className="w-[250px] object-contain drop-shadow-sm select-none"
+                            className="w-full h-full object-contain drop-shadow-sm select-none"
                             style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
                         />
                     </div>

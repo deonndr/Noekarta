@@ -11,7 +11,7 @@ import component3 from '../assets/components/component3.webp';
 import component5 from '../assets/components/component5.webp';
 import component6 from '../assets/components/component6.webp';
 import component7 from '../assets/components/component7.webp';
-import logoNoekarta from '../assets/logo-noekarta.webp';
+import logoNoekarta from '../assets/logo-noekarta1.webp';
 
 import component8 from '../assets/components/component8.webp';
 import component9 from '../assets/components/component9.webp';
@@ -263,15 +263,58 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           {modalState === 'confirm' && (
-            <div className="p-8 text-center bg-white">
-              <h3 className="mb-8 text-2xl font-bold text-[#0A1B3F]">Apakah anda sudah siap?</h3>
-              <div className="flex justify-center gap-4">
-                <button onClick={onClose} className="w-32 rounded-full border-2 border-slate-300 py-3 font-bold text-slate-600 transition hover:bg-slate-100 cursor-pointer">
-                  Tidak
-                </button>
-                <button onClick={() => setModalState('countdown')} className="w-32 rounded-full bg-[#0A4BB3] py-3 font-bold text-white transition hover:bg-[#083E93] cursor-pointer">
-                  Iya
-                </button>
+            <div className="flex flex-col bg-white text-center">
+              {/* Layer 2: Container biru tua dengan component image component7.webp */}
+              <div 
+                className="w-full h-[140px] relative"
+                style={{
+                  backgroundColor: '#111A5A',
+                  backgroundImage: `url(${component7})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                 {/* Wavy bottom edge to match the Figma closely */}
+                 <div className="absolute -bottom-1 left-0 w-full overflow-hidden leading-[0]">
+                    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[30px] fill-white block">
+                        <path d="M0,0 Q600,120 1200,0 L1200,120 L0,120 Z" className="fill-white"></path>
+                    </svg>
+                 </div>
+              </div>
+
+              {/* Layer 3: Container bulat dengan icon tanda tanya */}
+              <div className="relative z-10 flex justify-center -mt-[56px]">
+                 <div className="flex h-[112px] w-[112px] items-center justify-center rounded-full bg-white">
+                    <div className="flex h-[92px] w-[92px] items-center justify-center rounded-full bg-[#EDF2FF] relative">
+                       {/* Animated dashed ring */}
+                       <div className="absolute inset-1 rounded-full border-[2.5px] border-dashed border-[#111A5A] opacity-40 animate-[spin_8s_linear_infinite]"></div>
+                       
+                       <div 
+                         className="flex h-[76px] w-[76px] items-center justify-center rounded-full relative overflow-hidden z-10" 
+                         style={{ 
+                           backgroundColor: '#111A5A',
+                           backgroundImage: `url(${component7})`, 
+                           backgroundSize: 'cover', 
+                           backgroundPosition: 'center' 
+                         }}
+                       >
+                          <span className="text-white text-[40px] font-bold relative z-10 leading-none">?</span>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div className="px-8 pb-8 pt-4">
+                <h3 className="text-[28px] font-bold text-[#0A1B3F] mb-1">Siap?</h3>
+                <p className="text-[#3A3A3A] font-medium mb-8 text-[14px]">Apakah anda sudah Siap</p>
+                <div className="flex justify-center gap-4">
+                  <button onClick={() => setModalState('countdown')} className="flex-1 rounded-[14px] bg-[#111A5A] py-3.5 text-[15px] font-bold text-white transition hover:bg-[#083E93] shadow-[0_8px_20px_rgba(10,27,63,0.15)] cursor-pointer">
+                    Iya
+                  </button>
+                  <button onClick={onClose} className="flex-1 rounded-[14px] border-[2px] border-[#111A5A] bg-white py-3.5 text-[15px] font-bold text-[#111A5A] transition hover:bg-slate-50 cursor-pointer">
+                    Tidak
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -506,12 +549,12 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
             
              {/* Left Card: Explorasi */}
              <div className="flex-1 bg-white rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-8 md:p-10 relative flex flex-col justify-center overflow-visible min-h-[280px]">
-               <div className="lg:max-w-[60%] xl:max-w-[55%] relative z-10">
+               <div className="relative z-10 pr-[110px] sm:pr-[140px] md:pr-[180px] lg:pr-[240px] xl:pr-[270px]">
                  <img src={titleImage} alt="NoeQuiz Explorasi" className="h-[32px] md:h-[38px] object-contain mb-4 select-none" />
                  <p className="text-[#3A3A3A] text-sm md:text-[14px] leading-relaxed mb-6 font-medium">
                    Selesaikan Tantangan di setiap pos dengan skor minimal 3/5 benar untuk membuka pos selanjutnya. Mari taklukkan semua level!
                  </p>
-                 <button onClick={() => setIsTutorialOpen(true)} className="bg-[#111A5A] hover:bg-[#0d1445] text-white font-semibold px-10 py-2.5 rounded-full transition-all text-sm shadow-md cursor-pointer">
+                 <button onClick={() => setIsTutorialOpen(true)} className="bg-[#111A5A] hover:bg-[#0d1445] text-white font-semibold px-6 py-1.5 sm:px-8 sm:py-2 md:px-10 md:py-2.5 rounded-full transition-all text-[11px] sm:text-xs md:text-sm shadow-md cursor-pointer w-max">
                    Tutorial!
                  </button>
                </div>

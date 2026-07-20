@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronDown, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
-import logo from '../assets/logo-noekarta.webp';
+import logo from '../assets/logo-noekarta1.webp';
 import heroBackground from '../assets/bg-ApaItuJakarta.webp';
 import heroTitle from '../assets/title.pageApaItuJakarta.webp';
 import heroForeground from '../assets/bgtrans-ApaItuJakarta.webp';

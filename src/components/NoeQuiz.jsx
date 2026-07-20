@@ -4,29 +4,29 @@ import { ChevronRight, Rocket, Flag, Check, LockKeyhole } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import titleImage from '../assets/noequiz-title.webp';
-import logoNoekarta from '../assets/logo-noekarta.webp';
+import logoNoekarta from '../assets/logo-noekarta1.webp';
 import component8 from '../assets/components/component8.webp';
 import component9 from '../assets/components/component9.webp';
 
 const sampleQuestions = [
   {
     id: 1,
-    title: "Pos 1: Sejarah Batavia",
+    title: "Contoh Soal",
     text: "Pelabuhan utama di Batavia yang menjadi pusat perdagangan rempah-rempah pada masa penjajahan Belanda adalah...",
   },
   {
     id: 2,
-    title: "Pos 2: Budaya Betawi",
+    title: "Contoh Soal",
     text: "Kesenian musik tradisional Betawi yang mendapat pengaruh dari budaya Tionghoa dengan alat musik gesek Tehyan adalah...",
   },
   {
     id: 3,
-    title: "Pos 3: Kuliner Khas",
+    title: "Contoh Soal",
     text: "Soto Betawi sangat khas dengan kuahnya yang kental dan gurih. Bahan utama pembuat kuah soto ini adalah...",
   },
   {
     id: 4,
-    title: "Pos 4: Landmark Jakarta",
+    title: "Contoh Soal",
     text: "Monumen berupa patung yang dibangun untuk memperingati pembebasan Irian Barat dari tangan Belanda adalah...",
   },
   {
@@ -84,11 +84,11 @@ const NoeQuiz = ({ completedStations = [] }) => {
             </p>
             <Link 
               to="/noequiz"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#1D1D6A] via-[#23239C] to-[#2E2EAB] text-white font-semibold px-6 md:px-8 py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_rgba(42,35,138,0.3)] hover:shadow-[0_8px_25px_rgba(42,35,138,0.4)] hover:opacity-90 active:scale-95 group w-max"
+              className="inline-flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-[#1D1D6A] via-[#23239C] to-[#2E2EAB] text-white font-semibold px-4 sm:px-6 md:px-8 py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_rgba(42,35,138,0.3)] hover:shadow-[0_8px_25px_rgba(42,35,138,0.4)] hover:opacity-90 active:scale-95 group w-full sm:w-max"
             >
-              <Rocket className="w-5 h-5 text-white/90" />
-              <span className="text-[14px] md:text-[15px]">Mainkan NoeQuiz Sekarang !!</span>
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <Rocket className="w-5 h-5 text-white/90 shrink-0" />
+              <span className="text-[13px] sm:text-[14px] md:text-[15px] text-center">Mainkan NoeQuiz Sekarang !!</span>
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
             </Link>
           </motion.div>
 
@@ -100,7 +100,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="w-full max-w-[400px] md:max-w-[340px] lg:max-w-[400px]"
           >
-            <div className="bg-white rounded-[24px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 p-6 md:p-8 min-h-[300px] flex flex-col relative overflow-hidden">
+            <div className="bg-white rounded-[24px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 p-6 md:p-8 min-h-[320px] md:min-h-[360px] lg:min-h-[320px] flex flex-col relative overflow-hidden">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                   <img src={logoNoekarta} alt="Noekarta" className="h-3.5 md:h-4 w-auto object-contain select-none" />
@@ -147,7 +147,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
               </div>
 
               {/* Dots */}
-              <div className="flex justify-center gap-[6px] mt-8 absolute bottom-8 left-1/2 -translate-x-1/2">
+              <div className="flex justify-center gap-[6px] mt-12 absolute bottom-8 left-1/2 -translate-x-1/2">
                 {sampleQuestions.map((_, idx) => (
                   <button
                     key={idx}
@@ -167,8 +167,9 @@ const NoeQuiz = ({ completedStations = [] }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-          className="w-full relative max-w-[850px] mx-auto hidden md:block"
+          className="w-full relative max-w-[850px] mx-auto overflow-x-auto overflow-y-hidden pb-8 pt-4"
         >
+          <div className="min-w-[700px] md:min-w-0 relative w-full px-2">
           {/* SVG Line Connections */}
           <div className="absolute top-1/2 left-[5%] w-[90%] h-[150px] -translate-y-1/2 z-0 pointer-events-none">
             <svg width="100%" height="100%" viewBox="0 0 1000 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="overflow-visible absolute top-0 left-0 w-full h-full">
@@ -244,74 +245,8 @@ const NoeQuiz = ({ completedStations = [] }) => {
                </div>
                <span className="text-[12px] font-bold mt-4 text-[#3A3A3A] uppercase tracking-wider">FINISH</span>
             </div>
+            </div>
           </div>
-        </motion.div>
-
-        {/* Mobile View for Path */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-          className="w-full relative mt-12 mb-4 max-w-[300px] mx-auto md:hidden flex flex-col items-center gap-12"
-        >
-            {/* Start Node */}
-            <div className="flex flex-col items-center">
-               <div className="w-[50px] h-[50px] rounded-full bg-[#515151] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 20px 8px rgba(130, 205, 255, 0.5)' }}>
-                 <Flag className="w-5 h-5" strokeWidth={2.5} />
-               </div>
-               <span className="text-[10px] font-bold mt-2 text-[#3A3A3A] uppercase tracking-wider">START</span>
-            </div>
-
-            {/* Node 1 */}
-            <Link to="/noequiz" className="flex flex-col items-center relative hover:scale-105 transition-transform duration-300">
-               {isBataviaComplete && (
-                 <div className="absolute -top-6 px-3 py-0.5 bg-[#EAE8FE] text-[#341697] text-[9px] font-bold rounded-full whitespace-nowrap shadow-sm z-20">
-                   Complete
-                 </div>
-               )}
-               {isBataviaComplete ? (
-                 <div className="w-[50px] h-[50px] rounded-full bg-[#0351DF] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 6px rgba(211, 193, 250, 0.8), 0 0 20px 10px rgba(211, 193, 250, 0.6)' }}>
-                   <Check className="w-6 h-6" strokeWidth={3.5} />
-                 </div>
-               ) : (
-                 <div className="w-[50px] h-[50px] rounded-full bg-[#0A1869] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 6px rgba(211, 193, 250, 0.8), 0 0 20px 10px rgba(211, 193, 250, 0.6)' }}>
-                   <img src={component8} alt="Icon Batavia" className="w-6 h-6 object-contain select-none" />
-                 </div>
-               )}
-               <span className="text-[13px] font-bold mt-4 text-[#1A1856]">Sejarah Batavia</span>
-            </Link>
-
-            {/* Node 2 */}
-            <Link to={isBetawiUnlocked ? "/noequiz" : "#"} className={`flex flex-col items-center relative transition-transform duration-300 ${isBetawiUnlocked ? 'hover:scale-105' : 'cursor-not-allowed'}`}>
-               {isBetawiComplete && (
-                 <div className="absolute -top-6 px-3 py-0.5 bg-[#EAE8FE] text-[#341697] text-[9px] font-bold rounded-full whitespace-nowrap shadow-sm z-20">
-                   Complete
-                 </div>
-               )}
-               {isBetawiComplete ? (
-                 <div className="w-[50px] h-[50px] rounded-full bg-[#0351DF] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 6px rgba(168, 219, 255, 0.8), 0 0 20px 10px rgba(168, 219, 255, 0.6)' }}>
-                   <Check className="w-6 h-6" strokeWidth={3.5} />
-                 </div>
-               ) : isBetawiUnlocked ? (
-                 <div className="w-[50px] h-[50px] rounded-full bg-[#0A1869] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 6px rgba(168, 219, 255, 0.8), 0 0 20px 10px rgba(168, 219, 255, 0.6)' }}>
-                   <img src={component9} alt="Icon Betawi" className="w-6 h-6 object-contain select-none" />
-                 </div>
-               ) : (
-                 <div className="w-[50px] h-[50px] rounded-full bg-[#62646B] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 7px 18px rgba(24,54,124,0.28)' }}>
-                   <LockKeyhole className="w-5 h-5" strokeWidth={2.5} />
-                 </div>
-               )}
-               <span className="text-[13px] font-bold mt-4 text-[#1A1856]">Budaya Betawi</span>
-            </Link>
-
-            {/* Finish Node */}
-            <div className="flex flex-col items-center">
-               <div className={`w-[50px] h-[50px] rounded-full border-[3px] border-white text-white flex items-center justify-center relative z-10 transition-colors duration-500 ${isFinishComplete ? 'bg-[#5C31DD]' : 'bg-[#515151]'}`} style={{ boxShadow: '0 0 0 3px #D1D5E8' }}>
-                 {isFinishComplete ? <Check className="w-5 h-5" strokeWidth={2.5} /> : <Flag className="w-5 h-5" strokeWidth={2.5} />}
-               </div>
-               <span className="text-[10px] font-bold mt-2 text-[#3A3A3A] uppercase tracking-wider">FINISH</span>
-            </div>
         </motion.div>
 
       </div>
