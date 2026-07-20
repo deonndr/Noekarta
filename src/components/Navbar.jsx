@@ -36,14 +36,25 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isMobileMenuOpen]);
 
-    // Kunci scroll body saat menu mobile terbuka
+    // Kunci scroll body dan Lenis saat menu mobile terbuka
     useEffect(() => {
         if (isMobileMenuOpen) {
             document.body.style.overflow = 'hidden';
+            if (window.lenis) {
+                window.lenis.stop();
+            }
         } else {
             document.body.style.overflow = '';
+            if (window.lenis) {
+                window.lenis.start();
+            }
         }
-        return () => { document.body.style.overflow = ''; };
+        return () => {
+            document.body.style.overflow = '';
+            if (window.lenis) {
+                window.lenis.start();
+            }
+        };
     }, [isMobileMenuOpen]);
 
     const navLinks = [
@@ -117,36 +128,37 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Overlay Menu Mobile */}
-                    <div className={`mobile-menu absolute top-full left-0 w-full shadow-lg z-50 lg:hidden mt-3 rounded-2xl border border-white/40 bg-white/20 backdrop-blur-xl backdrop-saturate-150 overflow-hidden ${isMobileMenuOpen ? 'menu-open' : ''}`}>
-                        <div className="flex flex-col items-center gap-1 py-4">
-                            {navLinks.map((link, i) => (
-                                <a
-                                    key={i}
-                                    href={link.href}
-                                    className="mobile-link w-full text-center py-2 px-4 mx-2 rounded-xl text-gray-900 font-medium hover:text-blue-700 hover:bg-white/30 transition-all duration-200 text-base"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
+                </nav>
 
-                            {/* Pembatas halus */}
-                            <div className="w-4/5 h-[1px] bg-white/30 my-2" />
+                {/* Overlay Menu Mobile — sibling <nav>, inset tetap agar selalu konsisten */}
+                <div data-lenis-prevent="true" className={`mobile-menu absolute left-4 right-4 sm:left-6 sm:right-6 top-full mt-2 shadow-lg z-50 lg:hidden rounded-2xl border border-white/40 bg-white/20 backdrop-blur-xl backdrop-saturate-150 overflow-hidden ${isMobileMenuOpen ? 'menu-open' : ''}`}>
+                    <div className="flex flex-col items-center gap-1 py-4">
+                        {navLinks.map((link, i) => (
+                            <a
+                                key={i}
+                                href={link.href}
+                                className="mobile-link w-full text-center py-2 px-4 mx-2 rounded-xl text-gray-900 font-medium hover:text-blue-700 hover:bg-white/30 text-base"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                {link.label}
+                            </a>
+                        ))}
 
-                            {/* Language Switcher di Mobile Drawer */}
-                            <div className="flex items-center gap-3 py-1">
-                                <button className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-800/90 text-white shadow-sm transition-all cursor-pointer backdrop-blur-sm">
-                                    ID
-                                </button>
-                                <span className="text-white/40 text-xs">|</span>
-                                <button className="px-3 py-1 text-xs font-medium rounded-full text-gray-700 hover:bg-white/30 transition-all cursor-pointer">
-                                    EN
-                                </button>
-                            </div>
+                        {/* Pembatas halus */}
+                        <div className="w-4/5 h-[1px] bg-white/30 my-2" />
+
+                        {/* Language Switcher di Mobile Drawer */}
+                        <div className="flex items-center gap-3 py-1">
+                            <button className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-800/90 text-white shadow-sm transition-all cursor-pointer backdrop-blur-sm">
+                                ID
+                            </button>
+                            <span className="text-white/40 text-xs">|</span>
+                            <button className="px-3 py-1 text-xs font-medium rounded-full text-gray-700 hover:bg-white/30 transition-all cursor-pointer">
+                                EN
+                            </button>
                         </div>
                     </div>
-                </nav>
+                </div>
             </header>
 
             {/* Backdrop gelap saat menu mobile terbuka */}

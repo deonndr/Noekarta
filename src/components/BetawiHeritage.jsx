@@ -1,455 +1,304 @@
-import { useState, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import betawi1 from '../assets/betawi1.webp';
-import betawi2 from '../assets/betawi2.webp';
-import betawi3 from '../assets/betawi3.webp';
-import betawi4 from '../assets/betawi4.webp';
-import betawi5 from '../assets/betawi5.webp';
+import { useState, useRef, forwardRef } from 'react';
+import HTMLFlipBook from 'react-pageflip';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import component2 from '../assets/components/component2.webp';
+import betawi1 from '../assets/image-betawiheritage1.png';
+import betawi2 from '../assets/image-betawiheritage2.png';
+import betawi3 from '../assets/image-betawiheritage3.png';
+import betawi4 from '../assets/image-betawiheritage4.png';
+import betawi5 from '../assets/image-betawiheritage5.png';
+import betawi6 from '../assets/image-betawiheritage6.png';
 
 const betawiData = [
   {
     id: 1,
-    title: 'Lenong Betawi',
+    title: 'Budaya Betawi',
+    badge: 'Ondel - Ondel',
     img: betawi1,
-    subtitle: 'Kenali budaya Betawi yang kaya akan tradisi dan kearifan lokal.',
-    showImage: true,
-    desc: 'teater tradisional atau sandiwara rakyat khas Jakarta (Betawi). Seni pertunjukan ini menggabungkan drama, komedi, musik Gambang Kromong, dan silat yang dibawakan dalam dialek Betawi. Biasanya, lenong menyampaikan pesan moral atau kritik sosial dengan cara yang jenaka.',
-    tables: [
-      {
-        rows: [
-          { label: 'Bahasa & Dialog', value: 'Menggunakan bahasa Melayu atau bahasa Indonesia dialek Betawi. Ciri khas utamanya adalah celetukan spontan dan improvisasi humor yang interaktif' },
-          { label: 'Musik Pengiring', value: 'Pementasan diiringi oleh musik khas berupa gambang, kromong, gong, kendang, kecrek, serta unsur alat musik Tionghoa seperti tehyan dan kongahyan' },
-          { label: 'Pesan Moral', value: 'Lakon umumnya berpihak pada kebenaran, membela kaum lemah, dan menentang kerakusan' },
-        ],
-      },
-    ],
+    desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 2,
-    title: 'Palang Pintu',
+    title: 'Pakaian Adat Betawi',
+    badge: 'Kebaya Encim',
     img: betawi2,
-    subtitle: 'Kenali budaya Betawi yang kaya akan tradisi dan kearifan lokal.',
-    showImage: true,
-    desc: 'tradisi penyambutan khas adat Betawi yang menggabungkan seni bela diri (pencak silat) dengan seni sastra lisan (berbalas pantun).',
-    tables: [
-      {
-        rows: [
-          { label: 'Penyambutan & Shalawat', value: 'Rombongan mempelai pria tiba dan disambut dengan lantunan shalawat serta iringan musik rebana ketimpring' },
-          { label: 'Berbalas Pantun', value: 'Juru pantun dari kedua belah pihak saling beradu pantun. Pihak wanita menagih syarat, sementara pihak pria menyatakan kesungguhan dan niat baiknya' },
-          { label: 'Adu Silat (Beklai)', value: 'Setelah pantun, jawara (pendekar silat) dari kedua pihak akan unjuk kebolehan memperagakan gerakan silat atau berkelahi secara simbolik.' },
-          { label: 'Uji Ilmu Agama', value: 'Sebelum diizinkan masuk, pihak wanita akan menguji kemampuan mengaji atau pemahaman agama calon mempelai pria dengan melantunkan ayat suci Al-Qur\'an (Lantun Sike)' },
-          { label: 'Penyerahan', value: 'Setelah semua syarat terpenuhi, pintu akan dibuka dan kedua keluarga dipersilakan untuk bersatu' },
-        ],
-      },
-    ],
+    desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 3,
-    title: 'Pakaian Adat',
+    title: 'Kuliner Betawi',
+    badge: 'Semur Jengkol',
     img: betawi3,
-    imgPosition: 'top',
-    subtitle: 'Kenali budaya Betawi yang kaya akan tradisi dan kearifan lokal.',
-    showImage: true,
-    desc: null,
-    tables: [
-      {
-        sectionTitle: 'Pakaian Pria',
-        rows: [
-          { label: 'Baju Pangsi', value: 'Pakaian khas jawara atau pendekar Betawi. Terdiri dari baju longgar dan celana gombrong dengan warna gelap. Biasanya dilengkapi dengan sabuk ikat, peci hitam, dan sarung yang dililitkan di leher (cukin)' },
-          { label: 'Jas Ujung Serong', value: 'Pakaian resmi untuk acara formal. Terdiri dari jas tutup berwarna gelap, celana panjang dengan warna senada, kemeja putih di bagian dalam, serta kain batik yang dililitkan di pinggang (sebatas lutut) dan penutup kepala (blangkon)' },
-        ],
-      },
-      {
-        sectionTitle: 'Pakaian Wanita',
-        rows: [
-          { label: 'Kebaya Encim', value: 'Jenis kebaya yang paling populer. Memiliki potongan yang pas di badan dengan bordiran khas di bagian depan.' },
-          { label: 'Kebaya Kerancang', value: 'Dikenal juga sebagai kebaya None Jakarta. Ciri utamanya terletak pada sulaman atau bordir lubang-lubang kecil yang rumit namun cantik di seluruh bagian kebaya' },
-        ],
-      },
-    ],
+    desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 4,
-    title: 'Roti Buaya',
+    title: 'Kesenian & Music Betawi',
+    badge: 'Rebana Biang',
     img: betawi4,
-    imgPosition: 'center',
-    subtitle: 'Kenali budaya Betawi yang kaya akan tradisi dan kearifan lokal.',
-    showImage: true,
-    desc: 'Roti Buaya adalah Makanan khas Masyarakat Betawi yang disajikan pada acara-acara khusus salah satunya adalah upacara pernikahan. Biasanya roti yang memiliki panjang sekitar 50 sentimeter ini dibawa oleh pengantin laki-laki pada acara serah-serahan.',
-    tables: [
-      {
-        rows: [
-          { label: 'Bahan Utama', value: 'Tepung terigu, ragi, telur, garam, gula, margarin' },
-          { label: 'Bahan Umum', value: 'Buah dan sebagainya' },
-          { label: 'Daerah', value: 'Jakarta, Banten, Jawa Barat' },
-          { label: 'Jenis', value: 'Camilan' },
-          { label: 'Tempat asal', value: 'Indonesia' },
-        ],
-      },
-    ],
+    desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 5,
-    title: 'Bahasa Betawi',
+    title: 'Tradisi Betawi',
+    badge: 'Ngarak Pengantin',
     img: betawi5,
-    subtitle: null,
-    showImage: false,
-    desc: 'Bahasa Betawi adalah bahasa kreol yang digunakan masyarakat Jakarta dan sekitarnya. Kaya akan serapan dari Melayu, Arab, Tionghoa, dan Belanda, bahasa ini terkenal luwes, santai, dan identik dengan kata ganti gue (saya) dan elu (kamu) dalam percakapan sehari-hari',
-    tables: [
-      {
-        rows: [
-          { label: 'Enyak / Nyak', value: 'Ibu' },
-          { label: 'Babe', value: 'Ayah' },
-          { label: 'Engkong', value: 'Kakek' },
-          { label: 'Encang', value: 'Kaka dari Orang Tua' },
-          { label: 'Encing', value: 'Adik dari Orang Tua' },
-          { label: 'Emang', value: 'Memang' },
-          { label: 'Bikin', value: 'Membuat' },
-          { label: 'Entar', value: 'Nanti' },
-          { label: 'Demen', value: 'Suka' },
-          { label: 'Ujug - Ujug', value: 'Tiba - Tiba' },
-          { label: 'Ngelebog', value: 'Makan' },
-          { label: 'Ngaso', value: 'Istirahat' },
-          { label: 'Bodong', value: 'Bohong / Tidak benar' },
-        ],
-      },
-    ],
+    desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
+  {
+    id: 6,
+    title: 'Wisata Betawi',
+    badge: 'Museum Wayang',
+    img: betawi6,
+    desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
+  }
 ];
 
-/* ─── Reusable Table ─── */
-const InfoTable = ({ rows }) => (
+// react-pageflip requires children to be wrapped with forwardRef
+const ImagePage = forwardRef(({ img }, ref) => (
   <div
+    ref={ref}
+    style={{ width: '100%', height: '100%', overflow: 'hidden', background: '#1a1a2e' }}
+  >
+    <img
+      src={img}
+      alt=""
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+    />
+  </div>
+));
+ImagePage.displayName = 'ImagePage';
+
+const TextPage = forwardRef(({ data }, ref) => (
+  <div
+    ref={ref}
     style={{
-      border: '1px solid #d1d5db',
-      borderRadius: '12px',
+      width: '100%',
+      height: '100%',
+      background: '#ffffff',
       overflow: 'hidden',
+      position: 'relative',
+      boxShadow: 'inset -4px 0 15px rgba(0,0,0,0.03)'
     }}
   >
-    {rows.map((row, i) => (
-      <div
-        key={i}
-        style={{
-          display: 'flex',
-          borderBottom: i < rows.length - 1 ? '1px solid #d1d5db' : 'none',
-          minHeight: '44px',
-        }}
-      >
-        <div
-          style={{
-            width: '35%',
-            flexShrink: 0,
-            padding: '12px 16px',
-            fontSize: '13px',
-            fontWeight: 500,
-            color: '#374151',
-            borderRight: '1px solid #d1d5db',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          {row.label}
-        </div>
-        <div
-          style={{
-            width: '65%',
-            padding: '12px 16px',
-            fontSize: '13px',
-            color: '#4b5563',
-            lineHeight: 1.6,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          {row.value}
-        </div>
+    {/* Spine shadow line on the left edge of text page */}
+    <div style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '4px',
+      height: '100%',
+      background: 'linear-gradient(to right, rgba(0,0,0,0.08), transparent)',
+      zIndex: 1
+    }} />
+
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      padding: '40px 44px',
+    }}>
+      <span style={{ color: '#0F285C', fontWeight: 700, fontSize: '22px', marginBottom: '8px', fontFamily: 'Poppins, sans-serif' }}>
+        0{data.id}
+      </span>
+
+      <div style={{ height: '76px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginBottom: '16px', overflow: 'hidden' }}>
+        <h3 style={{
+          fontSize: '26px',
+          fontWeight: 700,
+          color: '#111827',
+          lineHeight: 1.3,
+          margin: 0,
+          fontFamily: 'Poppins, sans-serif',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden'
+        }}>
+          {data.title}
+        </h3>
       </div>
-    ))}
+
+      <div style={{ width: '48px', height: '3px', background: '#0F285C', borderRadius: '9999px', marginBottom: '20px' }} />
+
+      <p style={{
+        color: '#6B7280',
+        fontSize: '14px',
+        lineHeight: 1.7,
+        marginBottom: '28px',
+        height: '72px',
+        overflow: 'hidden',
+        fontFamily: 'Poppins, sans-serif',
+        margin: '0 0 28px 0'
+      }}>
+        {data.desc}
+      </p>
+
+      <div style={{
+        display: 'inline-block',
+        border: '1.5px solid #0F285C',
+        color: '#0F285C',
+        padding: '10px 24px',
+        borderRadius: '9999px',
+        fontSize: '13px',
+        fontWeight: 600,
+        fontFamily: 'Poppins, sans-serif',
+        width: 'fit-content',
+        letterSpacing: '0.05em'
+      }}>
+        {data.badge}
+      </div>
+    </div>
   </div>
-);
+));
+TextPage.displayName = 'TextPage';
 
-/* ─── Modal Content per card type ─── */
-const ModalBody = ({ card }) => {
-  return (
-    <>
-      {/* ── Title ── */}
-      <h3 style={{ fontSize: '26px', fontWeight: 700, color: '#111', margin: 0 }}>
-        {card.title}
-      </h3>
-
-      {/* ── Subtitle (semua kecuali Bahasa Betawi) ── */}
-      {card.subtitle && (
-        <p style={{ fontSize: '14px', color: '#555', marginTop: '4px', lineHeight: 1.5 }}>
-          {card.subtitle}
-        </p>
-      )}
-
-      {/* ── Image (semua kecuali Bahasa Betawi) ── */}
-      {card.showImage && (
-        <motion.div
-          layoutId={`image-${card.id}`}
-          transition={{
-            layout: { type: 'spring', stiffness: 250, damping: 26, mass: 0.9 }
-          }}
-          style={{
-            marginTop: '14px',
-            overflow: 'hidden',
-            width: '100%',
-            height: '220px',
-            borderRadius: '14px',
-
-          }}
-        >
-          <motion.img
-            src={card.img}
-            alt={card.title}
-            className="select-none"
-            initial={{ scale: 1.5, rotate: 15, y: 30 }}
-            animate={{ scale: 1, rotate: 0, y: 0 }}
-            exit={{ scale: 0.4, rotate: -20, y: 80, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: card.imgPosition || 'top', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' }}
-          />
-        </motion.div>
-      )}
-
-      {/* ── Description ── */}
-      {card.desc && (
-        <p style={{ fontSize: '14px', color: '#333', lineHeight: 1.7, marginTop: '14px' }}>
-          {card.desc}
-        </p>
-      )}
-
-      {/* ── Tables with optional section titles ── */}
-      {card.tables.map((table, idx) => (
-        <div key={idx} style={{ marginTop: '18px' }}>
-          {table.sectionTitle && (
-            <p style={{ fontSize: '15px', fontWeight: 600, color: '#222', marginBottom: '10px' }}>
-              {table.sectionTitle}
-            </p>
-          )}
-          <InfoTable rows={table.rows} />
-        </div>
-      ))}
-    </>
-  );
-};
-
-/* ─── Modal Portal ─── */
-const BetawiModalPortal = ({ selectedCard, onClose }) => {
-  const handleKeyDown = useCallback(
-    (e) => { if (e.key === 'Escape') onClose(); },
-    [onClose],
-  );
-
-  useEffect(() => {
-    if (selectedCard) {
-      document.addEventListener('keydown', handleKeyDown);
-      // For Lenis compatibility, just use overflow hidden.
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-      };
-    }
-  }, [selectedCard, handleKeyDown]);
-
-  return createPortal(
-    <AnimatePresence mode="wait">
-      {selectedCard && (
-        <motion.div
-          key={`overlay-${selectedCard.id}`}
-          data-lenis-prevent="true"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          onClick={onClose}
-          onWheel={(e) => e.stopPropagation()}
-          onTouchMove={(e) => e.stopPropagation()}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '24px 16px',
-            backgroundColor: 'rgba(0,0,0,0.55)',
-            backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)',
-          }}
-        >
-          <motion.div
-            key={`modal-${selectedCard.id}`}
-            initial={{ opacity: 0, scale: 0.92, y: 60 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 60 }}
-            transition={{
-              type: 'spring',
-              stiffness: 260,
-              damping: 26,
-              mass: 0.8,
-            }}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: '#fff',
-              borderRadius: '24px',
-              width: '100%',
-              maxWidth: '660px',
-              height: '85vh',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-            }}
-          >
-            {/* Scrollable content area */}
-            <div
-              className="betawi-modal-scroll"
-              onWheel={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
-              style={{
-                flex: 1,
-                overflowY: 'scroll',
-                padding: '28px 28px 0',
-                WebkitOverflowScrolling: 'touch',
-              }}
-            >
-              <ModalBody card={selectedCard} />
-            </div>
-
-            {/* Tutup Button */}
-            <div style={{ padding: '16px 28px 24px', flexShrink: 0 }}>
-              <motion.button
-                whileHover={{ scale: 1.01, backgroundColor: '#fef2f2' }}
-                whileTap={{ scale: 0.97 }}
-                onClick={onClose}
-                style={{
-                  width: '100%',
-                  padding: '14px',
-                  borderRadius: '12px',
-                  border: '1.5px solid #e5252a',
-                  backgroundColor: 'transparent',
-                  color: '#e5252a',
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                }}
-              >
-                Tutup
-              </motion.button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
-    document.body,
-  );
-};
-
-/* ─── Main Section ─── */
 const BetawiHeritage = () => {
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [currentItem, setCurrentItem] = useState(0);
+  const book = useRef();
+
+  const flipNext = () => {
+    book.current?.pageFlip().flipNext();
+  };
+
+  const flipPrev = () => {
+    book.current?.pageFlip().flipPrev();
+  };
+
+  const onFlip = (e) => {
+    // Each item = 2 pages (image + text), page index / 2 = item index
+    setCurrentItem(Math.floor(e.data / 2));
+  };
 
   return (
-    <section className="py-18 ">
-      <div className="container mx-auto px-4 md:px-8 max-w-[1400px]">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:justify-between mb-5 gap-4">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-3 bg-[#E6EFFB] px-5 py-2.5 rounded-xl mb-4">
-              <img src={component2} alt="icon" className="w-6 h-6 object-contain" />
-              <h2 className="text-2xl md:text-3xl ml-3 font-ancizar font-semibold text-indigo-900">
-                Betawi Heritage Hub
-              </h2>
-            </div>
-            <p className="text-gray-800 text-lg font-medium max-w-lg leading-relaxed">
-              Kenali budaya Betawi yang kaya akan tradisi dan kearifan lokal.
-            </p>
-          </div>
-          <div className="flex md:items-center">
-            <a
-              href="#"
-              className="text-indigo-900 mt-auto font-semibold hover:text-indigo-700 transition-colors flex items-center gap-1 group whitespace-nowrap text-lg"
-            >
-              Lihat Semua Budaya
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-        </div>
+    <section className="py-24 bg-[#FAFAFA] font-poppins relative overflow-hidden" id="betawi-heritage">
+      <div className="container mx-auto px-4 md:px-8 max-w-[1200px]">
+        {/* Main Grid */}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
 
-        {/* Cards Carousel */}
-        <div
-          className="flex overflow-x-auto gap-4 md:gap-6 pb-8 pt-4 px-2 -mx-2 snap-x snap-mandatory"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {betawiData.map((item) => (
-            <motion.div
-              key={item.id}
-              onClick={() => setSelectedCard(item)}
-              whileHover={{ y: -6 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="bg-white rounded-[20px] p-2.5 shadow-lg flex flex-col gap-4 cursor-pointer flex-shrink-0 snap-start border border-gray-100"
-              style={{
-                width: '245px',
-                height: '313px',
-              }}
-            >
-              <motion.div
-                layoutId={`image-${item.id}`}
-                transition={{
-                  layout: { type: 'spring', stiffness: 250, damping: 26, mass: 0.9 },
-                }}
-                className="relative rounded-xl overflow-hidden select-none flex-1 flex flex-col"
-              >
-                {item.id === 5 ? (
-                  <div className="flex-1 border border-gray-200  rounded-lg flex flex-col overflow-hidden">
-                    {[
-                      { label: 'Enyak / Nyak', value: 'Ibu' },
-                      { label: 'Babe', value: 'Ayah' },
-                      { label: 'Ngelebog', value: 'Makan' },
-                      { label: 'Bodong', value: 'Bohong' },
-                    ].map((row, i) => (
-                      <div key={i} className="flex flex-1 border-b border-gray-200 last:border-b-0 text-[11px]">
-                        <div className="w-1/2 px-1 py-1 border-r border-gray-200 flex items-center text-center justify-center text-gray-700">{row.label}</div>
-                        <div className="w-1/2 px-1 py-1 flex items-center text-center justify-center text-gray-700">{row.value}</div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full rounded-lg h-full object-cover object-top"
+          {/* Left Column: Static Content */}
+          <div className="w-full lg:w-[35%] flex flex-col">
+            <div className="inline-flex items-center gap-2.5 bg-[#F1F5F9] px-4 py-2 rounded-xl mb-8 w-fit">
+              <img src={component2} alt="icon" className="w-5 h-5 object-contain" />
+              <span className="text-[#0F285C] font-semibold text-sm">Betawi Heritage Hub</span>
+            </div>
+
+            <h2 className="text-[32px] md:text-[40px] font-bold text-gray-900 mb-5 leading-tight font-ancizar">
+              Kenali Budaya <br className="hidden md:block" />
+              <span className="text-[#0F285C]">Jakarta</span>
+            </h2>
+
+            <p className="text-gray-600 text-[15px] leading-relaxed mb-10 max-w-sm">
+              Jelajahi kekayaan budaya jakarta melalui tradisi, seni, dan warisan yang terus hidup hingga kini.
+            </p>
+
+            <div className="mt-auto flex flex-col gap-6">
+              {/* Page counter */}
+              <div className="text-sm text-gray-400 font-medium">
+                <span className="text-[#0F285C] font-bold text-lg">{String(currentItem + 1).padStart(2, '0')}</span>
+                <span className="mx-1">/</span>
+                <span>{String(betawiData.length).padStart(2, '0')}</span>
+              </div>
+
+              {/* Navigation buttons */}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={flipPrev}
+                  className="w-12 h-12 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-white hover:shadow-sm hover:border-gray-300 transition-all focus:outline-none"
+                  aria-label="Previous page"
+                >
+                  <ArrowLeft size={20} strokeWidth={2.5} />
+                </button>
+                <button
+                  onClick={flipNext}
+                  className="w-12 h-12 rounded-full bg-[#0F285C] flex items-center justify-center text-white hover:bg-[#1E40AF] hover:shadow-lg transition-all focus:outline-none"
+                  aria-label="Next page"
+                >
+                  <ArrowRight size={20} strokeWidth={2.5} />
+                </button>
+              </div>
+
+              {/* Dots */}
+              <div className="flex items-center gap-2">
+                {betawiData.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      if (idx !== currentItem) {
+                        // Jump to the correct page (each item = 2 pages, show left page = even index)
+                        book.current?.pageFlip().turnToPage(idx * 2);
+                      }
+                    }}
+                    className={`rounded-full transition-all duration-300 ${
+                      idx === currentItem
+                        ? 'bg-[#0F285C] w-2.5 h-2.5'
+                        : 'bg-[#D1D5DB] hover:bg-gray-400 w-2 h-2'
+                    }`}
+                    aria-label={`Go to item ${idx + 1}`}
                   />
-                )}
-              </motion.div>
-              <h3 className="text-center font-semibold text-indigo-900 text-[17px] mb-1">{item.title}</h3>
-            </motion.div>
-          ))}
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Book */}
+          <div className="w-full lg:w-[65%] flex justify-center">
+
+            {/* Desktop Book */}
+            <div className="hidden md:block w-full">
+              <HTMLFlipBook
+                ref={book}
+                width={370}
+                height={500}
+                size="stretch"
+                minWidth={240}
+                maxWidth={420}
+                minHeight={380}
+                maxHeight={560}
+                showCover={false}
+                mobileScrollSupport={false}
+                onFlip={onFlip}
+                drawShadow={true}
+                flippingTime={900}
+                useMouseEvents={false}
+                style={{
+                  borderRadius: '24px',
+                  boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)',
+                  overflow: 'hidden'
+                }}
+              >
+                {betawiData.flatMap((item) => [
+                  <ImagePage key={`img-${item.id}`} img={item.img} />,
+                  <TextPage key={`txt-${item.id}`} data={item} />
+                ])}
+              </HTMLFlipBook>
+            </div>
+
+            {/* Mobile View */}
+            <div className="flex md:hidden w-full flex-col rounded-3xl overflow-hidden bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] h-[600px]">
+              <div className="h-[300px] shrink-0 relative bg-gray-100">
+                <img
+                  src={betawiData[currentItem].img}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex-1 relative bg-white">
+                <div className="absolute inset-0 flex flex-col justify-center px-8 py-6">
+                  <span className="text-[#0F285C] font-bold text-xl mb-2">0{betawiData[currentItem].id}</span>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-snug line-clamp-2">{betawiData[currentItem].title}</h3>
+                  <div className="w-10 h-[3px] bg-[#0F285C] mb-4 rounded-full" />
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6">{betawiData[currentItem].desc}</p>
+                  <div className="inline-block border-[1.5px] border-[#0F285C] text-[#0F285C] px-5 py-2 rounded-full text-sm font-semibold w-fit">{betawiData[currentItem].badge}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
-
-      {/* Modal Portal — selalu di-render, AnimatePresence di dalam */}
-      <BetawiModalPortal
-        selectedCard={selectedCard}
-        onClose={() => setSelectedCard(null)}
-      />
     </section>
   );
 };

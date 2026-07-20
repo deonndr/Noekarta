@@ -1,74 +1,56 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, PartyPopper } from 'lucide-react';
+import { Calendar, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import historyTitle from '../assets/history-title.webp';
-import history1 from '../assets/history-image1.webp';
-import history2 from '../assets/history-image2.webp';
-import history3 from '../assets/history-image3.webp';
-import history4 from '../assets/history-image4.webp';
-import history5 from '../assets/history-image5.webp';
-import history6 from '../assets/history-image6.webp';
-import title1 from '../assets/hero-title1.webp';
-import title2 from '../assets/hero-title2.webp';
-import title3 from '../assets/hero-title3.webp';
-import title4 from '../assets/hero-title4.webp';
-import title5 from '../assets/hero-title5.webp';
-import title6 from '../assets/hero-title6.webp';
+import history1 from '../assets/history1.webp';
+import history2 from '../assets/history2.webp';
+import history3 from '../assets/history3.webp';
+import history4 from '../assets/history4.webp';
+import history5 from '../assets/history5.webp';
+import history6 from '../assets/history6.webp';
 
 const historyData = [
   {
     id: 1,
     name: 'Sunda Kelapa',
-    titleImg: title1,
-    year: 'Abad ke-5',
+    year: 'Abad Ke 5',
     desc: 'Pelabuhan bersejarah di Jakarta Utara yang terletak di muara Sungai Ciliwung. Dulunya merupakan pelabuhan utama Kerajaan Sunda, tempat ini kini beroperasi sebagai pusat kapal layar kayu tradisional (Pinisi) antarpulau dan menjadi salah satu destinasi wisata sejarah yang menarik di ibu kota.',
     img: history1,
-
   },
   {
     id: 2,
     name: 'Jayakarta',
-    titleImg: title2,
-    year: 'Tahun 1527',
+    year: '1527',
     desc: 'Jayakarta berkembang sebagai bandar perdagangan rempah-rempah yang penting. Namun, riwayatnya berakhir pada 1619 ketika VOC di bawah pimpinan Jan Pieterszoon Coen menaklukkan wilayah tersebut, meratakannya dengan tanah, dan membangun kota baru bernama Batavia di atasnya.',
     img: history2,
-
   },
   {
     id: 3,
     name: 'Batavia',
-    titleImg: title3,
     year: '1619 - 1942',
     desc: 'Batavia adalah nama lama untuk ibu kota Indonesia, Jakarta, pada masa penjajahan Belanda. Nama ini diberikan oleh Vereenigde Oostindische Compagnie (VOC) pada tahun 1619 setelah menaklukkan Jayakarta, dan diambil dari nama suku bangsa Jermanik kuno (Batavi) yang dianggap sebagai leluhur bangsa Belanda.',
     img: history3,
-
   },
   {
     id: 4,
     name: 'Jakarta Merdeka',
-    titleImg: title4,
-    year: '1945 - 90-an',
-    desc: 'Jakarta Merdeka adalah transformasi dari kota kolonial menjadi pusat perjuangan dan ibu kota. Setelah Proklamasi 1945, namanya diubah dari pendudukan Jepang (Jakarta Tokubetsu Shi) menjadi Jakarta. Di sinilah tempat Ir. Soekarno membacakan naskah proklamasi yang mengawali kedaulatan penuh Republik Indonesia.',
+    year: '1942 - 1966',
+    desc: 'Jakarta merdeka adalah transformasi dari kota kolonial menjadi pusat perjuangan dan ibu kota. Setelah Proklamasi 1945, namanya diubah dari pendudukan Jepang (Jakarta Tokubetsu Shi) menjadi Jakarta. Di sinilah tempat Ir. Soekarno membacakan naskah proklamasi yang mengawali kedaulatan penuh Republik Indonesia.',
     img: history4,
-
   },
   {
     id: 5,
     name: 'Jakarta Modern',
-    titleImg: title5,
-    year: '1990 - 2000-an',
-    desc: 'Jakarta telah bertransformasi menjadi megapolitan modern berskala global. Kota ini menawarkan pesona futuristik melalui integrasi transportasi publik mutakhir seperti MRT dan LRT, kawasan hijau terpadu seperti Hutan Kota GBK, perpustakaan berkualitas digital di Perpustakaan Jakarta serta kemudahan mobilitas melalui aplikasi terintegrasi dari Transjakarta.',
+    year: '1966 - 2000',
+    desc: 'Jakarta telah bertransformasi menjadi megapolitan modern berskala global. Kota ini menawarkan pesona futuristik melalui integrasi transportasi publik mutakhir seperti MRT dan LRT, kawasan hijau terpadu seperti Hutan Kota GBK, perpustakaan berfasilitas digital di Perpustakaan Jakarta serta kemudahan mobilitas melalui aplikasi terintegrasi dari Transjakarta.',
     img: history5,
-
   },
   {
     id: 6,
     name: 'Jakarta Digital',
-    titleImg: title6,
-    year: '2000 - Saat Ini',
+    year: '2000 - Sekarang',
     desc: 'Jakarta Digital merujuk pada transformasi digital yang dilakukan oleh Pemerintah Provinsi DKI Jakarta untuk mengubah wajah birokrasi, tata kelola, dan layanan publik dari sistem manual ke dalam ekosistem terpadu berbasis teknologi.',
     img: history6,
-
   },
 ];
 
@@ -97,13 +79,6 @@ const preloadImage = (src, priority = 'auto') => {
   return promise;
 };
 
-const preloadHistoryAssets = (item, priority = 'auto') => (
-  Promise.all([
-    preloadImage(item.img, priority),
-    preloadImage(item.titleImg, priority),
-  ])
-);
-
 const History = () => {
   const [activeCard, setActiveCard] = useState(1);
   const sectionRef = useRef(null);
@@ -111,7 +86,7 @@ const History = () => {
   const activeData = historyData.find(d => d.id === activeCard);
 
   const handleSelectCard = useCallback((item) => {
-    preloadHistoryAssets(item, 'high');
+    preloadImage(item.img, 'high');
     setActiveCard(item.id);
   }, []);
 
@@ -119,7 +94,7 @@ const History = () => {
     const activeIndex = historyData.findIndex((item) => item.id === activeCard);
     [activeIndex, activeIndex + 1, activeIndex - 1].forEach((index) => {
       const item = historyData[index];
-      if (item) preloadHistoryAssets(item, index === activeIndex ? 'high' : 'low');
+      if (item) preloadImage(item.img, index === activeIndex ? 'high' : 'low');
     });
   }, [activeCard]);
 
@@ -135,7 +110,7 @@ const History = () => {
       started = true;
 
       historyData.forEach((item, index) => {
-        const preload = () => preloadHistoryAssets(item, index < 2 ? 'high' : 'low');
+        const preload = () => preloadImage(item.img, index < 2 ? 'high' : 'low');
 
         if ('requestIdleCallback' in window) {
           const id = window.requestIdleCallback(preload, { timeout: 1200 + index * 180 });
@@ -176,112 +151,151 @@ const History = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} id="history" className="pt-24 pb-24 bg-[#FAFAFA] relative overflow-hidden">
+    <section ref={sectionRef} id="history" className="pt-24 pb-24 bg-[#FAFAFA] relative overflow-hidden font-poppins">
       <div className="container mx-auto px-4 md:px-8 max-w-[1200px]">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center lg:items-start">
-
-          {/* Left Column */}
-          <div className="w-full lg:w-1/2 flex flex-col">
-            {/* Title */}
-            <div className="mb-8">
-              <img src={historyTitle} alt="Lorong Waktu digital" className="h-12 md:h-16 object-contain" />
-            </div>
-
-            {/* Banner */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-5 flex items-center gap-4 mb-10 shadow-sm w-full md:w-[90%]">
-              <PartyPopper className="text-[#2563EB] shrink-0" size={24} />
-              <p className="text-gray-800 font-medium">
-                Setiap era membentuk cerita, setiap cerita membentuk Jakarta.
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+          
+          {/* Left Column: Timeline List */}
+          <div className="w-full lg:w-[55%] flex flex-col pt-4">
+            {/* Title Area */}
+            <div className="mb-10">
+              <img src={historyTitle} alt="Lorong Waktu digital" className="h-10 md:h-14 object-contain mb-4" />
+              <p className="text-gray-600 max-w-sm md:max-w-md text-sm md:text-[15px] leading-relaxed">
+                Telusuri Transformasi Jakarta dari masa ke masa, dari pelabuhan kecil hingga kota global.
               </p>
             </div>
 
-            {/* List */}
-            <div className="flex font-ancizar flex-col w-full md:w-[90%]">
-              {historyData.map((item) => {
+            {/* Timeline List */}
+            <div className="relative flex flex-col gap-4">
+              {/* Continuous Animated Timeline Line */}
+              <div className="absolute left-[7px] top-[36px] md:top-[42px] bottom-[36px] md:bottom-[42px] w-[2px] bg-[#D1D5DB] z-0 hidden sm:block">
+                <motion.div 
+                  className="absolute top-0 left-0 w-full bg-[#1E40AF]"
+                  initial={false}
+                  animate={{ height: `${((activeCard - 1) / (historyData.length - 1)) * 100}%` }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                />
+              </div>
+
+              {/* Mobile Timeline Line (Fallback if padding is different) */}
+              <div className="absolute left-[7px] top-[36px] bottom-[36px] w-[2px] bg-[#D1D5DB] z-0 sm:hidden">
+                <motion.div 
+                  className="absolute top-0 left-0 w-full bg-[#1E40AF]"
+                  initial={false}
+                  animate={{ height: `${((activeCard - 1) / (historyData.length - 1)) * 100}%` }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                />
+              </div>
+
+              {historyData.map((item, index) => {
                 const isActive = activeCard === item.id;
+                const isPast = item.id <= activeCard;
                 return (
-                  <div key={item.id} className="relative">
-                    {item.id > 1 && <div className="h-px  bg-gray-200 w-full" />}
-                    <div
-                      onPointerEnter={() => preloadHistoryAssets(item, 'high')}
-                      onFocus={() => preloadHistoryAssets(item, 'high')}
-                      onClick={() => handleSelectCard(item)}
-                      className={`flex items-center justify-between py-4 px-6 cursor-pointer transition-all rounded-r-xl ${isActive ? 'bg-[#F0F5FF]' : 'hover:bg-gray-50'
-                        }`}
-                    >
-                      {isActive && (
-                        <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-blue-800 rounded-r-full" />
-                      )}
-                      <div className="flex items-center gap-6">
-                        <span className={`text-lg font-medium ${isActive ? 'text-indigo-950' : 'text-gray-400'}`}>
-                          0{item.id}
-                        </span>
-                        <span className={`text-xl font-semibold ${isActive ? 'text-[#0F285C]' : 'text-gray-700'}`}>
-                          {item.name}
-                        </span>
-                      </div>
-                      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 shadow-md ${isActive ? 'bg-blue-800 text-white' : 'bg-indigo-950 text-white'}`}>
-                        <ArrowUpRight size={18} />
-                      </div>
+                  <div key={item.id} className="relative flex items-center gap-4 md:gap-6 z-10">
+                    {/* Timeline Graphic */}
+                    <div className="w-4 flex justify-center shrink-0">
+                      <div className={`w-3.5 h-3.5 rounded-full transition-colors duration-500 ${isPast ? 'bg-[#1E40AF]' : 'bg-[#D1D5DB]'}`} />
                     </div>
+
+                    {/* Timeline Item Button */}
+                    <button
+                      onClick={() => handleSelectCard(item)}
+                      onPointerEnter={() => preloadImage(item.img, 'high')}
+                      className={`flex-1 flex items-center cursor-pointer justify-between p-4 md:p-5 rounded-2xl border transition-all duration-300 ${
+                        isActive 
+                          ? 'bg-[#EBF3FF] border-[#BFDBFE]' 
+                          : 'bg-white border-gray-100 hover:border-gray-200 shadow-sm'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4 md:gap-5">
+                        <div className={`w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center font-bold text-sm md:text-base transition-colors duration-300 ${
+                          isActive 
+                            ? 'bg-[#1E40AF] text-white' 
+                            : 'bg-[#F3F4F6] text-gray-500'
+                        }`}>
+                          0{item.id}
+                        </div>
+                        <div className="text-left">
+                          <div className={`font-semibold text-[17px] md:text-lg mb-0.5 transition-colors duration-300 ${isActive ? 'text-[#0F285C]' : 'text-gray-800'}`}>
+                            {item.name}
+                          </div>
+                          <div className={`text-[13px] md:text-sm font-medium transition-colors duration-300 ${isActive ? 'text-gray-600' : 'text-gray-400'}`}>
+                            {item.year}
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRight className={`transition-colors duration-300 ${isActive ? 'text-[#1E40AF]' : 'text-gray-400'}`} size={24} />
+                    </button>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          {/* Right Column */}
-          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start pt-10 lg:pt-0">
-            <div className="relative w-full max-w-[506px]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeData.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  {/* Image with Pre-shaped Blob */}
-                  <div className="relative aspect-[506/489] w-full mb-10 flex items-center justify-center">
-                    {/* Badge */}
-                    <div className="absolute bottom-2 left-2 md:bottom-6 md:left-10 w-20 h-20 md:w-[90px] md:h-[90px] bg-indigo-950 text-white rounded-full flex items-center justify-center text-2xl md:text-[32px] font-bold z-10 border-[6px] border-[#FAFAFA]" style={{ boxShadow: '0px 4px 10px rgba(0,0,0,0.1)' }}>
-                      0{activeData.id}
-                    </div>
+          {/* Right Column: Detail Card */}
+          <div className="w-full lg:w-[45%] flex flex-col lg:sticky lg:top-24 mt-8 lg:mt-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeData.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="bg-white rounded-[2rem] p-5 md:p-7 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full"
+              >
+                {/* Image Container (Persegi Panjang) */}
+                <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden mb-6 relative bg-gray-50">
+                  <img
+                    src={activeData.img}
+                    alt={activeData.name}
+                    className="w-full h-full object-cover"
+                    decoding="async"
+                    fetchPriority="high"
+                  />
+                </div>
 
-                    <div className="w-full h-full transition-all duration-1000 ease-in-out drop-shadow-[6px_4px_4px_rgba(0,0,0,0.25)]">
-                      <img
-                        src={activeData.img}
-                        alt={activeData.name}
-                        className="w-full h-full object-contain"
-                        width="506"
-                        height="489"
-                        decoding="async"
-                        fetchPriority="high"
-                      />
-                    </div>
-                  </div>
+                {/* Badge */}
+                <div className="bg-[#EBF3FF] text-[#1E40AF] font-bold text-[13px] px-4 py-1.5 rounded-full inline-block mb-5">
+                  0{activeData.id} / 0{historyData.length}
+                </div>
 
-                  {/* Title & Badge */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-                    <img
-                      src={activeData.titleImg}
-                      alt={activeData.name}
-                      className="h-10 md:h-12 object-contain object-left"
-                      decoding="async"
-                      fetchPriority="high"
-                    />
-                    <span className="bg-[#E5EDFF] shadow-xl ms-auto text-indigo-900 px-5 py-2 rounded-xl text-sm font-semibold w-fit">
-                      {activeData.year}
-                    </span>
-                  </div>
+                {/* Title */}
+                <h3 className="text-[26px] md:text-3xl font-bold text-[#0F285C] mb-3">
+                  {activeData.name}
+                </h3>
 
-                  {/* Description */}
-                  <p className="text-black leading-relaxed text-[15px] md:text-[16px]">
-                    {activeData.desc}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                {/* Date */}
+                <div className="flex items-center gap-2 text-gray-500 mb-5 text-sm font-semibold">
+                  <Calendar size={16} className="text-gray-400" />
+                  <span>{activeData.year}</span>
+                </div>
+
+                {/* Description */}
+                <p className="text-gray-700 leading-[1.7] text-[14px] md:text-[15px] mb-8 min-h-[120px]">
+                  {activeData.desc}
+                </p>
+
+                {/* Buttons */}
+                <div className="flex items-center gap-3 md:gap-4 mt-auto">
+                  <button 
+                    onClick={() => activeCard > 1 && handleSelectCard(historyData.find(d => d.id === activeCard - 1))}
+                    disabled={activeCard === 1}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 md:py-3.5 px-4 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  >
+                    <ArrowLeft size={18} />
+                    Sebelumnya
+                  </button>
+                  <button 
+                    onClick={() => activeCard < historyData.length && handleSelectCard(historyData.find(d => d.id === activeCard + 1))}
+                    disabled={activeCard === historyData.length}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 md:py-3.5 px-4 rounded-xl bg-[#0F285C] text-white font-semibold text-sm hover:bg-[#0F285C]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  >
+                    Selanjutnya
+                    <ArrowRight size={18} />
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
         </div>
@@ -291,3 +305,4 @@ const History = () => {
 };
 
 export default History;
+

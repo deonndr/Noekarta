@@ -2,87 +2,105 @@
 
 html,
 body {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    display: none;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /* font Kustom */
 .font-poppins {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .font-ancizar {
-    font-family: 'Ancizar', serif;
+  font-family: "Ancizar", serif;
 }
 
 /* warna kustom */
 .color-primary1 {
-    color: #0F285C;
+  color: #0f285c;
 }
-
 
 /* Animasi Navbar  */
 
 /* Animasi Garis Bawah Tautan Navbar */
 .nav-link-animated::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 2px;
-    background-color: #1D1D6A;
-    transition: all 0.3s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #1d1d6a;
+  transition: all 0.3s ease;
 }
 
 .nav-link-animated:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
 /* Garis Burger */
 .burger-line {
-    position: absolute;
-    height: 2px;
-    width: 24px;
-    background-color: currentColor;
-    border-radius: 9999px;
-    transition: all 0.3s ease-in-out;
+  position: absolute;
+  height: 2px;
+  width: 24px;
+  background-color: currentColor;
+  border-radius: 9999px;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Garis Burger  Posisi Default */
-.burger-line-top { transform: translateY(-8px); }
-.burger-line-mid { opacity: 1; transform: scaleX(1); }
-.burger-line-bot { transform: translateY(8px); }
+.burger-line-top {
+  transform: translateY(-8px);
+}
+.burger-line-mid {
+  opacity: 1;
+  transform: scaleX(1);
+}
+.burger-line-bot {
+  transform: translateY(8px);
+}
 
 /* Garis Burger  Posisi Terbuka  */
-.burger-open .burger-line-top { transform: rotate(45deg) translateY(0); }
-.burger-open .burger-line-mid { opacity: 0; transform: scaleX(0); }
-.burger-open .burger-line-bot { transform: rotate(-45deg) translateY(0); }
+.burger-open .burger-line-top {
+  transform: rotate(45deg) translateY(0);
+}
+.burger-open .burger-line-mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.burger-open .burger-line-bot {
+  transform: rotate(-45deg) translateY(0);
+}
 
-/* Menu Mobile  Slide Down */
+/* Menu Mobile — Premium Fade + Scale (Zero-Reflow) */
 .mobile-menu {
-    max-height: 0;
     opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    transform: translateY(-8px) scale(0.95);
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mobile-menu.menu-open {
-    max-height: 400px;
     opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
 }
 
-/* link Menu Mobile  */
+/* Link Menu Mobile Stagger Animation */
 .mobile-link {
-    transform: translateY(-16px);
+    transform: translateY(-12px);
     opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.2s ease,
+                background-color 0.2s ease;
 }
 
 .menu-open .mobile-link {
@@ -90,175 +108,239 @@ body::-webkit-scrollbar {
     opacity: 1;
 }
 
-/* Delay bertahap untuk setiap link */
-.menu-open .mobile-link:nth-child(1) { transition-delay: 0ms; }
-.menu-open .mobile-link:nth-child(2) { transition-delay: 75ms; }
+/* Delay bertahap presisi 50ms tiap link */
+.menu-open .mobile-link:nth-child(1) { transition-delay: 50ms; }
+.menu-open .mobile-link:nth-child(2) { transition-delay: 100ms; }
 .menu-open .mobile-link:nth-child(3) { transition-delay: 150ms; }
-.menu-open .mobile-link:nth-child(4) { transition-delay: 225ms; }
+.menu-open .mobile-link:nth-child(4) { transition-delay: 200ms; }
+.menu-open .mobile-link:nth-child(5) { transition-delay: 250ms; }
+.menu-open .mobile-link:nth-child(6) { transition-delay: 300ms; }
 
 /* Backdrop Overlay */
 .menu-backdrop {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .menu-backdrop.menu-open {
-    opacity: 1;
-    pointer-events: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .perspective-1000 {
-    perspective: 1000px;
+  perspective: 1000px;
 }
 
 /* Modal scroll — override global scrollbar hiding */
 .betawi-modal-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,0,0,0.15) transparent;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
 }
 
 .betawi-modal-scroll::-webkit-scrollbar {
-    display: block;
-    width: 6px;
+  display: block;
+  width: 6px;
 }
 
 .betawi-modal-scroll::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .betawi-modal-scroll::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,0.15);
-    border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
 }
 
 .betawi-modal-scroll::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 /* ── 3D Cylinder Carousel ── */
 .cylinder-card {
-    transition: filter 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    filter 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .cylinder-card:hover {
-    filter: brightness(1.15);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3), 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  filter: brightness(1.15);
+  box-shadow:
+    0 0 30px rgba(255, 255, 255, 0.3),
+    0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* ── Hero Native Animations ── */
 @keyframes float-card-1 {
-    0%, 100% { transform: translate(0px, 0px) rotate(-4deg) scale(1); }
-    33% { transform: translate(-10px, -15px) rotate(-1deg) scale(1.02); }
-    66% { transform: translate(8px, -5px) rotate(-6deg) scale(0.98); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) rotate(-4deg) scale(1);
+  }
+  33% {
+    transform: translate(-10px, -15px) rotate(-1deg) scale(1.02);
+  }
+  66% {
+    transform: translate(8px, -5px) rotate(-6deg) scale(0.98);
+  }
 }
 
 @keyframes float-card-2 {
-    0%, 100% { transform: translate(0px, 0px) rotate(4deg) scale(1); }
-    33% { transform: translate(12px, 15px) rotate(7deg) scale(0.98); }
-    66% { transform: translate(-5px, 8px) rotate(1deg) scale(1.02); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) rotate(4deg) scale(1);
+  }
+  33% {
+    transform: translate(12px, 15px) rotate(7deg) scale(0.98);
+  }
+  66% {
+    transform: translate(-5px, 8px) rotate(1deg) scale(1.02);
+  }
 }
 
 @keyframes float-card-3 {
-    0%, 100% { transform: translate(0px, 0px) rotate(-2deg) scale(1); }
-    33% { transform: translate(15px, -12px) rotate(3deg) scale(1.02); }
-    66% { transform: translate(-10px, -20px) rotate(-5deg) scale(0.99); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) rotate(-2deg) scale(1);
+  }
+  33% {
+    transform: translate(15px, -12px) rotate(3deg) scale(1.02);
+  }
+  66% {
+    transform: translate(-10px, -20px) rotate(-5deg) scale(0.99);
+  }
 }
 
 @keyframes float-card-4 {
-    0%, 100% { transform: translate(0px, 0px) rotate(2deg) scale(1); }
-    33% { transform: translate(-12px, 15px) rotate(-1deg) scale(0.98); }
-    66% { transform: translate(10px, -5px) rotate(5deg) scale(1.03); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) rotate(2deg) scale(1);
+  }
+  33% {
+    transform: translate(-12px, 15px) rotate(-1deg) scale(0.98);
+  }
+  66% {
+    transform: translate(10px, -5px) rotate(5deg) scale(1.03);
+  }
 }
 
 @keyframes hero-fade-up {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes hero-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.anim-float-1 { animation: float-card-1 8s ease-in-out infinite; }
-.anim-float-2 { animation: float-card-2 9s ease-in-out infinite; }
-.anim-float-3 { animation: float-card-3 8.5s ease-in-out infinite; }
-.anim-float-4 { animation: float-card-4 9.5s ease-in-out infinite; }
+.anim-float-1 {
+  animation: float-card-1 8s ease-in-out infinite;
+}
+.anim-float-2 {
+  animation: float-card-2 9s ease-in-out infinite;
+}
+.anim-float-3 {
+  animation: float-card-3 8.5s ease-in-out infinite;
+}
+.anim-float-4 {
+  animation: float-card-4 9.5s ease-in-out infinite;
+}
 
 .anim-fade-up {
-    opacity: 0;
-    animation: hero-fade-up 0.7s ease-out forwards;
+  opacity: 0;
+  animation: hero-fade-up 0.7s ease-out forwards;
 }
 
 .anim-fade-in {
-    opacity: 0;
-    animation: hero-fade-in 0.8s ease-out forwards;
+  opacity: 0;
+  animation: hero-fade-in 0.8s ease-out forwards;
 }
 
 /* NoeQuiz tutorial modal */
 @keyframes noequiz-orbit-spin {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 @keyframes noequiz-controller-breathe {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.04); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
 }
 
 @keyframes noequiz-step-pulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(8, 62, 147, 0.22);
-    }
-    50% {
-        transform: scale(1.08);
-        box-shadow: 0 0 0 7px rgba(8, 62, 147, 0);
-    }
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(8, 62, 147, 0.22);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 7px rgba(8, 62, 147, 0);
+  }
 }
 
 .noequiz-controller-orbit {
-    position: relative;
-    display: grid;
-    width: 70px;
-    height: 70px;
-    place-items: center;
-    animation: noequiz-controller-breathe 2.6s ease-in-out infinite;
+  position: relative;
+  display: grid;
+  width: 70px;
+  height: 70px;
+  place-items: center;
+  animation: noequiz-controller-breathe 2.6s ease-in-out infinite;
 }
 
 .noequiz-controller-orbit::before,
 .noequiz-controller-orbit::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    border-radius: 9999px;
-    border: 1.5px solid #0A4BB3;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 9999px;
+  border: 1.5px solid #0a4bb3;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .noequiz-controller-orbit::before {
-    width: 62px;
-    height: 62px;
-    border-left-color: transparent;
-    border-bottom-color: transparent;
-    animation: noequiz-orbit-spin 2.8s linear infinite;
+  width: 62px;
+  height: 62px;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  animation: noequiz-orbit-spin 2.8s linear infinite;
 }
 
 .noequiz-controller-orbit::after {
-    width: 52px;
-    height: 52px;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    animation: noequiz-orbit-spin 2s linear infinite reverse;
+  width: 52px;
+  height: 52px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: noequiz-orbit-spin 2s linear infinite reverse;
 }
 
 .noequiz-step-ring {
-    animation: noequiz-step-pulse 2.8s ease-in-out infinite;
+  animation: noequiz-step-pulse 2.8s ease-in-out infinite;
 }
 
 .noequiz-step-number {
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35), 0 6px 14px rgba(8, 62, 147, 0.2);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 6px 14px rgba(8, 62, 147, 0.2);
 }
