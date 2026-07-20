@@ -86,13 +86,13 @@ function LandingPage({ completedStations = [] }) {
         description="Jelajahi sejarah, budaya Betawi, kuliner khas, landmark, dan cerita Jakarta melalui pengalaman interaktif dari Noekarta."
       />
       <Navbar />
-      <Hero />
-      <div className="gsap-section"><About /></div>
-      <div className="gsap-section"><History /></div>
-      <div className="gsap-section"><BetawiHeritage /></div>
-      <div className="gsap-section"><KulinerJakarta /></div>
-      <div className="gsap-section"><LandmarkExplorer /></div>
-      <div className="gsap-section"><NoeQuiz completedStations={completedStations} /></div>
+      <div id="hero"><Hero /></div>
+      <div id="about" className="gsap-section"><About /></div>
+      <div id="history" className="gsap-section"><History /></div>
+      <div id="budaya" className="gsap-section"><BetawiHeritage /></div>
+      <div id="kuliner" className="gsap-section"><KulinerJakarta /></div>
+      <div id="landmark" className="gsap-section"><LandmarkExplorer /></div>
+      <div id="noequiz" className="gsap-section"><NoeQuiz completedStations={completedStations} /></div>
       <Footer />
     </div>
   );

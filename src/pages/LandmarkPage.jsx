@@ -106,8 +106,8 @@ const LandmarkPage = () => {
                                     key={landmark.id}
                                     onClick={() => handleLandmarkClick(landmark)}
                                     className={`flex items-center gap-4 p-3 rounded-[14px] text-left transition-all duration-300 border ${isActive
-                                            ? 'bg-red-50 border-red-300 shadow-sm'
-                                            : 'bg-white border-gray-100 hover:border-red-200 hover:bg-red-50/40'
+                                        ? 'bg-red-50 border-red-300 shadow-sm'
+                                        : 'bg-white border-gray-100 hover:border-red-200 hover:bg-red-50/40'
                                         }`}
                                 >
                                     {/* Thumbnail */}
@@ -222,8 +222,8 @@ const LandmarkPage = () => {
                                         key={landmark.id}
                                         onClick={() => handleLandmarkClick(landmark)}
                                         className={`flex flex-col gap-3 p-3 rounded-2xl text-left transition-all duration-300 border bg-white shrink-0 w-[260px] snap-center shadow-lg ${isActive
-                                                ? 'border-red-400 ring-4 ring-red-50'
-                                                : 'border-gray-100 opacity-95 hover:opacity-100'
+                                            ? 'border-red-400 ring-4 ring-red-50'
+                                            : 'border-gray-100 opacity-95 hover:opacity-100'
                                             }`}
                                     >
                                         <div className="w-full h-32 rounded-xl overflow-hidden shrink-0 relative">

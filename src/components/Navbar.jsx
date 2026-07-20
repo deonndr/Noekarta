@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import logo from '../assets/logo-noekarta1.webp';
+import { useLanguage } from '../context/LanguageContext';
 
 const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const menuRef = useRef(null);
+    const { language, toggleLanguage, t } = useLanguage();
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen((prev) => !prev);
@@ -58,13 +60,29 @@ const Navbar = () => {
     }, [isMobileMenuOpen]);
 
     const navLinks = [
-        { label: 'Beranda', href: '#' },
-        { label: 'Tentang Jakarta', href: '#' },
-        { label: 'Sejarah', href: '#' },
-        { label: 'Budaya', href: '#' },
-        { label: 'Kuliner', href: '#' },
-        { label: 'NoeQuiz', href: '#' },
+        { labelKey: 'nav_home',     sectionId: 'hero' },
+        { labelKey: 'nav_about',    sectionId: 'about' },
+        { labelKey: 'nav_history',  sectionId: 'history' },
+        { labelKey: 'nav_culture',  sectionId: 'budaya' },
+        { labelKey: 'nav_culinary', sectionId: 'kuliner' },
+        { labelKey: 'nav_quiz',     sectionId: 'noequiz' },
     ];
+
+    // Scroll ke section menggunakan Lenis (dengan fallback native scroll)
+    const handleNavClick = (e, sectionId) => {
+        e.preventDefault();
+        setIsMobileMenuOpen(false);
+
+        const target = document.getElementById(sectionId);
+        if (!target) return;
+
+        if (window.lenis) {
+            window.lenis.scrollTo(target, { offset: -88, duration: 1.2 });
+        } else {
+            const top = target.getBoundingClientRect().top + window.scrollY - 88;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+    };
 
     return (
         <>
@@ -79,7 +97,7 @@ const Navbar = () => {
                         : ' px-6 md:px-12 lg:px-24 py-5 border-b border-gray-100 max-w-full'
                         }`}
                 >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-4">
                         {/* Bagian Logo */}
                         <div className="flex items-center shrink-0">
                             <a href="/">
@@ -87,29 +105,34 @@ const Navbar = () => {
                             </a>
                         </div>
 
-                        {/* Tautan Navigasi (Desktop) */}
-                        <div className="hidden whitespace-nowrap lg:flex items-center gap-8 lg:gap-12 absolute left-1/2 -translate-x-1/2">
+                        {/* Tautan Navigasi (Desktop) — flex bukan absolute agar tidak nabrak logo */}
+                        <div className="hidden lg:flex items-center gap-4 xl:gap-6 flex-1 justify-center min-w-0">
                             {navLinks.map((link, i) => (
                                 <a
                                     key={i}
-                                    href={link.href}
-                                    className="relative text-black font-medium hover:text-indigo-800 transition-colors py-1 nav-link-animated"
+                                    href={`#${link.sectionId}`}
+                                    onClick={(e) => handleNavClick(e, link.sectionId)}
+                                    className="relative whitespace-nowrap text-black text-sm font-medium hover:text-indigo-800 transition-colors py-1 nav-link-animated"
                                 >
-                                    {link.label}
+                                    {t(link.labelKey)}
                                 </a>
                             ))}
                         </div>
 
                         {/* Sisi Kanan Bahasa + Menu Burger */}
-                        <div className="flex items-center gap-4">
-                            {/* pilih bahasa */}
-                            <button className="hidden lg:flex items-center gap-1.5 text-gray-800 hover:text-black font-medium transition-colors focus:outline-none">
+                        <div className="flex items-center gap-4 shrink-0">
+                            {/* Tombol pilih bahasa (Desktop) */}
+                            <button
+                                onClick={toggleLanguage}
+                                className="hidden lg:flex items-center gap-1.5 text-gray-800 hover:text-black font-medium transition-colors focus:outline-none cursor-pointer"
+                                aria-label="Toggle language"
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <circle cx="12" cy="12" r="10" />
                                     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
                                     <path d="M2 12h20" />
                                 </svg>
-                                <span className="text-sm tracking-wide">EN</span>
+                                <span className="text-sm tracking-wide">{language === 'id' ? 'ID' : 'EN'}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="m6 9 6 6 6-6" />
                                 </svg>
@@ -136,11 +159,11 @@ const Navbar = () => {
                         {navLinks.map((link, i) => (
                             <a
                                 key={i}
-                                href={link.href}
+                                href={`#${link.sectionId}`}
                                 className="mobile-link w-full text-center py-2 px-4 mx-2 rounded-xl text-gray-900 font-medium hover:text-blue-700 hover:bg-white/30 text-base"
-                                onClick={() => setIsMobileMenuOpen(false)}
+                                onClick={(e) => handleNavClick(e, link.sectionId)}
                             >
-                                {link.label}
+                                {t(link.labelKey)}
                             </a>
                         ))}
 
@@ -149,11 +172,17 @@ const Navbar = () => {
 
                         {/* Language Switcher di Mobile Drawer */}
                         <div className="flex items-center gap-3 py-1">
-                            <button className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-800/90 text-white shadow-sm transition-all cursor-pointer backdrop-blur-sm">
+                            <button
+                                onClick={toggleLanguage}
+                                className={`px-3 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer backdrop-blur-sm ${language === 'id' ? 'bg-blue-800/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/30'}`}
+                            >
                                 ID
                             </button>
                             <span className="text-white/40 text-xs">|</span>
-                            <button className="px-3 py-1 text-xs font-medium rounded-full text-gray-700 hover:bg-white/30 transition-all cursor-pointer">
+                            <button
+                                onClick={toggleLanguage}
+                                className={`px-3 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer backdrop-blur-sm ${language === 'en' ? 'bg-blue-800/90 text-white shadow-sm' : 'text-gray-700 hover:bg-white/30'}`}
+                            >
                                 EN
                             </button>
                         </div>

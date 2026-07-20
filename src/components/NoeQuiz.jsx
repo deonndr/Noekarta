@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, Rocket, Flag, Check, LockKeyhole } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 import titleImage from '../assets/noequiz-title.webp';
 import logoNoekarta from '../assets/logo-noekarta1.webp';
@@ -39,6 +40,7 @@ const sampleQuestions = [
 const NoeQuiz = ({ completedStations = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [timeLeft, setTimeLeft] = useState(5);
+  const { t } = useLanguage();
 
   const isBataviaComplete = completedStations.includes(0);
   const isBetawiUnlocked = completedStations.includes(0);
@@ -80,14 +82,14 @@ const NoeQuiz = ({ completedStations = [] }) => {
           >
             <img src={titleImage} alt="NoeQuiz Explorasi" className="h-10 md:h-12 object-contain mb-6 select-none" />
             <p className="text-[#3A3A3A] text-[14px] md:text-[15px] leading-relaxed mb-8 font-medium max-w-[450px]">
-              Selesaikan Tantangan di setiap pos dengan skor minimal 3/5 benar untuk membuka pos selanjutnya. Mari taklukkan semua level!
+              {t('quiz_desc')}
             </p>
             <Link 
               to="/noequiz"
               className="inline-flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-[#1D1D6A] via-[#23239C] to-[#2E2EAB] text-white font-semibold px-4 sm:px-6 md:px-8 py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_rgba(42,35,138,0.3)] hover:shadow-[0_8px_25px_rgba(42,35,138,0.4)] hover:opacity-90 active:scale-95 group w-full sm:w-max"
             >
               <Rocket className="w-5 h-5 text-white/90 shrink-0" />
-              <span className="text-[13px] sm:text-[14px] md:text-[15px] text-center">Mainkan NoeQuiz Sekarang !!</span>
+              <span className="text-[13px] sm:text-[14px] md:text-[15px] text-center">{t('quiz_cta')}</span>
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
             </Link>
           </motion.div>

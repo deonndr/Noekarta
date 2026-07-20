@@ -21,18 +21,206 @@ import component11 from '../assets/components/component11.webp';
 const stationIcons = [component8, component9, component10, component11];
 
 const stations = [
-  {
-    title: 'Sejarah Batavia',
-  },
-  {
-    title: 'Budaya Betawi',
-  },
-  {
-    title: 'Kuliner Khas',
-  },
-  {
-    title: 'Landmark Jakarta',
-  },
+  { title: 'Sejarah Batavia' },
+  { title: 'Budaya Betawi' },
+  { title: 'Kuliner Khas' },
+  { title: 'Landmark Jakarta' },
+];
+
+// 5 soal per pos — setiap soal: { text, options: [{id, text, isCorrect}] }
+const quizData = [
+  // Pos 0 — Sejarah Batavia
+  [
+    {
+      text: 'Pelabuhan utama Batavia yang menjadi pusat perdagangan rempah-rempah VOC pada abad ke-17 adalah...',
+      options: [
+        { id: 1, text: 'Pelabuhan Sunda Kelapa', isCorrect: true },
+        { id: 2, text: 'Pelabuhan Tanjung Priok', isCorrect: false },
+        { id: 3, text: 'Pelabuhan Merak', isCorrect: false },
+        { id: 4, text: 'Pelabuhan Cilincing', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Jan Pieterszoon Coen mendirikan Batavia pada tahun...',
+      options: [
+        { id: 1, text: '1619', isCorrect: true },
+        { id: 2, text: '1602', isCorrect: false },
+        { id: 3, text: '1645', isCorrect: false },
+        { id: 4, text: '1682', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Nama "Jayakarta" diganti menjadi "Batavia" oleh...',
+      options: [
+        { id: 1, text: 'VOC (Belanda)', isCorrect: true },
+        { id: 2, text: 'Portugis', isCorrect: false },
+        { id: 3, text: 'Inggris', isCorrect: false },
+        { id: 4, text: 'Kerajaan Banten', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Kota Tua Jakarta dulunya merupakan pusat pemerintahan yang dikenal dengan nama...',
+      options: [
+        { id: 1, text: 'Batavia', isCorrect: true },
+        { id: 2, text: 'Sunda Kelapa', isCorrect: false },
+        { id: 3, text: 'Weltevreden', isCorrect: false },
+        { id: 4, text: 'Ommelanden', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Fatahillah mengubah nama Sunda Kelapa menjadi Jayakarta pada tanggal...',
+      options: [
+        { id: 1, text: '22 Juni 1527', isCorrect: true },
+        { id: 2, text: '17 Agustus 1945', isCorrect: false },
+        { id: 3, text: '4 Maret 1621', isCorrect: false },
+        { id: 4, text: '1 Januari 1600', isCorrect: false },
+      ],
+    },
+  ],
+  // Pos 1 — Budaya Betawi
+  [
+    {
+      text: 'Tari tradisional Betawi yang sering ditampilkan dalam penyambutan tamu kehormatan adalah...',
+      options: [
+        { id: 1, text: 'Tari Topeng Betawi', isCorrect: true },
+        { id: 2, text: 'Tari Kecak', isCorrect: false },
+        { id: 3, text: 'Tari Saman', isCorrect: false },
+        { id: 4, text: 'Tari Jaipong', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Alat musik gesek Betawi yang mendapat pengaruh dari budaya Tionghoa adalah...',
+      options: [
+        { id: 1, text: 'Tehyan', isCorrect: true },
+        { id: 2, text: 'Rebab', isCorrect: false },
+        { id: 3, text: 'Kecapi', isCorrect: false },
+        { id: 4, text: 'Biola', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Kesenian pertunjukan Betawi yang memadukan seni musik, lagu, dan lawak disebut...',
+      options: [
+        { id: 1, text: 'Lenong', isCorrect: true },
+        { id: 2, text: 'Ludruk', isCorrect: false },
+        { id: 3, text: 'Ketoprak', isCorrect: false },
+        { id: 4, text: 'Wayang Kulit', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Pakaian adat pengantin pria Betawi disebut...',
+      options: [
+        { id: 1, text: 'Dandanan Care Haji', isCorrect: true },
+        { id: 2, text: 'Baju Koko', isCorrect: false },
+        { id: 3, text: 'Beskap', isCorrect: false },
+        { id: 4, text: 'Teluk Belanga', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Senjata tradisional khas Betawi yang berbentuk seperti sabit adalah...',
+      options: [
+        { id: 1, text: 'Golok', isCorrect: true },
+        { id: 2, text: 'Keris', isCorrect: false },
+        { id: 3, text: 'Mandau', isCorrect: false },
+        { id: 4, text: 'Rencong', isCorrect: false },
+      ],
+    },
+  ],
+  // Pos 2 — Kuliner Khas
+  [
+    {
+      text: 'Kuah Soto Betawi yang kental dan gurih terbuat dari campuran...',
+      options: [
+        { id: 1, text: 'Santan dan Susu', isCorrect: true },
+        { id: 2, text: 'Kaldu dan Kecap', isCorrect: false },
+        { id: 3, text: 'Kacang dan Tauco', isCorrect: false },
+        { id: 4, text: 'Kelapa dan Terasi', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Kue tradisional Betawi yang berwarna hijau berbahan dasar tepung beras dan daun pandan adalah...',
+      options: [
+        { id: 1, text: 'Kue Cucur', isCorrect: true },
+        { id: 2, text: 'Kue Lapis', isCorrect: false },
+        { id: 3, text: 'Kue Putu', isCorrect: false },
+        { id: 4, text: 'Klepon', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Minuman khas Betawi berbahan dasar kelapa muda yang sering disajikan saat Lebaran adalah...',
+      options: [
+        { id: 1, text: 'Es Selendang Mayang', isCorrect: true },
+        { id: 2, text: 'Es Cendol', isCorrect: false },
+        { id: 3, text: 'Es Dawet', isCorrect: false },
+        { id: 4, text: 'Es Campur', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Makanan Betawi berupa potongan lontong dengan bumbu kacang dan sayuran disebut...',
+      options: [
+        { id: 1, text: 'Gado-gado', isCorrect: true },
+        { id: 2, text: 'Ketoprak', isCorrect: false },
+        { id: 3, text: 'Lotek', isCorrect: false },
+        { id: 4, text: 'Pecel', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Kerak telor adalah makanan khas Betawi yang dimasak menggunakan...',
+      options: [
+        { id: 1, text: 'Wajan dibalik di atas bara arang', isCorrect: true },
+        { id: 2, text: 'Kukusan bambu', isCorrect: false },
+        { id: 3, text: 'Oven tradisional', isCorrect: false },
+        { id: 4, text: 'Wajan biasa di kompor', isCorrect: false },
+      ],
+    },
+  ],
+  // Pos 3 — Landmark Jakarta
+  [
+    {
+      text: 'Monumen Nasional (Monas) dibangun untuk memperingati...',
+      options: [
+        { id: 1, text: 'Perjuangan kemerdekaan Indonesia', isCorrect: true },
+        { id: 2, text: 'Kemenangan Fatahillah', isCorrect: false },
+        { id: 3, text: 'Pembebasan Irian Barat', isCorrect: false },
+        { id: 4, text: 'Proklamasi Soekarno-Hatta', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Patung yang dibangun untuk memperingati pembebasan Irian Barat adalah Patung...',
+      options: [
+        { id: 1, text: 'Patung Pembebasan (Patung Dirgantara)', isCorrect: false },
+        { id: 2, text: 'Patung Pemuda Membangun', isCorrect: false },
+        { id: 3, text: 'Patung Selamat Datang', isCorrect: false },
+        { id: 4, text: 'Patung Pembebasan Irian Barat', isCorrect: true },
+      ],
+    },
+    {
+      text: 'Museum Fatahillah atau Museum Sejarah Jakarta berlokasi di kawasan...',
+      options: [
+        { id: 1, text: 'Kota Tua Jakarta', isCorrect: true },
+        { id: 2, text: 'Menteng', isCorrect: false },
+        { id: 3, text: 'Kebayoran Baru', isCorrect: false },
+        { id: 4, text: 'Kemang', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Taman Mini Indonesia Indah (TMII) terletak di wilayah...',
+      options: [
+        { id: 1, text: 'Jakarta Timur', isCorrect: true },
+        { id: 2, text: 'Jakarta Selatan', isCorrect: false },
+        { id: 3, text: 'Jakarta Barat', isCorrect: false },
+        { id: 4, text: 'Jakarta Utara', isCorrect: false },
+      ],
+    },
+    {
+      text: 'Kebun Binatang tertua di Jakarta yang masih beroperasi hingga kini adalah...',
+      options: [
+        { id: 1, text: 'Kebun Binatang Ragunan', isCorrect: true },
+        { id: 2, text: 'Kebun Binatang Gembira Loka', isCorrect: false },
+        { id: 3, text: 'Taman Safari', isCorrect: false },
+        { id: 4, text: 'Ancol Dreamland', isCorrect: false },
+      ],
+    },
+  ],
 ];
 
 const tutorialSteps = [
@@ -179,13 +367,23 @@ const TutorialModal = ({ isOpen, onClose }) => {
   );
 };
 
-const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
-  const [modalState, setModalState] = useState('confirm'); // 'confirm', 'countdown', 'quiz'
+const TOTAL_QUESTIONS = 5;
+const PASS_THRESHOLD = 3;
+const TIME_PER_QUESTION = 20;
+
+const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
+  const [modalState, setModalState] = useState('confirm'); // 'confirm' | 'countdown' | 'quiz' | 'result'
   const [countdown, setCountdown] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(20);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
   const [selectedOption, setSelectedOption] = useState(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
   const [isTextLarge, setIsTextLarge] = useState(false);
+
+  const questions = quizData[stationIndex] ?? quizData[0];
+  const currentQuestion = questions[currentQuestionIndex];
+  const isPassed = correctCount >= PASS_THRESHOLD;
 
   // Stop Lenis & lock body scroll when modal is open
   useEffect(() => {
@@ -202,47 +400,61 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
     }
   }, [station]);
 
-  // Dummy question
-  const dummyQuestion = {
-    title: station?.title || "Sejarah Batavia",
-    text: "Lorem ipsum dolor sit amet, adipiscing in proident dolore aute qui. Quis eu sunt minim aliqua ............ deserunt non exercitation do ullamco.",
-    options: [
-      { id: 1, text: "Lorep Dolor gg", isCorrect: true },
-      { id: 2, text: "Lorep Dolor gg", isCorrect: false },
-      { id: 3, text: "Lorep Dolor gg", isCorrect: false },
-      { id: 4, text: "Lorep Dolor gg", isCorrect: false },
-    ]
-  };
-
+  // Countdown timer
   useEffect(() => {
     if (modalState === 'countdown') {
       if (countdown > 0) {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
       } else {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setModalState('quiz');
       }
     }
   }, [modalState, countdown]);
 
+  // Per-question timer
   useEffect(() => {
-    if (modalState === 'quiz' && !hasSubmitted) {
-      if (timeLeft > 0) {
-        const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-        return () => clearTimeout(timer);
-      } else {
-        // Auto submit if time runs out
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setHasSubmitted(true);
-        if (selectedOption) {
-          onAnswer(dummyQuestion.options.find(o => o.id === selectedOption)?.isCorrect || false);
-        } else {
-          onAnswer(false);
-        }
-      }
+    if (modalState !== 'quiz' || hasSubmitted) return;
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      // Time's up — treat as wrong answer
+      handleSubmit(true);
     }
-  }, [modalState, timeLeft, hasSubmitted, selectedOption, onAnswer, dummyQuestion.options]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalState, timeLeft, hasSubmitted]);
+
+  const handleSubmit = (isTimeout = false) => {
+    if (hasSubmitted) return;
+    setHasSubmitted(true);
+    const isCorrect = isTimeout
+      ? false
+      : (currentQuestion.options.find(o => o.id === selectedOption)?.isCorrect ?? false);
+    if (isCorrect) setCorrectCount(prev => prev + 1);
+  };
+
+  const handleNext = () => {
+    const nextIndex = currentQuestionIndex + 1;
+    if (nextIndex >= TOTAL_QUESTIONS) {
+      setModalState('result');
+    } else {
+      setCurrentQuestionIndex(nextIndex);
+      setSelectedOption(null);
+      setHasSubmitted(false);
+      setTimeLeft(TIME_PER_QUESTION);
+    }
+  };
+
+  const handleRetry = () => {
+    setCurrentQuestionIndex(0);
+    setSelectedOption(null);
+    setHasSubmitted(false);
+    setCorrectCount(0);
+    setTimeLeft(TIME_PER_QUESTION);
+    setCountdown(3);
+    setModalState('countdown');
+  };
 
   if (!station) return null;
 
@@ -256,16 +468,20 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className={`relative w-full bg-[#F8F9FA] shadow-2xl ${modalState === 'quiz' ? 'max-w-[660px] max-h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-[28px]' : 'max-w-md overflow-hidden rounded-[24px]'}`}
+          className={`relative w-full bg-[#F8F9FA] shadow-2xl ${
+            modalState === 'quiz'
+              ? 'max-w-[660px] max-h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-[28px]'
+              : 'max-w-md overflow-hidden rounded-[24px]'
+          }`}
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.98 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
+          {/* ── CONFIRM ── */}
           {modalState === 'confirm' && (
             <div className="flex flex-col bg-white text-center">
-              {/* Layer 2: Container biru tua dengan component image component7.webp */}
-              <div 
+              <div
                 className="w-full h-[140px] relative"
                 style={{
                   backgroundColor: '#111A5A',
@@ -274,42 +490,32 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
                   backgroundPosition: 'center',
                 }}
               >
-                 {/* Wavy bottom edge to match the Figma closely */}
-                 <div className="absolute -bottom-1 left-0 w-full overflow-hidden leading-[0]">
-                    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[30px] fill-white block">
-                        <path d="M0,0 Q600,120 1200,0 L1200,120 L0,120 Z" className="fill-white"></path>
-                    </svg>
-                 </div>
+                <div className="absolute -bottom-1 left-0 w-full overflow-hidden leading-[0]">
+                  <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[30px] fill-white block">
+                    <path d="M0,0 Q600,120 1200,0 L1200,120 L0,120 Z" className="fill-white" />
+                  </svg>
+                </div>
               </div>
-
-              {/* Layer 3: Container bulat dengan icon tanda tanya */}
               <div className="relative z-10 flex justify-center -mt-[56px]">
-                 <div className="flex h-[112px] w-[112px] items-center justify-center rounded-full bg-white">
-                    <div className="flex h-[92px] w-[92px] items-center justify-center rounded-full bg-[#EDF2FF] relative">
-                       {/* Animated dashed ring */}
-                       <div className="absolute inset-1 rounded-full border-[2.5px] border-dashed border-[#111A5A] opacity-40 animate-[spin_8s_linear_infinite]"></div>
-                       
-                       <div 
-                         className="flex h-[76px] w-[76px] items-center justify-center rounded-full relative overflow-hidden z-10" 
-                         style={{ 
-                           backgroundColor: '#111A5A',
-                           backgroundImage: `url(${component7})`, 
-                           backgroundSize: 'cover', 
-                           backgroundPosition: 'center' 
-                         }}
-                       >
-                          <span className="text-white text-[40px] font-bold relative z-10 leading-none">?</span>
-                       </div>
+                <div className="flex h-[112px] w-[112px] items-center justify-center rounded-full bg-white">
+                  <div className="flex h-[92px] w-[92px] items-center justify-center rounded-full bg-[#EDF2FF] relative">
+                    <div className="absolute inset-1 rounded-full border-[2.5px] border-dashed border-[#111A5A] opacity-40 animate-[spin_8s_linear_infinite]" />
+                    <div
+                      className="flex h-[76px] w-[76px] items-center justify-center rounded-full relative overflow-hidden z-10"
+                      style={{ backgroundColor: '#111A5A', backgroundImage: `url(${component7})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                    >
+                      <span className="text-white text-[40px] font-bold relative z-10 leading-none">?</span>
                     </div>
-                 </div>
+                  </div>
+                </div>
               </div>
-
               <div className="px-8 pb-8 pt-4">
                 <h3 className="text-[28px] font-bold text-[#0A1B3F] mb-1">Siap?</h3>
-                <p className="text-[#3A3A3A] font-medium mb-8 text-[14px]">Apakah anda sudah Siap</p>
+                <p className="text-[#3A3A3A] font-medium mb-2 text-[14px]">{station.title}</p>
+                <p className="text-[#6B7280] text-[13px] mb-8">Jawab minimal <span className="font-bold text-[#111A5A]">{PASS_THRESHOLD} dari {TOTAL_QUESTIONS}</span> soal dengan benar untuk lanjut ke pos berikutnya.</p>
                 <div className="flex justify-center gap-4">
                   <button onClick={() => setModalState('countdown')} className="flex-1 rounded-[14px] bg-[#111A5A] py-3.5 text-[15px] font-bold text-white transition hover:bg-[#083E93] shadow-[0_8px_20px_rgba(10,27,63,0.15)] cursor-pointer">
-                    Iya
+                    Iya, Siap!
                   </button>
                   <button onClick={onClose} className="flex-1 rounded-[14px] border-[2px] border-[#111A5A] bg-white py-3.5 text-[15px] font-bold text-[#111A5A] transition hover:bg-slate-50 cursor-pointer">
                     Tidak
@@ -319,6 +525,7 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
             </div>
           )}
 
+          {/* ── COUNTDOWN ── */}
           {modalState === 'countdown' && (
             <div className="flex h-64 items-center justify-center bg-white p-8">
               <motion.div
@@ -333,84 +540,104 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
             </div>
           )}
 
-          {modalState === 'quiz' && (
+          {/* ── QUIZ ── */}
+          {modalState === 'quiz' && currentQuestion && (
             <div className="flex flex-col min-h-0 bg-white rounded-[28px]">
-              {/* Layer 2: Dark blue container (inside white card) */}
+              {/* Dark blue header */}
               <div
                 className="relative flex h-[140px] sm:h-[150px] flex-col px-6 pt-5 sm:px-8 mx-2 mt-2 sm:mx-3 sm:mt-3"
-                style={{
-                  backgroundColor: '#111A5A',
-                  backgroundImage: `url(${component7})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  borderRadius: '24px',
-                }}
+                style={{ backgroundColor: '#111A5A', backgroundImage: `url(${component7})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '24px' }}
               >
                 <div className="flex items-center justify-between">
                   <button onClick={onClose} className="rounded-full p-2 text-white transition hover:bg-white/20 cursor-pointer">
                     <ArrowLeft className="h-5 w-5" />
                   </button>
+                  {/* Question progress dots */}
+                  <div className="flex items-center gap-1.5">
+                    {questions.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`rounded-full transition-all duration-300 ${
+                          i < currentQuestionIndex
+                            ? 'w-2 h-2 bg-green-400'
+                            : i === currentQuestionIndex
+                            ? 'w-3 h-3 bg-white'
+                            : 'w-2 h-2 bg-white/30'
+                        }`}
+                      />
+                    ))}
+                  </div>
                   <button onClick={() => setIsTextLarge(!isTextLarge)} className="flex items-center justify-center p-2 text-white transition hover:bg-white/20 cursor-pointer">
                     <img src={component6} alt="Text Size" className="h-5 w-auto object-contain brightness-0 invert" />
                   </button>
                 </div>
               </div>
 
-              {/* Layer 3: Question card overlapping the blue container */}
+              {/* Question card */}
               <div className="relative z-10 -mt-12 mx-4 sm:mx-6">
-                {/* Timer Circle - anchored to the top of the question card */}
+                {/* Timer circle */}
                 <div className="absolute -top-10 left-1/2 flex h-[80px] w-[80px] -translate-x-1/2 items-center justify-center rounded-full bg-white shadow-md z-20">
                   <svg className="absolute inset-0 h-full w-full -rotate-90 transform" viewBox="0 0 80 80">
                     <circle cx="40" cy="40" r="34" fill="none" stroke="#E5E7EB" strokeWidth="4.5" />
                     <circle
-                      cx="40" cy="40" r="34" fill="none" stroke="#111A5A" strokeWidth="4.5"
+                      cx="40" cy="40" r="34" fill="none"
+                      stroke={timeLeft <= 5 ? '#EF4444' : '#111A5A'}
+                      strokeWidth="4.5"
                       strokeDasharray={2 * Math.PI * 34}
-                      strokeDashoffset={(2 * Math.PI * 34) - (timeLeft / 20) * (2 * Math.PI * 34)}
+                      strokeDashoffset={(2 * Math.PI * 34) - (timeLeft / TIME_PER_QUESTION) * (2 * Math.PI * 34)}
                       strokeLinecap="round"
                       className="transition-all duration-1000 ease-linear"
                     />
                   </svg>
-                  <span className="relative text-lg font-bold text-[#111A5A]">{timeLeft}</span>
+                  <span className={`relative text-lg font-bold transition-colors ${timeLeft <= 5 ? 'text-red-500' : 'text-[#111A5A]'}`}>{timeLeft}</span>
                 </div>
 
-                <div className="rounded-[18px] bg-white p-5 pt-12 sm:p-6 sm:pt-12 shadow-sm border border-gray-100">
-                  <div className="mb-3 flex items-center justify-between border-b border-gray-100 pb-3">
-                    <div className="flex items-center gap-2">
-                      <img src={logoNoekarta} alt="Noekarta" className="h-6 w-auto object-contain" />
-                      <div className="h-3.5 w-px bg-gray-300 mx-1.5"></div>
-                      <img src={component5} alt="Logo 2" className="h-3.5 w-auto object-contain" />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentQuestionIndex}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.25 }}
+                    className="rounded-[18px] bg-white p-5 pt-12 sm:p-6 sm:pt-12 shadow-sm border border-gray-100"
+                  >
+                    <div className="mb-3 flex items-center justify-between border-b border-gray-100 pb-3">
+                      <div className="flex items-center gap-2">
+                        <img src={logoNoekarta} alt="Noekarta" className="h-6 w-auto object-contain" />
+                        <div className="h-3.5 w-px bg-gray-300 mx-1.5" />
+                        <img src={component5} alt="Logo 2" className="h-3.5 w-auto object-contain" />
+                      </div>
+                      <span className="text-xs sm:text-sm font-semibold text-[#111A5A]">Soal {currentQuestionIndex + 1}/{TOTAL_QUESTIONS}</span>
                     </div>
-                    <span className="text-xs sm:text-sm font-semibold text-[#111A5A]">Question 1/5</span>
-                  </div>
-
-                  <div className="text-center">
-                    <h3 className={`mb-2 font-bold text-[#111A5A] transition-all ${isTextLarge ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>{dummyQuestion.title}</h3>
-                    <p className={`font-medium leading-relaxed text-gray-700 transition-all ${isTextLarge ? 'text-[15px] sm:text-[16px]' : 'text-[13px] sm:text-[14px]'}`}>
-                      {dummyQuestion.text}
-                    </p>
-                  </div>
-                </div>
+                    <div className="text-center">
+                      <h3 className={`mb-2 font-bold text-[#111A5A] transition-all ${isTextLarge ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>{station.title}</h3>
+                      <p className={`font-medium leading-relaxed text-gray-700 transition-all ${isTextLarge ? 'text-[15px] sm:text-[16px]' : 'text-[13px] sm:text-[14px]'}`}>
+                        {currentQuestion.text}
+                      </p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              {/* Options & Submit - white area */}
+              {/* Options & submit */}
               <div className="px-4 pb-6 pt-4 sm:px-6">
                 <div className="space-y-2.5">
-                  {dummyQuestion.options.map((option) => {
-                    let optionStyle = "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-800";
+                  {currentQuestion.options.map((option) => {
+                    let optionStyle = 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-800';
                     let showIcon = null;
 
                     if (hasSubmitted) {
                       if (option.isCorrect) {
-                        optionStyle = "border-green-500 bg-white text-gray-800 shadow-sm";
+                        optionStyle = 'border-green-500 bg-green-50 text-gray-800 shadow-sm';
                         showIcon = <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500"><Check className="h-3.5 w-3.5 text-white" strokeWidth={3.5} /></div>;
                       } else if (selectedOption === option.id) {
-                        optionStyle = "border-red-500 bg-white text-gray-800 shadow-sm";
+                        optionStyle = 'border-red-500 bg-red-50 text-gray-800 shadow-sm';
                         showIcon = <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500"><X className="h-3.5 w-3.5 text-white" strokeWidth={3.5} /></div>;
                       } else {
-                        optionStyle = "border-gray-200 bg-white text-gray-800 opacity-60";
+                        optionStyle = 'border-gray-200 bg-white text-gray-800 opacity-50';
                       }
                     } else if (selectedOption === option.id) {
-                      optionStyle = "border-[#0A4BB3] bg-white text-gray-800";
+                      optionStyle = 'border-[#0A4BB3] bg-blue-50 text-gray-800';
                     }
 
                     return (
@@ -424,8 +651,8 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
                         {hasSubmitted && showIcon ? (
                           showIcon
                         ) : (
-                          <div className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${selectedOption === option.id ? 'border-[#0A4BB3]' : 'border-gray-300'}`}>
-                            {selectedOption === option.id && <div className="h-2.5 w-2.5 rounded-full bg-[#0A4BB3]"></div>}
+                          <div className={`flex h-5 w-5 items-center justify-center rounded-full border-2 flex-shrink-0 ${selectedOption === option.id ? 'border-[#0A4BB3]' : 'border-gray-300'}`}>
+                            {selectedOption === option.id && <div className="h-2.5 w-2.5 rounded-full bg-[#0A4BB3]" />}
                           </div>
                         )}
                       </button>
@@ -433,24 +660,102 @@ const QuizModal = ({ station, onClose, onAnswer, onFinish }) => {
                   })}
                 </div>
 
-                {/* Submit Button */}
-                <button
-                  disabled={!selectedOption && !hasSubmitted}
-                  onClick={() => {
-                    if (!hasSubmitted) {
-                      setHasSubmitted(true);
-                      onAnswer(dummyQuestion.options.find(o => o.id === selectedOption)?.isCorrect || false);
-                    } else {
-                      onFinish(1); // dummy close/finish
-                    }
-                  }}
-                  className={`mt-5 w-full rounded-[12px] py-3 text-sm font-bold text-white transition ${(!selectedOption && !hasSubmitted)
-                      ? 'cursor-not-allowed bg-gray-200 text-gray-400'
-                      : 'bg-[#0A4BB3] hover:bg-[#083E93] shadow-md cursor-pointer'
+                {/* Submit / Next button */}
+                {!hasSubmitted ? (
+                  <button
+                    disabled={!selectedOption}
+                    onClick={() => handleSubmit()}
+                    className={`mt-5 w-full rounded-[12px] py-3 text-sm font-bold text-white transition ${
+                      !selectedOption ? 'cursor-not-allowed bg-gray-200 text-gray-400' : 'bg-[#0A4BB3] hover:bg-[#083E93] shadow-md cursor-pointer'
                     }`}
-                >
-                  Kirim
-                </button>
+                  >
+                    Kirim Jawaban
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleNext}
+                    className="mt-5 w-full rounded-[12px] py-3 text-sm font-bold text-white bg-[#0A4BB3] hover:bg-[#083E93] shadow-md cursor-pointer transition"
+                  >
+                    {currentQuestionIndex + 1 < TOTAL_QUESTIONS ? 'Soal Berikutnya →' : 'Lihat Hasil'}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ── RESULT ── */}
+          {modalState === 'result' && (
+            <div className="flex flex-col bg-white text-center overflow-hidden rounded-[24px]">
+              {/* Header */}
+              <div
+                className="w-full h-[120px] relative flex items-center justify-center"
+                style={{ backgroundColor: isPassed ? '#0A4BB3' : '#111A5A', backgroundImage: `url(${component7})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+              >
+                <div className="absolute -bottom-1 left-0 w-full overflow-hidden leading-[0]">
+                  <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-[30px] fill-white block">
+                    <path d="M0,0 Q600,120 1200,0 L1200,120 L0,120 Z" className="fill-white" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Score badge */}
+              <div className="relative z-10 flex justify-center -mt-[52px] mb-4">
+                <div className={`flex h-[104px] w-[104px] items-center justify-center rounded-full bg-white shadow-lg border-4 ${
+                  isPassed ? 'border-green-400' : 'border-red-400'
+                }`}>
+                  <div className={`flex flex-col items-center justify-center h-[80px] w-[80px] rounded-full ${
+                    isPassed ? 'bg-green-50' : 'bg-red-50'
+                  }`}>
+                    <span className={`text-3xl font-black leading-none ${
+                      isPassed ? 'text-green-600' : 'text-red-600'
+                    }`}>{correctCount}/{TOTAL_QUESTIONS}</span>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${
+                      isPassed ? 'text-green-500' : 'text-red-500'
+                    }`}>{isPassed ? 'LULUS' : 'GAGAL'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-8 pb-8 pt-2">
+                {isPassed ? (
+                  <>
+                    <h3 className="text-[24px] font-bold text-[#0A1B3F] mb-1">Selamat! 🎉</h3>
+                    <p className="text-[#3A3A3A] text-[13px] mb-6">
+                      Kamu berhasil menjawab <span className="font-bold text-green-600">{correctCount} dari {TOTAL_QUESTIONS}</span> soal dengan benar.
+                      Pos <span className="font-bold">{station.title}</span> telah selesai!
+                    </p>
+                    <button
+                      onClick={() => onFinish(correctCount)}
+                      className="w-full rounded-[14px] bg-[#111A5A] py-3.5 text-[15px] font-bold text-white transition hover:bg-[#083E93] shadow-[0_8px_20px_rgba(10,27,63,0.15)] cursor-pointer"
+                    >
+                      Lanjut ke Pos Berikutnya →
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-[24px] font-bold text-[#0A1B3F] mb-1">Hampir Berhasil!</h3>
+                    <p className="text-[#3A3A3A] text-[13px] mb-2">
+                      Kamu hanya menjawab <span className="font-bold text-red-600">{correctCount} dari {TOTAL_QUESTIONS}</span> soal dengan benar.
+                    </p>
+                    <p className="text-[#6B7280] text-[12px] mb-6">
+                      Butuh minimal <span className="font-bold text-[#111A5A]">{PASS_THRESHOLD} jawaban benar</span> untuk lanjut. Coba lagi!
+                    </p>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handleRetry}
+                        className="flex-1 rounded-[14px] bg-[#111A5A] py-3.5 text-[14px] font-bold text-white transition hover:bg-[#083E93] shadow-md cursor-pointer"
+                      >
+                        Coba Lagi
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="flex-1 rounded-[14px] border-2 border-gray-300 bg-white py-3.5 text-[14px] font-bold text-gray-700 transition hover:bg-gray-50 cursor-pointer"
+                      >
+                        Keluar
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
@@ -496,15 +801,17 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
     isCompleted: completedStations.includes(index),
   }));
 
-  const finishStation = () => {
+  const finishStation = (correctCount) => {
     const stationIndex = activeStation;
-    setCompletedStations((completed) => completed.includes(stationIndex) ? completed : [...completed, stationIndex]);
+    // Only mark complete if passed (>= PASS_THRESHOLD correct)
+    if (correctCount >= PASS_THRESHOLD) {
+      setCompletedStations((completed) =>
+        completed.includes(stationIndex) ? completed : [...completed, stationIndex]
+      );
+      setAnswersGiven((total) => total + TOTAL_QUESTIONS);
+      setCorrectAnswers((total) => total + correctCount);
+    }
     setActiveStation(null);
-  };
-
-  const recordAnswer = (isCorrect) => {
-    setAnswersGiven((total) => total + 1);
-    setCorrectAnswers((total) => total + Number(isCorrect));
   };
 
   const openStation = (stationIndex) => {
@@ -666,7 +973,13 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
       </div>
 
       <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} />
-      <QuizModal key={activeStation ?? 'closed'} station={activeStation === null ? null : stations[activeStation]} onClose={() => setActiveStation(null)} onAnswer={recordAnswer} onFinish={finishStation} />
+      <QuizModal
+        key={activeStation ?? 'closed'}
+        stationIndex={activeStation ?? 0}
+        station={activeStation === null ? null : stations[activeStation]}
+        onClose={() => setActiveStation(null)}
+        onFinish={finishStation}
+      />
         </div>
       </main>
     </div>
