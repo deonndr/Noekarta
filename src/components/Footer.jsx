@@ -65,7 +65,7 @@ const Footer = () => {
       />
       
       {/* Layer 2: Monas Logo (Animated) */}
-      <div className="absolute right-0 bottom-0 z-10 h-full w-[80%] max-w-[650px] flex items-end justify-end pointer-events-none">
+      <div className="absolute right-0 -bottom-18 z-10 h-full w-[80%] max-w-[650px] flex items-end justify-end pointer-events-none">
         <img 
           ref={monasRef}
           src={monasLogo} 
@@ -135,7 +135,7 @@ const Footer = () => {
              </p>
            </div>
            
-           <div className="col-span-1 lg:col-span-7">
+           {/* <div className="col-span-1 lg:col-span-7">
              <div className="flex flex-wrap items-center gap-3">
                 <a href="#" className="flex items-center gap-2 rounded-lg bg-[#1d2a54] px-4 py-2.5 text-xs font-semibold text-[#e1e7f5] transition hover:bg-[#273a6a] hover:-translate-y-0.5 border border-white/5">
                    <InstagramIcon className="h-4 w-4" />
@@ -150,7 +150,7 @@ const Footer = () => {
                    @mlnarasyaaa_
                 </a>
              </div>
-           </div>
+           </div> */}
         </div>
       </div>
     </footer>

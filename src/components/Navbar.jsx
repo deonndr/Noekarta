@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import logo from '../assets/logo-noekarta.webp';
+import logo from '../assets/logo-noekarta1.webp';
 
 const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
