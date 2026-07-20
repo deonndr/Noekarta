@@ -1,52 +1,12 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useInView, motion } from 'motion/react';
-import kuliner1 from '../assets/kuliner1.webp';
-import kuliner2 from '../assets/kuliner2.webp';
-import kuliner3 from '../assets/kuliner3.webp';
-import kuliner4 from '../assets/kuliner4.webp';
-import kuliner5 from '../assets/kuliner5.webp';
-import kuliner6 from '../assets/kuliner6.webp';
+import { Link } from 'react-router-dom';
+import { allKulinerData } from '../data/kuliner';
+import { useInventory } from '../hooks/useInventory';
 import cardfly from '../assets/cardfly2.svg';
 import component1 from '../assets/components/component1.webp';
 
-const kulinerData = [
-  {
-    id: 1,
-    title: 'Kerak telor',
-    img: kuliner1,
-    desc: 'Telur bebek, Beras ketan Serundeng, dan ebi yang gurih',
-  },
-  {
-    id: 2,
-    title: 'Soto betawi',
-    img: kuliner2,
-    desc: 'Daging Sapi, jeroan, dan rempah - rempah yang khas',
-  },
-  {
-    id: 3,
-    title: 'Nasi uduk Betawi',
-    img: kuliner3,
-    desc: 'disajikan dengan lauk jengkol, semur tahu atau tempe',
-  },
-  {
-    id: 4,
-    title: 'Asinan Betawi',
-    img: kuliner4,
-    desc: 'kuahnya kemerahan, rasa asam, manis, dan pedas',
-  },
-  {
-    id: 5,
-    title: 'Roti Buaya',
-    img: kuliner5,
-    desc: 'disajikan pada acara khusus Seperti upacara pernikahan',
-  },
-  {
-    id: 6,
-    title: 'Es Selendang Mayang',
-    img: kuliner6,
-    desc: 'kue kenyal dari tepung beras, santan, dan air gula merah',
-  },
-];
+const kulinerData = allKulinerData.slice(0, 6);
 
 /* Bookmark Icon SVG */
 const BookmarkIcon = () => (
@@ -65,15 +25,9 @@ const BookmarkIcon = () => (
 );
 
 const KulinerJakarta = () => {
-  const [savedItems, setSavedItems] = useState([]);
+  const { savedItems, toggleSave } = useInventory();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { margin: '200px' });
-
-  const toggleSave = (id) => {
-    setSavedItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
 
   return (
     <section ref={sectionRef} className="py-20 bg-[#fafafa]">
@@ -99,12 +53,12 @@ const KulinerJakarta = () => {
               Cicipi kuliner khas Betawi dan Jakarta
             </p>
 
-            <a href="#" className="bg-[#0f285e] hover:bg-[#0a1b40] text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center w-fit gap-2 transition-colors">
+            <Link to="/kuliner" className="bg-[#0f285e] hover:bg-[#0a1b40] text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center w-fit gap-2 transition-colors">
               Lihat Semua Kuliner
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </a>
+            </Link>
 
             {/* component1 decorations */}
             <div className="absolute -bottom-1 left-5 w-[80px] h-[80px]">
@@ -151,7 +105,7 @@ const KulinerJakarta = () => {
                   <img
                     src={item.img}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover select-none"
                     draggable="false"
                   />
                 </div>
@@ -174,15 +128,15 @@ const KulinerJakarta = () => {
                     style={{
                       padding: '8px',
                       borderRadius: '8px',
-                      border: '1px solid #3b82f6',
-                      backgroundColor: savedItems.includes(item.id) ? '#eff6ff' : 'transparent',
-                      color: '#3b82f6',
+                      border: '1.5px solid #0f285e',
+                      backgroundColor: savedItems.includes(item.id) ? '#0f285e' : 'transparent',
+                      color: savedItems.includes(item.id) ? 'white' : '#0f285e',
                       fontSize: '12px',
                       fontWeight: 600,
                     }}
                   >
                     <BookmarkIcon />
-                    {savedItems.includes(item.id) ? 'Tersimpan' : 'Simpan ke Inventory'}
+                    {savedItems.includes(item.id) ? 'Batal Menyimpan' : 'Simpan ke inventory'}
                   </button>
                 </div>
               </div>

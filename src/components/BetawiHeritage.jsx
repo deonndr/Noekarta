@@ -2,12 +2,18 @@ import { useState, useRef, forwardRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import component2 from '../assets/components/component2.webp';
-import betawi1 from '../assets/image-betawiheritage1.png';
-import betawi2 from '../assets/image-betawiheritage2.png';
-import betawi3 from '../assets/image-betawiheritage3.png';
-import betawi4 from '../assets/image-betawiheritage4.png';
-import betawi5 from '../assets/image-betawiheritage5.png';
-import betawi6 from '../assets/image-betawiheritage6.png';
+import betawi1 from '../assets/image-betawiheritage1.webp';
+import betawi2 from '../assets/image-betawiheritage2.webp';
+import betawi3 from '../assets/image-betawiheritage3.webp';
+import betawi4 from '../assets/image-betawiheritage4.webp';
+import betawi5 from '../assets/image-betawiheritage5.webp';
+import betawi6 from '../assets/image-betawiheritage6.webp';
+import info1 from '../assets/information-betawiheritage1.webp';
+import info2 from '../assets/information-betawiheritage2.webp';
+import info3 from '../assets/information-betawiheritage3.webp';
+import info4 from '../assets/information-betawiheritage4.webp';
+import info5 from '../assets/information-betawiheritage5.webp';
+import info6 from '../assets/information-betawiheritage6.webp';
 
 const betawiData = [
   {
@@ -15,6 +21,7 @@ const betawiData = [
     title: 'Budaya Betawi',
     badge: 'Ondel - Ondel',
     img: betawi1,
+    infoImg: info1,
     desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
@@ -22,27 +29,31 @@ const betawiData = [
     title: 'Pakaian Adat Betawi',
     badge: 'Kebaya Encim',
     img: betawi2,
+    infoImg: info2,
     desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 3,
     title: 'Kuliner Betawi',
     badge: 'Semur Jengkol',
-    img: betawi3,
+    img: betawi5,
+    infoImg: info3,
     desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 4,
     title: 'Kesenian & Music Betawi',
     badge: 'Rebana Biang',
-    img: betawi4,
+    img: betawi3,
+    infoImg: info4,
     desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
     id: 5,
     title: 'Tradisi Betawi',
     badge: 'Ngarak Pengantin',
-    img: betawi5,
+    img: betawi4,
+    infoImg: info5,
     desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   },
   {
@@ -50,6 +61,7 @@ const betawiData = [
     title: 'Wisata Betawi',
     badge: 'Museum Wayang',
     img: betawi6,
+    infoImg: info6,
     desc: 'Budaya asli masyarakat Jakarta yang tercermin dalam bahasa, kesenian kuliner, hingga tradisi sehari-hari'
   }
 ];
@@ -63,6 +75,7 @@ const ImagePage = forwardRef(({ img }, ref) => (
     <img
       src={img}
       alt=""
+      className="select-none"
       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
     />
   </div>
@@ -81,7 +94,7 @@ const TextPage = forwardRef(({ data }, ref) => (
       boxShadow: 'inset -4px 0 15px rgba(0,0,0,0.03)'
     }}
   >
-    {/* Spine shadow line on the left edge of text page */}
+    {/* Spine shadow — visible during page peel */}
     <div style={{
       position: 'absolute',
       top: 0,
@@ -92,84 +105,48 @@ const TextPage = forwardRef(({ data }, ref) => (
       zIndex: 1
     }} />
 
-    <div style={{
-      position: 'absolute',
-      inset: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      padding: '40px 44px',
-    }}>
-      <span style={{ color: '#0F285C', fontWeight: 700, fontSize: '22px', marginBottom: '8px', fontFamily: 'Poppins, sans-serif' }}>
-        0{data.id}
-      </span>
-
-      <div style={{ height: '76px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', marginBottom: '16px', overflow: 'hidden' }}>
-        <h3 style={{
-          fontSize: '26px',
-          fontWeight: 700,
-          color: '#111827',
-          lineHeight: 1.3,
-          margin: 0,
-          fontFamily: 'Poppins, sans-serif',
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden'
-        }}>
-          {data.title}
-        </h3>
-      </div>
-
-      <div style={{ width: '48px', height: '3px', background: '#0F285C', borderRadius: '9999px', marginBottom: '20px' }} />
-
-      <p style={{
-        color: '#6B7280',
-        fontSize: '14px',
-        lineHeight: 1.7,
-        marginBottom: '28px',
-        height: '72px',
-        overflow: 'hidden',
-        fontFamily: 'Poppins, sans-serif',
-        margin: '0 0 28px 0'
-      }}>
-        {data.desc}
-      </p>
-
-      <div style={{
-        display: 'inline-block',
-        border: '1.5px solid #0F285C',
-        color: '#0F285C',
-        padding: '10px 24px',
-        borderRadius: '9999px',
-        fontSize: '13px',
-        fontWeight: 600,
-        fontFamily: 'Poppins, sans-serif',
-        width: 'fit-content',
-        letterSpacing: '0.05em'
-      }}>
-        {data.badge}
-      </div>
-    </div>
+    <img 
+      src={data.infoImg} 
+      alt=""
+      className="select-none"
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        display: 'block'
+      }}
+      draggable="false"
+    />
   </div>
 ));
 TextPage.displayName = 'TextPage';
 
 const BetawiHeritage = () => {
   const [currentItem, setCurrentItem] = useState(0);
+  const [isFlipping, setIsFlipping] = useState(false);
   const book = useRef();
 
   const flipNext = () => {
+    if (isFlipping) return;
     book.current?.pageFlip().flipNext();
   };
 
   const flipPrev = () => {
+    if (isFlipping) return;
     book.current?.pageFlip().flipPrev();
   };
 
   const onFlip = (e) => {
-    // Each item = 2 pages (image + text), page index / 2 = item index
-    setCurrentItem(Math.floor(e.data / 2));
+    const idx = Math.floor(e.data / 2);
+    setCurrentItem(idx);
+  };
+
+  const onChangeState = (e) => {
+    if (e.data === 'flipping' || e.data === 'user_fold') {
+      setIsFlipping(true);
+    } else if (e.data === 'read') {
+      setIsFlipping(false);
+    }
   };
 
   return (
@@ -181,7 +158,7 @@ const BetawiHeritage = () => {
           {/* Left Column: Static Content */}
           <div className="w-full lg:w-[35%] flex flex-col">
             <div className="inline-flex items-center gap-2.5 bg-[#F1F5F9] px-4 py-2 rounded-xl mb-8 w-fit">
-              <img src={component2} alt="icon" className="w-5 h-5 object-contain" />
+              <img src={component2} alt="icon" className="w-5 h-5 object-contain select-none" />
               <span className="text-[#0F285C] font-semibold text-sm">Betawi Heritage Hub</span>
             </div>
 
@@ -206,14 +183,24 @@ const BetawiHeritage = () => {
               <div className="flex items-center gap-4">
                 <button
                   onClick={flipPrev}
-                  className="w-12 h-12 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-white hover:shadow-sm hover:border-gray-300 transition-all focus:outline-none"
+                  disabled={isFlipping}
+                  className={`w-12 h-12 rounded-full border-[1.5px] border-gray-200 flex items-center justify-center transition-all focus:outline-none ${
+                    isFlipping
+                      ? 'text-gray-200 border-gray-100 cursor-not-allowed opacity-40'
+                      : 'text-gray-400 hover:text-gray-700 hover:bg-white hover:shadow-sm hover:border-gray-300 cursor-pointer'
+                  }`}
                   aria-label="Previous page"
                 >
                   <ArrowLeft size={20} strokeWidth={2.5} />
                 </button>
                 <button
                   onClick={flipNext}
-                  className="w-12 h-12 rounded-full bg-[#0F285C] flex items-center justify-center text-white hover:bg-[#1E40AF] hover:shadow-lg transition-all focus:outline-none"
+                  disabled={isFlipping}
+                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all focus:outline-none ${
+                    isFlipping
+                      ? 'bg-[#0F285C]/40 text-white/60 cursor-not-allowed'
+                      : 'bg-[#0F285C] text-white hover:bg-[#1E40AF] hover:shadow-lg cursor-pointer'
+                  }`}
                   aria-label="Next page"
                 >
                   <ArrowRight size={20} strokeWidth={2.5} />
@@ -225,16 +212,18 @@ const BetawiHeritage = () => {
                 {betawiData.map((_, idx) => (
                   <button
                     key={idx}
+                    disabled={isFlipping}
                     onClick={() => {
-                      if (idx !== currentItem) {
-                        // Jump to the correct page (each item = 2 pages, show left page = even index)
+                      if (idx !== currentItem && !isFlipping) {
                         book.current?.pageFlip().turnToPage(idx * 2);
                       }
                     }}
                     className={`rounded-full transition-all duration-300 ${
                       idx === currentItem
                         ? 'bg-[#0F285C] w-2.5 h-2.5'
-                        : 'bg-[#D1D5DB] hover:bg-gray-400 w-2 h-2'
+                        : isFlipping
+                          ? 'bg-[#D1D5DB] w-2 h-2 cursor-not-allowed opacity-50'
+                          : 'bg-[#D1D5DB] hover:bg-gray-400 w-2 h-2 cursor-pointer'
                     }`}
                     aria-label={`Go to item ${idx + 1}`}
                   />
@@ -260,6 +249,7 @@ const BetawiHeritage = () => {
                 showCover={false}
                 mobileScrollSupport={false}
                 onFlip={onFlip}
+                onChangeState={onChangeState}
                 drawShadow={true}
                 flippingTime={900}
                 useMouseEvents={false}
@@ -267,6 +257,7 @@ const BetawiHeritage = () => {
                   borderRadius: '24px',
                   boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)',
                   overflow: 'hidden'
+                
                 }}
               >
                 {betawiData.flatMap((item) => [
@@ -282,7 +273,7 @@ const BetawiHeritage = () => {
                 <img
                   src={betawiData[currentItem].img}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover select-none"
                 />
               </div>
               <div className="flex-1 relative bg-white">

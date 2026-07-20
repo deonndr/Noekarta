@@ -84,7 +84,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
             </p>
             <Link 
               to="/noequiz"
-              className="inline-flex items-center gap-3 bg-[#2A238A] hover:bg-[#201a73] text-white font-semibold px-6 md:px-8 py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_rgba(42,35,138,0.3)] hover:shadow-[0_8px_25px_rgba(42,35,138,0.4)] active:scale-95 group w-max"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#1D1D6A] via-[#23239C] to-[#2E2EAB] text-white font-semibold px-6 md:px-8 py-3.5 rounded-xl transition-all duration-300 shadow-[0_8px_20px_rgba(42,35,138,0.3)] hover:shadow-[0_8px_25px_rgba(42,35,138,0.4)] hover:opacity-90 active:scale-95 group w-max"
             >
               <Rocket className="w-5 h-5 text-white/90" />
               <span className="text-[14px] md:text-[15px]">Mainkan NoeQuiz Sekarang !!</span>
@@ -103,7 +103,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
             <div className="bg-white rounded-[24px] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.12)] border border-gray-100 p-6 md:p-8 min-h-[300px] flex flex-col relative overflow-hidden">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
-                  <img src={logoNoekarta} alt="Noekarta" className="h-3.5 md:h-4 w-auto object-contain" />
+                  <img src={logoNoekarta} alt="Noekarta" className="h-3.5 md:h-4 w-auto object-contain select-none" />
                 </div>
                 
                 {/* Timer Circle */}
@@ -205,7 +205,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
                  </div>
                ) : (
                  <div className="w-[60px] h-[60px] rounded-full bg-[#0A1869] border-[4px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 8px rgba(211, 193, 250, 0.8), 0 0 30px 15px rgba(211, 193, 250, 0.6)' }}>
-                   <img src={component8} alt="Icon Batavia" className="w-7 h-7 object-contain" />
+                   <img src={component8} alt="Icon Batavia" className="w-7 h-7 object-contain select-none" />
                  </div>
                )}
 
@@ -213,7 +213,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
             </Link>
 
             {/* Node 2: Budaya Betawi */}
-            <Link to={isBetawiUnlocked ? "/noequiz" : "#"} className={`flex flex-col items-center relative translate-y-[15px] transition-transform duration-300 z-20 ${isBetawiUnlocked ? 'group hover:scale-105' : 'opacity-70 cursor-not-allowed'}`}>
+            <Link to={isBetawiUnlocked ? "/noequiz" : "#"} className={`flex flex-col items-center relative translate-y-[15px] transition-transform duration-300 z-20 ${isBetawiUnlocked ? 'group hover:scale-105' : 'cursor-not-allowed'}`}>
                {isBetawiComplete && (
                  <div className="absolute -top-7 px-3.5 py-0.5 bg-[#EAE8FE] text-[#341697] text-[10px] font-bold rounded-full mb-1.5 shadow-sm z-20">
                    Complete
@@ -226,11 +226,11 @@ const NoeQuiz = ({ completedStations = [] }) => {
                  </div>
                ) : isBetawiUnlocked ? (
                  <div className="w-[60px] h-[60px] rounded-full bg-[#0A1869] border-[4px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 8px rgba(168, 219, 255, 0.8), 0 0 30px 15px rgba(168, 219, 255, 0.6)' }}>
-                   <img src={component9} alt="Icon Betawi" className="w-7 h-7 object-contain" />
+                   <img src={component9} alt="Icon Betawi" className="w-7 h-7 object-contain select-none" />
                  </div>
                ) : (
-                 <div className="w-[60px] h-[60px] rounded-full bg-[#62646B] border-[4px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 4px #D1D5E8' }}>
-                   <LockKeyhole className="w-6 h-6" />
+                 <div className="w-[60px] h-[60px] rounded-full bg-[#62646B] border-[4px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 7px 18px rgba(24,54,124,0.28)' }}>
+                   <LockKeyhole className="w-6 h-6" strokeWidth={2.5} />
                  </div>
                )}
 
@@ -276,14 +276,14 @@ const NoeQuiz = ({ completedStations = [] }) => {
                  </div>
                ) : (
                  <div className="w-[50px] h-[50px] rounded-full bg-[#0A1869] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 6px rgba(211, 193, 250, 0.8), 0 0 20px 10px rgba(211, 193, 250, 0.6)' }}>
-                   <img src={component8} alt="Icon Batavia" className="w-6 h-6 object-contain" />
+                   <img src={component8} alt="Icon Batavia" className="w-6 h-6 object-contain select-none" />
                  </div>
                )}
                <span className="text-[13px] font-bold mt-4 text-[#1A1856]">Sejarah Batavia</span>
             </Link>
 
             {/* Node 2 */}
-            <Link to={isBetawiUnlocked ? "/noequiz" : "#"} className={`flex flex-col items-center relative transition-transform duration-300 ${isBetawiUnlocked ? 'hover:scale-105' : 'opacity-70 cursor-not-allowed'}`}>
+            <Link to={isBetawiUnlocked ? "/noequiz" : "#"} className={`flex flex-col items-center relative transition-transform duration-300 ${isBetawiUnlocked ? 'hover:scale-105' : 'cursor-not-allowed'}`}>
                {isBetawiComplete && (
                  <div className="absolute -top-6 px-3 py-0.5 bg-[#EAE8FE] text-[#341697] text-[9px] font-bold rounded-full whitespace-nowrap shadow-sm z-20">
                    Complete
@@ -295,11 +295,11 @@ const NoeQuiz = ({ completedStations = [] }) => {
                  </div>
                ) : isBetawiUnlocked ? (
                  <div className="w-[50px] h-[50px] rounded-full bg-[#0A1869] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 6px rgba(168, 219, 255, 0.8), 0 0 20px 10px rgba(168, 219, 255, 0.6)' }}>
-                   <img src={component9} alt="Icon Betawi" className="w-6 h-6 object-contain" />
+                   <img src={component9} alt="Icon Betawi" className="w-6 h-6 object-contain select-none" />
                  </div>
                ) : (
-                 <div className="w-[50px] h-[50px] rounded-full bg-[#62646B] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 0 0 3px #D1D5E8' }}>
-                   <LockKeyhole className="w-5 h-5" />
+                 <div className="w-[50px] h-[50px] rounded-full bg-[#62646B] border-[3px] border-white text-white flex items-center justify-center relative z-10" style={{ boxShadow: '0 7px 18px rgba(24,54,124,0.28)' }}>
+                   <LockKeyhole className="w-5 h-5" strokeWidth={2.5} />
                  </div>
                )}
                <span className="text-[13px] font-bold mt-4 text-[#1A1856]">Budaya Betawi</span>

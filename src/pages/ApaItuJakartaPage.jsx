@@ -62,7 +62,7 @@ const ApaItuJakartaPage = () => {
 
           {/* Logo Center */}
           <a href="/" className="absolute left-1/2 -translate-x-1/2">
-            <img src={logo} alt="Noekarta" className="h-8 w-auto" />
+            <img src={logo} alt="Noekarta" className="h-8 w-auto select-none" />
           </a>
 
           {/* Language Selector */}
@@ -84,6 +84,12 @@ const ApaItuJakartaPage = () => {
           />
 
           <div className="absolute left-1/2 top-[31%] z-10 w-[78%] -translate-x-1/2 md:top-[18%] md:w-[76%]">
+            <img
+              src={cardfly}
+              alt="Decoration"
+              className="w-[120px] md:w-[150px] object-contain drop-shadow-sm select-none"
+              style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
+            />
             <motion.img
               src={heroTitle}
               alt="Kota Jakarta"

@@ -62,7 +62,7 @@ const LandmarkMap = ({ landmarks, activeLandmark, setActiveLandmark, setStreetVi
                             <img
                                 src={landmark.image}
                                 alt={landmark.title}
-                                className="w-full h-24 object-cover rounded-lg"
+                                className="w-full h-24 object-cover rounded-lg select-none"
                             />
                             <p className="font-bold text-gray-900 text-sm m-0">{landmark.title}</p>
                             <p className="text-gray-500 text-xs m-0">{landmark.description}</p>

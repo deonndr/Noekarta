@@ -246,7 +246,7 @@ const Hero = () => {
                 <div
                     className="inline-flex items-center gap-1 md:gap-2 rounded-full px-2.5 py-1 md:px-4 md:py-2 text-[10px] md:text-sm font-semibold bg-gray-50 mb-3 md:mb-6 anim-fade-up"
                 >
-                    <img src={component2} alt="Star" className="w-2.5 h-2.5 md:w-auto md:h-auto mr-0.5 md:mr-1" />
+                    <img src={component2} alt="Star" className="w-2.5 h-2.5 md:w-auto md:h-auto mr-0.5 md:mr-1 select-none" />
                     <p className="text-indigo-950">
                         Jelajahi Sejarah, Budaya &amp; Kuliner
                     </p>
@@ -385,7 +385,7 @@ const Hero = () => {
                                 <img
                                     src={src}
                                     alt={`Landmark ${i + 1}`}
-                                    className="w-full h-full object-cover pointer-events-none"
+                                    className="w-full h-full object-cover pointer-events-none select-none"
                                     draggable={false}
                                     loading="lazy"
                                 />

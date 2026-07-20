@@ -26,8 +26,8 @@ const InstagramIcon = ({ className }) => (
 );
 
 import logoNoekarta from '../assets/logo-noekarta2.webp';
-import footerBg from '../assets/components/component-footer.png';
-import monasLogo from '../assets/components/component-footer2.png';
+import footerBg from '../assets/components/component-footer.webp';
+import monasLogo from '../assets/components/component-footer2.webp';
 
 const Footer = () => {
   const monasRef = React.useRef(null);
@@ -70,7 +70,7 @@ const Footer = () => {
           ref={monasRef}
           src={monasLogo} 
           alt="Monas Logo" 
-          className="h-full w-auto object-contain object-right-bottom"
+          className="h-full w-auto object-contain object-right-bottom select-none"
           style={{ opacity: 0 }} // Initial state for GSAP
         />
       </div>
@@ -82,7 +82,7 @@ const Footer = () => {
           {/* Left Column - Branding */}
           <div className="col-span-1 lg:col-span-5 flex flex-col items-start pr-0 md:pr-12">
              <div className="mb-6">
-                <img src={logoNoekarta} alt="Noekarta" className="h-10" />
+                <img src={logoNoekarta} alt="Noekarta" className="h-10 select-none" />
              </div>
              
              <p className="mb-8 text-sm leading-relaxed text-[#c3ceea] max-w-[320px]">

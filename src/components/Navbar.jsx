@@ -83,7 +83,7 @@ const Navbar = () => {
                         {/* Bagian Logo */}
                         <div className="flex items-center shrink-0">
                             <a href="/">
-                                <img src={logo} alt="Noekarta Logo" className="h-8 md:h-10 w-auto" />
+                                <img src={logo} alt="Noekarta Logo" className="h-8 md:h-10 w-auto select-none" />
                             </a>
                         </div>
 

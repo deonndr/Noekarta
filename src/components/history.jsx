@@ -159,7 +159,7 @@ const History = () => {
           <div className="w-full lg:w-[55%] flex flex-col pt-4">
             {/* Title Area */}
             <div className="mb-10">
-              <img src={historyTitle} alt="Lorong Waktu digital" className="h-10 md:h-14 object-contain mb-4" />
+              <img src={historyTitle} alt="Lorong Waktu digital" className="h-10 md:h-14 object-contain mb-4 select-none" />
               <p className="text-gray-600 max-w-sm md:max-w-md text-sm md:text-[15px] leading-relaxed">
                 Telusuri Transformasi Jakarta dari masa ke masa, dari pelabuhan kecil hingga kota global.
               </p>
@@ -248,7 +248,7 @@ const History = () => {
                   <img
                     src={activeData.img}
                     alt={activeData.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover select-none"
                     decoding="async"
                     fetchPriority="high"
                   />

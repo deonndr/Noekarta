@@ -17,6 +17,8 @@ import Seo from './components/Seo';
 const LandmarkPage = lazy(() => import('./pages/LandmarkPage'));
 const ApaItuJakartaPage = lazy(() => import('./pages/ApaItuJakartaPage'));
 const NoeQuizPage = lazy(() => import('./pages/NoeQuizPage'));
+const KulinerPage = lazy(() => import('./pages/KulinerPage'));
+const InventoryPage = lazy(() => import('./pages/InventoryPage'));
 import 'lenis/dist/lenis.css';
 import './index.css';
 
@@ -111,6 +113,8 @@ function App() {
           <Route path="/landmark-explorer" element={<LandmarkPage />} />
           <Route path="/apa-itu-jakarta" element={<ApaItuJakartaPage />} />
           <Route path="/noequiz" element={<NoeQuizPage completedStations={completedStations} setCompletedStations={setCompletedStations} />} />
+          <Route path="/kuliner" element={<KulinerPage />} />
+          <Route path="/inventory" element={<InventoryPage />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

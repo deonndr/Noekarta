@@ -82,7 +82,7 @@ const LandmarkPage = () => {
 
                     {/* Logo Center */}
                     <a href="/" className="absolute left-1/2 -translate-x-1/2">
-                        <img src={logo} alt="Noekarta" className="h-8 w-auto" />
+                        <img src={logo} alt="Noekarta" className="h-8 w-auto select-none" />
                     </a>
 
                 </div>
