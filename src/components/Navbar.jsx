@@ -105,8 +105,8 @@ const Navbar = () => {
                             </a>
                         </div>
 
-                        {/* Tautan Navigasi (Desktop) — flex bukan absolute agar tidak nabrak logo */}
-                        <div className="hidden lg:flex items-center gap-4 xl:gap-6 flex-1 justify-center min-w-0">
+                        {/* Tautan Navigasi (Desktop) — absolute agar benar-benar di tengah halaman */}
+                        <div className="hidden lg:flex items-center gap-4 xl:gap-6 absolute left-1/2 -translate-x-1/2">
                             {navLinks.map((link, i) => (
                                 <a
                                     key={i}
