@@ -76,16 +76,16 @@ const Footer = () => {
       </div>
       
       {/* Layer 3: Content */}
-      <div className="relative z-20 mx-auto w-full max-w-[1300px] px-6 py-16 md:px-12 lg:px-16 lg:pt-24 lg:pb-12">
+      <div className="relative z-20 mx-auto w-full max-w-[1300px] px-6 py-16 md:px-12 lg:px-16 lg:pt-0 lg:pb-6">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
           
           {/* Left Column - Branding */}
           <div className="col-span-1 lg:col-span-5 flex flex-col items-start pr-0 md:pr-12">
-             <div className="mb-6">
+             <div className="mt-24">
                 <img src={logoNoekarta} alt="Noekarta" className="h-10 select-none" />
              </div>
              
-             <p className="mb-8 text-sm leading-relaxed text-[#c3ceea] max-w-[320px]">
+             <p className="mt-4 text-sm pb-4 leading-relaxed text-[#c3ceea] max-w-[320px]">
                 Noekarta adalah website yang di buat untuk memperkenalkan budaya, kuliner, sejarah dari kota jakarta
              </p>
              
@@ -98,7 +98,7 @@ const Footer = () => {
     
 
           {/* Jakarta Column */}
-          <div className="col-span-1 lg:col-span-2 pt-2">
+          <div className="col-span-1 lg:col-span-2 pt-24">
              <h3 className="mb-6 text-lg font-bold text-white">Jakarta</h3>
              <ul className="space-y-4 text-[15px] font-medium text-[#c3ceea]">
                 <li><Link to="/" className="hover:text-white transition-colors">Beranda</Link></li>
@@ -107,7 +107,7 @@ const Footer = () => {
           </div>
           
           {/* Jelajahi Column */}
-          <div className="col-span-1 lg:col-span-2 pt-2">
+          <div className="col-span-1 lg:col-span-2 pt-24">
              <h3 className="mb-6 text-lg font-bold text-white">Jelajahi</h3>
              <ul className="space-y-4 text-[15px] font-medium text-[#c3ceea]">
                 <li><a href="#" className="hover:text-white transition-colors">Sejarah</a></li>
@@ -118,7 +118,7 @@ const Footer = () => {
           </div>
           
           {/* Game Column */}
-          <div className="col-span-1 lg:col-span-2 pt-2">
+          <div className="col-span-1 lg:col-span-2 pt-24">
              <h3 className="mb-6 text-lg font-bold text-white">Game</h3>
              <ul className="space-y-4 text-[15px] font-medium text-[#c3ceea]">
                 <li><Link to="/noequiz" className="hover:text-white transition-colors">NoeQuiz</Link></li>
@@ -128,7 +128,7 @@ const Footer = () => {
         </div>
         
         {/* Bottom Section */}
-        <div className="mt-28 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8 items-end">
+        <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8 items-end">
            <div className="col-span-1 lg:col-span-5">
              <p className="text-[13px] font-medium text-[#849bc5]">
                 © 2026 Noekarta SmartOne | All rights reserved.

@@ -73,15 +73,18 @@ const Navbar = () => {
         e.preventDefault();
         setIsMobileMenuOpen(false);
 
-        const target = document.getElementById(sectionId);
-        if (!target) return;
+        // Delay scroll agar menu mobile sempat tertutup & Lenis restart dulu
+        setTimeout(() => {
+            const target = document.getElementById(sectionId);
+            if (!target) return;
 
-        if (window.lenis) {
-            window.lenis.scrollTo(target, { offset: -88, duration: 1.2 });
-        } else {
-            const top = target.getBoundingClientRect().top + window.scrollY - 88;
-            window.scrollTo({ top, behavior: 'smooth' });
-        }
+            if (window.lenis) {
+                window.lenis.scrollTo(target, { offset: -80, duration: 1.2 });
+            } else {
+                const top = target.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+        }, 350);
     };
 
     return (
