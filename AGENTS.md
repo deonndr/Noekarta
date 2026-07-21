@@ -18,6 +18,7 @@
 - **Animation:** `motion` from `'motion/react'` (NOT `framer-motion`); GSAP + ScrollTrigger for `.gsap-section` fade-in; `useGSAP` from `@gsap/react` in `StreetViewPortal.jsx`.
 - **Icons:** lucide-react
 - **Fonts:** Poppins (Google Fonts) for body, Ancizar (custom serif) via `.font-ancizar`.
+- **i18n:** `LanguageContext` wraps `<App>` in `main.jsx`; `useLanguage()` returns `{ language, toggleLanguage, t }`; all UI strings via `t('key')` from `translations` object (id/en).
 
 ## Commands
 
@@ -54,6 +55,8 @@ src/
 │   ├── NoeQuizPage.jsx
 │   ├── KulinerPage.jsx
 │   └── InventoryPage.jsx
+├── context/
+│   └── LanguageContext.jsx   — i18n provider, `useLanguage()` hook, id/en translations
 ├── hooks/
 │   └── useInventory.js       — Custom hook, localStorage key `noekarta_inventory`
 ├── routes/ features/ lib/    — Empty scaffolding directories
@@ -63,6 +66,7 @@ src/
 ## Conventions & quirks
 
 - **Exports:** default for components, named for data arrays.
+- **i18n:** Add new UI strings to `translations` object in `context/LanguageContext.jsx` under both `id` and `en` keys, then use `t('key')` in components.
 - **history.jsx** is the only lowercase component filename.
 - **Navigation back:** `LandmarkPage` navigates with `navigate('/', { state: { scrollToLandmarkExplorer: true } })`; `LandmarkExplorer` reads via `useLocation()` + `scrollIntoView` + Lenis sync in `useLayoutEffect`.
 - **Navbar:** `navLinks` array is placeholder — all entries point to `#` (no real nav yet).

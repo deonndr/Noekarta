@@ -81,11 +81,7 @@ const LandmarkExplorer = () => {
                         Temukan Landmark Iconik Jakarta dan simpan favoritmu
                     </p>
                 </div>
-                <img src={cardfly}
-                    alt="landmark"
-                    className="select-none w-[230px]"
-                    style={{ animation: isSectionInView ? 'float-card-2 9s ease-in-out infinite' : 'none' }}
-                />
+            
             </div>
 
             {/* Horizontal Scroll */}

@@ -36,15 +36,7 @@ const KulinerJakarta = () => {
 
           {/* Left Column */}
           <div className="lg:col-span-4 mb-10 relative flex flex-col justify-center h-full">
-            {/* cardfly animation */}
-            <div className="relative mb-6 h-[80px] w-full">
-              <img
-                src={cardfly}
-                alt="50+ Kuliner Khas"
-                className="absolute bottom-10 left-0 select-none z-20 w-[250px]"
-                style={{ animation: isInView ? 'float-card-2 9s ease-in-out infinite' : 'none' }}
-              />
-            </div>
+       
 
             <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-gray-900 mb-6 leading-tight tracking-tight font-ancizar">
               Kuliner Jakarta
