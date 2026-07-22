@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Calendar, ChevronRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '../context/LanguageContext';
 import historyTitle from '../assets/history-title.webp';
 import history1 from '../assets/history1.webp';
 import history2 from '../assets/history2.webp';
@@ -80,11 +81,16 @@ const preloadImage = (src, priority = 'auto') => {
 };
 
 const History = () => {
+  const { t } = useLanguage();
   const [activeCard, setActiveCard] = useState(1);
   const sectionRef = useRef(null);
   const cardRef = useRef(null);
 
   const activeData = historyData.find(d => d.id === activeCard);
+
+  const getEraName = (id) => t(`history_era_${id}_name`);
+  const getEraYear = (id) => t(`history_era_${id}_year`);
+  const getEraDesc = (id) => t(`history_era_${id}_desc`);
 
   const handleSelectCard = useCallback((item, scrollToCard = false) => {
     preloadImage(item.img, 'high');
@@ -198,7 +204,7 @@ const History = () => {
                 />
               </div>
 
-              {historyData.map((item, index) => {
+              {historyData.map((item) => {
                 const isActive = activeCard === item.id;
                 const isPast = item.id <= activeCard;
                 return (
@@ -228,10 +234,10 @@ const History = () => {
                         </div>
                         <div className="text-left">
                           <div className={`font-semibold text-[17px] md:text-lg mb-0.5 transition-colors duration-300 ${isActive ? 'text-[#0F285C]' : 'text-gray-800'}`}>
-                            {item.name}
+                            {getEraName(item.id)}
                           </div>
                           <div className={`text-[13px] md:text-sm font-medium transition-colors duration-300 ${isActive ? 'text-gray-600' : 'text-gray-400'}`}>
-                            {item.year}
+                            {getEraYear(item.id)}
                           </div>
                         </div>
                       </div>
@@ -258,7 +264,7 @@ const History = () => {
                 <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden mb-6 relative bg-gray-50">
                   <img
                     src={activeData.img}
-                    alt={activeData.name}
+                    alt={getEraName(activeData.id)}
                     className="w-full h-full object-cover select-none"
                     decoding="async"
                     fetchPriority="high"
@@ -272,18 +278,18 @@ const History = () => {
 
                 {/* Title */}
                 <h3 className="text-[26px] md:text-3xl font-bold text-[#0F285C] mb-3">
-                  {activeData.name}
+                  {getEraName(activeData.id)}
                 </h3>
 
                 {/* Date */}
                 <div className="flex items-center gap-2 text-gray-500 mb-5 text-sm font-semibold">
                   <Calendar size={16} className="text-gray-400" />
-                  <span>{activeData.year}</span>
+                  <span>{getEraYear(activeData.id)}</span>
                 </div>
 
                 {/* Description */}
                 <p className="text-gray-700 leading-[1.7] text-[14px] md:text-[15px] mb-8 min-h-[120px]">
-                  {activeData.desc}
+                  {getEraDesc(activeData.id)}
                 </p>
 
                 {/* Buttons */}
@@ -294,14 +300,14 @@ const History = () => {
                     className="flex-1 flex items-center justify-center gap-2 py-3 md:py-3.5 px-4 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   >
                     <ArrowLeft size={18} />
-                    Sebelumnya
+                    {t('language') === 'en' ? 'Previous' : 'Sebelumnya'}
                   </button>
                   <button 
                     onClick={() => activeCard < historyData.length && handleSelectCard(historyData.find(d => d.id === activeCard + 1))}
                     disabled={activeCard === historyData.length}
-                    className="flex-1 flex items-center justify-center gap-2 py-3 md:py-3.5 px-4 rounded-xl bg-[#0F285C] text-white font-semibold text-sm hover:bg-[#0F285C]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 md:py-3.5 px-4 rounded-xl bg-[#1E40AF] text-white font-semibold text-sm hover:bg-blue-800 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md shadow-blue-500/10"
                   >
-                    Selanjutnya
+                    {t('language') === 'en' ? 'Next' : 'Selanjutnya'}
                     <ArrowRight size={18} />
                   </button>
                 </div>

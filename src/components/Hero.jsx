@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Search, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 // impor component
 import component2 from '../assets/components/starcomponent.webp';
@@ -45,6 +46,7 @@ const CYLINDER_PADDING = 50;   // extra spacing between cards on the cylinder wa
 const AUTO_ROTATE_SPEED = 0.12; // degrees per frame
 
 const Hero = () => {
+    const { t } = useLanguage();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [opacity, setOpacity] = useState(1);
     const [windowWidth, setWindowWidth] = useState(
@@ -248,13 +250,13 @@ const Hero = () => {
                 >
                     <img src={component2} alt="Star" className="w-2.5 h-2.5 md:w-auto md:h-auto mr-0.5 md:mr-1 select-none" />
                     <p className="text-indigo-950">
-                        Jelajahi Sejarah, Budaya &amp; Kuliner
+                        {t('hero_badge')}
                     </p>
                 </div>
 
                 {/* Judul Baris 1 */}
                 <div className="flex flex-wrap md:flex-nowrap font-ancizar items-center justify-center md:whitespace-nowrap gap-1.5 md:gap-3 text-[clamp(20px,5.5vw,60px)] font-extrabold text-black tracking-tight leading-[1.2]">
-                    <span>Dari Jejak</span>
+                    <span>{t('hero_title_1')}</span>
                     <div
                         ref={containerRef}
                         className="flex items-center justify-center h-[clamp(28px,4vw,80px)] transition-[width] duration-500 ease-in-out"
@@ -268,16 +270,16 @@ const Hero = () => {
                             onLoad={handleImageLoad}
                         />
                     </div>
-                    <span>Menuju</span>
+                    <span>{t('hero_title_2')}</span>
                 </div>
 
                 {/* Judul Baris 2 */}
                 <div className="mt-1 md:mt-2 flex flex-wrap md:flex-nowrap font-ancizar items-center justify-center md:whitespace-nowrap gap-1.5 md:gap-3 text-[clamp(20px,5.5vw,60px)] font-extrabold text-black tracking-tight leading-[1.2]">
-                    <span>Jakarta</span>
+                    <span>{t('hero_title_3')}</span>
                     <div className="bg-blue-100 text-blue-600 rounded-sm px-1.5 py-0.5 md:px-2 md:py-1 flex items-center justify-center">
                         <ArrowRight size={18} strokeWidth={3} className="md:w-6 md:h-6" />
                     </div>
-                    <span className="overflow-hidden">Kota Digital</span>
+                    <span className="overflow-hidden">{t('hero_title_4')}</span>
                 </div>
 
                 {/* Subtitle — Mobile: pendek & 1 baris */}
@@ -285,17 +287,15 @@ const Hero = () => {
                     className="md:hidden mt-2 text-[11px] text-gray-500 leading-normal anim-fade-in"
                     style={{ animationDelay: '0.35s' }}
                 >
-                    Jelajahi cerita Jakarta, dari masa ke masa.
+                    {t('hero_sub_mobile')}
                 </p>
 
                 {/* Subtitle — Desktop: full copy */}
                 <p
                     className="hidden md:block mt-5 text-[15px] max-w-md leading-relaxed anim-fade-in"
                     style={{ animationDelay: '0.35s' }}
-                >
-                    Telusuri perjalanan panjang jakarta dari masa ke masa<br />
-                    dan temukan cerita di setiap sudut kotanya.
-                </p>
+                    dangerouslySetInnerHTML={{ __html: t('hero_sub_desktop').replace(' dan ', '<br />dan ') }}
+                />
 
                 {/* Search Bar */}
                 <div
@@ -306,7 +306,7 @@ const Hero = () => {
                         <Search className="text-gray-400 mr-2 md:mr-3 shrink-0 transition-colors w-3 h-3 md:w-[18px] md:h-[18px]" />
                         <input
                             type="text"
-                            placeholder="Jelajahi Sejarah, budaya, kuliner, dll"
+                            placeholder={t('hero_search_placeholder')}
                             className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400 text-[10px] md:text-base"
                         />
                     </div>

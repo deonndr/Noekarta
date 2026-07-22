@@ -3,11 +3,13 @@ import { createPortal } from 'react-dom';
 import { X, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { useLanguage } from '../context/LanguageContext';
 import logo from '../assets/logo-noekarta2.webp';
 
 gsap.registerPlugin(useGSAP);
 
 const StreetViewPortal = ({ landmark, onClose }) => {
+    const { language, t } = useLanguage();
     const [loadedUrl, setLoadedUrl] = useState('');
 
     const containerRef = useRef(null);
@@ -118,7 +120,7 @@ const StreetViewPortal = ({ landmark, onClose }) => {
                 {!iframeLoaded && (
                     <div className="absolute inset-0 z-[15] flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none text-white">
                         <Loader2 className="w-10 h-10 animate-spin text-blue-500 mb-4" />
-                        <p className="text-sm font-medium tracking-wide">Memuat Panorama 360°...</p>
+                        <p className="text-sm font-medium tracking-wide">{t('street_view_loading')}</p>
                     </div>
                 )}
 
@@ -131,14 +133,14 @@ const StreetViewPortal = ({ landmark, onClose }) => {
                         <img src={logo} alt="Noekarta" className="mb-4 h-6 select-none object-contain md:h-7" />
                         <div className="flex flex-wrap items-center gap-3">
                             <h2 className="text-lg md:text-xl font-bold leading-tight">
-                                {landmark.title}
+                                {language === 'en' ? (landmark.title_en || landmark.title) : landmark.title}
                             </h2>
                             <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider bg-red-600 px-2 py-0.5 rounded text-white shrink-0">
                                 360° Street View
                             </span>
                         </div>
                         <p className="text-xs text-gray-300 mt-2 hidden md:block leading-relaxed">
-                            {landmark.description}
+                            {language === 'en' ? (landmark.description_en || landmark.description) : landmark.description}
                         </p>
                     </div>
 
@@ -146,7 +148,7 @@ const StreetViewPortal = ({ landmark, onClose }) => {
                         ref={btnRef}
                         onClick={handleClose}
                         className="bg-white/10 hover:bg-red-600 backdrop-blur-md text-white p-3 md:p-4 rounded-full shadow-lg transition-colors pointer-events-auto flex items-center justify-center cursor-pointer border border-white/20 group shrink-0"
-                        title="Tutup Street View"
+                        title={t('street_view_close')}
                     >
                         <X className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform" />
                     </button>

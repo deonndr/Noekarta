@@ -1,6 +1,7 @@
 import { useState, useRef, forwardRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import component2 from '../assets/components/component2.webp';
 import betawi1 from '../assets/image-betawiheritage1.webp';
 import betawi2 from '../assets/image-betawiheritage2.webp';
@@ -160,6 +161,7 @@ CombinedPage.displayName = 'CombinedPage';
 
 // ── Component ──────────────────────────────────────────────────────────────
 const BetawiHeritage = () => {
+  const { t } = useLanguage();
   const [currentItem, setCurrentItem] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
   // Two book refs — one per breakpoint
@@ -227,16 +229,16 @@ const BetawiHeritage = () => {
           <div className="w-full lg:w-[35%] flex flex-col">
             <div className="inline-flex items-center gap-2.5 bg-[#F1F5F9] px-4 py-2 rounded-xl mb-8 w-fit">
               <img src={component2} alt="icon" className="w-5 h-5 object-contain select-none" />
-              <span className="text-[#0F285C] font-semibold text-sm">Betawi Heritage Hub</span>
+              <span className="text-[#0F285C] font-semibold text-sm">{t('betawi_hub')}</span>
             </div>
 
             <h2 className="text-[32px] md:text-[40px] font-bold text-gray-900 mb-5 leading-tight font-ancizar">
-              Kenali Budaya <br className="hidden md:block" />
-              <span className="text-[#0F285C]">Jakarta</span>
+              {t('betawi_heading_1')} <br className="hidden md:block" />
+              <span className="text-[#0F285C]">{t('betawi_heading_2')}</span>
             </h2>
 
             <p className="text-gray-600 text-[15px] leading-relaxed mb-10 max-w-sm">
-              Jelajahi kekayaan budaya jakarta melalui tradisi, seni, dan warisan yang terus hidup hingga kini.
+              {t('betawi_desc')}
             </p>
 
             <div className="mt-auto flex flex-col gap-6">

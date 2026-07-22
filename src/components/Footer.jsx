@@ -1,8 +1,9 @@
 import React from 'react';
-import { motion } from 'motion/react';
+
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '../context/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,6 +31,7 @@ import footerBg from '../assets/components/component-footer.webp';
 import monasLogo from '../assets/components/component-footer2.webp';
 
 const Footer = () => {
+  const { t } = useLanguage();
   const monasRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -86,7 +88,7 @@ const Footer = () => {
              </div>
              
              <p className="mt-4 text-sm pb-4 leading-relaxed text-[#c3ceea] max-w-[320px]">
-                Noekarta adalah website yang di buat untuk memperkenalkan budaya, kuliner, sejarah dari kota jakarta
+                {t('footer_tagline')}
              </p>
              
              <a href="https://www.instagram.com/rpl_smkantartika1sda?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-[14px] bg-[#1d2a54] px-6 py-3 text-sm font-semibold transition hover:bg-[#273a6a] hover:-translate-y-0.5 border border-white/5">
@@ -95,33 +97,32 @@ const Footer = () => {
              </a>
           </div>
           
-    
 
           {/* Jakarta Column */}
           <div className="col-span-1 lg:col-span-2 pt-24">
-             <h3 className="mb-6 text-lg font-bold text-white">Jakarta</h3>
+             <h3 className="mb-6 text-lg font-bold text-white">{t('footer_col_jakarta')}</h3>
              <ul className="space-y-4 text-[15px] font-medium text-[#c3ceea]">
-                <li><Link to="/" className="hover:text-white transition-colors">Beranda</Link></li>
-                <li><a href="#" className="hover:text-white transition-colors">Tentang Jakarta</a></li>
+                <li><Link to="/" className="hover:text-white transition-colors">{t('nav_home')}</Link></li>
+                <li><a href="#about" className="hover:text-white transition-colors">{t('nav_about')}</a></li>
              </ul>
           </div>
           
           {/* Jelajahi Column */}
           <div className="col-span-1 lg:col-span-2 pt-24">
-             <h3 className="mb-6 text-lg font-bold text-white">Jelajahi</h3>
+             <h3 className="mb-6 text-lg font-bold text-white">{t('footer_col_explore')}</h3>
              <ul className="space-y-4 text-[15px] font-medium text-[#c3ceea]">
-                <li><a href="#" className="hover:text-white transition-colors">Sejarah</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Budaya</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Kuliner</a></li>
-                <li><Link to="/landmark-explorer" className="hover:text-white transition-colors">Landmark Jakarta</Link></li>
+                <li><a href="#history" className="hover:text-white transition-colors">{t('nav_history')}</a></li>
+                <li><a href="#budaya" className="hover:text-white transition-colors">{t('nav_culture')}</a></li>
+                <li><a href="#kuliner" className="hover:text-white transition-colors">{t('nav_culinary')}</a></li>
+                <li><Link to="/landmark-explorer" className="hover:text-white transition-colors">{t('landmark_sidebar_title')}</Link></li>
              </ul>
           </div>
           
           {/* Game Column */}
           <div className="col-span-1 lg:col-span-2 pt-24">
-             <h3 className="mb-6 text-lg font-bold text-white">Game</h3>
+             <h3 className="mb-6 text-lg font-bold text-white">{t('footer_col_game')}</h3>
              <ul className="space-y-4 text-[15px] font-medium text-[#c3ceea]">
-                <li><Link to="/noequiz" className="hover:text-white transition-colors">NoeQuiz</Link></li>
+                <li><Link to="/noequiz" className="hover:text-white transition-colors">{t('nav_quiz')}</Link></li>
              </ul>
           </div>
           
@@ -131,7 +132,7 @@ const Footer = () => {
         <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8 items-end">
            <div className="col-span-1 lg:col-span-5">
              <p className="text-[13px] font-medium text-[#849bc5]">
-                © 2026 Noekarta SmartOne | All rights reserved.
+                {t('footer_rights')}
              </p>
            </div>
            

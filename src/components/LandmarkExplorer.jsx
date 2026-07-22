@@ -1,21 +1,22 @@
 import { useRef, useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Bookmark, Map as MapIcon, ChevronRight, ChevronLeft } from 'lucide-react';
-import { useInView } from 'motion/react';
+import { Map as MapIcon, ChevronRight, ChevronLeft } from 'lucide-react';
 import { landmarks } from '../data/landmarks';
+import { useLanguage } from '../context/LanguageContext';
 import StreetViewPortal from './StreetViewPortal';
-import cardfly from '../assets/cardfly4.svg';
+
 
 const LandmarkMap = lazy(() => import('./LandmarkMap'));
 
 const LandmarkExplorer = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { language, t } = useLanguage();
     const [activeLandmark, setActiveLandmark] = useState(null);
     const [streetViewTarget, setStreetViewTarget] = useState(null);
     const scrollRef = useRef(null);
     const sectionRef = useRef(null);
-    const isSectionInView = useInView(sectionRef, { margin: '200px' });
+
     const defaultCenter = [-6.1700, 106.8250];
 
     const [isMapVisible, setIsMapVisible] = useState(false);
@@ -75,10 +76,10 @@ const LandmarkExplorer = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                 <div>
                     <h2 className="text-3xl md:text-[32px] font-ancizar font-bold text-gray-900 mb-2">
-                        Jakarta Landmark Explorer
+                        {t('landmark_heading')}
                     </h2>
                     <p className=" text-lg">
-                        Temukan Landmark Iconik Jakarta dan simpan favoritmu
+                        {t('landmark_sub')}
                     </p>
                 </div>
             
@@ -107,14 +108,14 @@ const LandmarkExplorer = () => {
                             <div className="relative w-full h-[130px] rounded-[10px] overflow-hidden mb-3">
                                 <img
                                     src={landmark.image}
-                                    alt={landmark.title}
+                                    alt={language === 'en' ? (landmark.title_en || landmark.title) : landmark.title}
                                     className="w-full h-full select-none object-cover group-hover:scale-105 transition-transform duration-500"
                                     loading="lazy"
                                 />
                                
                             </div>
                             <h3 className="font-semibold text-center text-gray-900 pb-1 text-sm md:text-base">
-                                {landmark.title}
+                                {language === 'en' ? (landmark.title_en || landmark.title) : landmark.title}
                             </h3>
                         </div>
                     ))}
@@ -133,7 +134,7 @@ const LandmarkExplorer = () => {
                 <Suspense fallback={
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50/50 backdrop-blur-[1px] z-[999] pointer-events-none">
                         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-                        <p className="text-sm font-semibold text-gray-700 tracking-wide">Memuat Peta...</p>
+                        <p className="text-sm font-semibold text-gray-700 tracking-wide">{t('landmark_loading_map')}</p>
                     </div>
                 }>
                     {isMapVisible ? (
@@ -147,7 +148,7 @@ const LandmarkExplorer = () => {
                     ) : (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
                             <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-                            <p className="text-sm font-semibold text-gray-700 tracking-wide">Mempersiapkan Peta...</p>
+                            <p className="text-sm font-semibold text-gray-700 tracking-wide">{t('landmark_prep_map')}</p>
                         </div>
                     )}
                 </Suspense>
@@ -157,7 +158,7 @@ const LandmarkExplorer = () => {
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[1000]">
                         <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.15)] border border-red-200">
                             <MapIcon className="w-4 h-4 text-red-500" />
-                            <span className="font-semibold text-gray-800 text-sm">{activeLandmark.title}</span>
+                            <span className="font-semibold text-gray-800 text-sm">{language === 'en' ? (activeLandmark.title_en || activeLandmark.title) : activeLandmark.title}</span>
                             <button
                                 onClick={() => setActiveLandmark(null)}
                                 className="ml-1 text-gray-400 hover:text-gray-600 text-xs leading-none"
@@ -174,7 +175,7 @@ const LandmarkExplorer = () => {
                         className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.15)] font-semibold text-gray-900 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                         <MapIcon className="w-5 h-5 text-gray-700" />
-                        Buka Peta Interaktif
+                        {t('landmark_open_map')}
                         <ChevronRight className="w-4 h-4 text-gray-500" />
                     </button>
                 </div>

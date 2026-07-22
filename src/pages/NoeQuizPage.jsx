@@ -5,6 +5,7 @@ import { Check, Flag, LockKeyhole, X, ArrowLeft, ChevronLeft, Globe, Menu } from
 import { Link } from 'react-router-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
+import { useLanguage } from '../context/LanguageContext';
 import maskot from '../assets/noekarta-maskot.webp';
 import titleImage from '../assets/noequiz-title.webp';
 import component3 from '../assets/components/component3.webp';
@@ -21,10 +22,10 @@ import component11 from '../assets/components/component11.webp';
 const stationIcons = [component8, component9, component10, component11];
 
 const stations = [
-  { title: 'Sejarah Batavia' },
-  { title: 'Budaya Betawi' },
-  { title: 'Kuliner Khas' },
-  { title: 'Landmark Jakarta' },
+  { title: 'Sejarah Batavia', title_en: 'Batavia History' },
+  { title: 'Budaya Betawi', title_en: 'Betawi Culture' },
+  { title: 'Kuliner Khas', title_en: 'Authentic Culinary' },
+  { title: 'Landmark Jakarta', title_en: 'Jakarta Landmarks' },
 ];
 
 // 5 soal per pos — setiap soal: { text, options: [{id, text, isCorrect}] }
@@ -33,47 +34,52 @@ const quizData = [
   [
     {
       text: 'Pelabuhan utama Batavia yang menjadi pusat perdagangan rempah-rempah VOC pada abad ke-17 adalah...',
+      text_en: 'The primary port of Batavia that served as the VOC spice trading hub in the 17th century was...',
       options: [
-        { id: 1, text: 'Pelabuhan Sunda Kelapa', isCorrect: true },
-        { id: 2, text: 'Pelabuhan Tanjung Priok', isCorrect: false },
-        { id: 3, text: 'Pelabuhan Merak', isCorrect: false },
-        { id: 4, text: 'Pelabuhan Cilincing', isCorrect: false },
+        { id: 1, text: 'Pelabuhan Sunda Kelapa', text_en: 'Sunda Kelapa Port', isCorrect: true },
+        { id: 2, text: 'Pelabuhan Tanjung Priok', text_en: 'Tanjung Priok Port', isCorrect: false },
+        { id: 3, text: 'Pelabuhan Merak', text_en: 'Merak Port', isCorrect: false },
+        { id: 4, text: 'Pelabuhan Cilincing', text_en: 'Cilincing Port', isCorrect: false },
       ],
     },
     {
       text: 'Jan Pieterszoon Coen mendirikan Batavia pada tahun...',
+      text_en: 'Jan Pieterszoon Coen established Batavia in the year...',
       options: [
-        { id: 1, text: '1619', isCorrect: true },
-        { id: 2, text: '1602', isCorrect: false },
-        { id: 3, text: '1645', isCorrect: false },
-        { id: 4, text: '1682', isCorrect: false },
+        { id: 1, text: '1619', text_en: '1619', isCorrect: true },
+        { id: 2, text: '1602', text_en: '1602', isCorrect: false },
+        { id: 3, text: '1645', text_en: '1645', isCorrect: false },
+        { id: 4, text: '1682', text_en: '1682', isCorrect: false },
       ],
     },
     {
       text: 'Nama "Jayakarta" diganti menjadi "Batavia" oleh...',
+      text_en: 'The name "Jayakarta" was changed to "Batavia" by...',
       options: [
-        { id: 1, text: 'VOC (Belanda)', isCorrect: true },
-        { id: 2, text: 'Portugis', isCorrect: false },
-        { id: 3, text: 'Inggris', isCorrect: false },
-        { id: 4, text: 'Kerajaan Banten', isCorrect: false },
+        { id: 1, text: 'VOC (Belanda)', text_en: 'VOC (Dutch)', isCorrect: true },
+        { id: 2, text: 'Portugis', text_en: 'Portuguese', isCorrect: false },
+        { id: 3, text: 'Inggris', text_en: 'British', isCorrect: false },
+        { id: 4, text: 'Kerajaan Banten', text_en: 'Banten Kingdom', isCorrect: false },
       ],
     },
     {
       text: 'Kota Tua Jakarta dulunya merupakan pusat pemerintahan yang dikenal dengan nama...',
+      text_en: 'Jakarta Old Town was historically an administrative center known as...',
       options: [
-        { id: 1, text: 'Batavia', isCorrect: true },
-        { id: 2, text: 'Sunda Kelapa', isCorrect: false },
-        { id: 3, text: 'Weltevreden', isCorrect: false },
-        { id: 4, text: 'Ommelanden', isCorrect: false },
+        { id: 1, text: 'Batavia', text_en: 'Batavia', isCorrect: true },
+        { id: 2, text: 'Sunda Kelapa', text_en: 'Sunda Kelapa', isCorrect: false },
+        { id: 3, text: 'Weltevreden', text_en: 'Weltevreden', isCorrect: false },
+        { id: 4, text: 'Ommelanden', text_en: 'Ommelanden', isCorrect: false },
       ],
     },
     {
       text: 'Fatahillah mengubah nama Sunda Kelapa menjadi Jayakarta pada tanggal...',
+      text_en: 'Fatahillah renamed Sunda Kelapa to Jayakarta on...',
       options: [
-        { id: 1, text: '22 Juni 1527', isCorrect: true },
-        { id: 2, text: '17 Agustus 1945', isCorrect: false },
-        { id: 3, text: '4 Maret 1621', isCorrect: false },
-        { id: 4, text: '1 Januari 1600', isCorrect: false },
+        { id: 1, text: '22 Juni 1527', text_en: 'June 22, 1527', isCorrect: true },
+        { id: 2, text: '17 Agustus 1945', text_en: 'August 17, 1945', isCorrect: false },
+        { id: 3, text: '4 Maret 1621', text_en: 'March 4, 1621', isCorrect: false },
+        { id: 4, text: '1 Januari 1600', text_en: 'January 1, 1600', isCorrect: false },
       ],
     },
   ],
@@ -81,47 +87,52 @@ const quizData = [
   [
     {
       text: 'Tari tradisional Betawi yang sering ditampilkan dalam penyambutan tamu kehormatan adalah...',
+      text_en: 'Traditional Betawi dance frequently performed to welcome honored guests is...',
       options: [
-        { id: 1, text: 'Tari Topeng Betawi', isCorrect: true },
-        { id: 2, text: 'Tari Kecak', isCorrect: false },
-        { id: 3, text: 'Tari Saman', isCorrect: false },
-        { id: 4, text: 'Tari Jaipong', isCorrect: false },
+        { id: 1, text: 'Tari Topeng Betawi', text_en: 'Betawi Mask Dance', isCorrect: true },
+        { id: 2, text: 'Tari Kecak', text_en: 'Kecak Dance', isCorrect: false },
+        { id: 3, text: 'Tari Saman', text_en: 'Saman Dance', isCorrect: false },
+        { id: 4, text: 'Tari Jaipong', text_en: 'Jaipong Dance', isCorrect: false },
       ],
     },
     {
       text: 'Alat musik gesek Betawi yang mendapat pengaruh dari budaya Tionghoa adalah...',
+      text_en: 'Traditional Betawi bowed string instrument influenced by Chinese culture is...',
       options: [
-        { id: 1, text: 'Tehyan', isCorrect: true },
-        { id: 2, text: 'Rebab', isCorrect: false },
-        { id: 3, text: 'Kecapi', isCorrect: false },
-        { id: 4, text: 'Biola', isCorrect: false },
+        { id: 1, text: 'Tehyan', text_en: 'Tehyan', isCorrect: true },
+        { id: 2, text: 'Rebab', text_en: 'Rebab', isCorrect: false },
+        { id: 3, text: 'Kecapi', text_en: 'Kecapi', isCorrect: false },
+        { id: 4, text: 'Biola', text_en: 'Violin', isCorrect: false },
       ],
     },
     {
       text: 'Kesenian pertunjukan Betawi yang memadukan seni musik, lagu, dan lawak disebut...',
+      text_en: 'Betawi performing art combining music, songs, and comedy is called...',
       options: [
-        { id: 1, text: 'Lenong', isCorrect: true },
-        { id: 2, text: 'Ludruk', isCorrect: false },
-        { id: 3, text: 'Ketoprak', isCorrect: false },
-        { id: 4, text: 'Wayang Kulit', isCorrect: false },
+        { id: 1, text: 'Lenong', text_en: 'Lenong', isCorrect: true },
+        { id: 2, text: 'Ludruk', text_en: 'Ludruk', isCorrect: false },
+        { id: 3, text: 'Ketoprak', text_en: 'Ketoprak', isCorrect: false },
+        { id: 4, text: 'Wayang Kulit', text_en: 'Wayang Kulit', isCorrect: false },
       ],
     },
     {
       text: 'Pakaian adat pengantin pria Betawi disebut...',
+      text_en: 'Traditional Betawi groom wedding attire is named...',
       options: [
-        { id: 1, text: 'Dandanan Care Haji', isCorrect: true },
-        { id: 2, text: 'Baju Koko', isCorrect: false },
-        { id: 3, text: 'Beskap', isCorrect: false },
-        { id: 4, text: 'Teluk Belanga', isCorrect: false },
+        { id: 1, text: 'Dandanan Care Haji', text_en: 'Dandanan Care Haji', isCorrect: true },
+        { id: 2, text: 'Baju Koko', text_en: 'Baju Koko', isCorrect: false },
+        { id: 3, text: 'Beskap', text_en: 'Beskap', isCorrect: false },
+        { id: 4, text: 'Teluk Belanga', text_en: 'Teluk Belanga', isCorrect: false },
       ],
     },
     {
       text: 'Senjata tradisional khas Betawi yang berbentuk seperti sabit adalah...',
+      text_en: 'Iconic traditional Betawi machete-like weapon is...',
       options: [
-        { id: 1, text: 'Golok', isCorrect: true },
-        { id: 2, text: 'Keris', isCorrect: false },
-        { id: 3, text: 'Mandau', isCorrect: false },
-        { id: 4, text: 'Rencong', isCorrect: false },
+        { id: 1, text: 'Golok', text_en: 'Golok', isCorrect: true },
+        { id: 2, text: 'Keris', text_en: 'Keris', isCorrect: false },
+        { id: 3, text: 'Mandau', text_en: 'Mandau', isCorrect: false },
+        { id: 4, text: 'Rencong', text_en: 'Rencong', isCorrect: false },
       ],
     },
   ],
@@ -129,47 +140,52 @@ const quizData = [
   [
     {
       text: 'Kuah Soto Betawi yang kental dan gurih terbuat dari campuran...',
+      text_en: 'Rich and savory Soto Betawi broth is made from a mixture of...',
       options: [
-        { id: 1, text: 'Santan dan Susu', isCorrect: true },
-        { id: 2, text: 'Kaldu dan Kecap', isCorrect: false },
-        { id: 3, text: 'Kacang dan Tauco', isCorrect: false },
-        { id: 4, text: 'Kelapa dan Terasi', isCorrect: false },
+        { id: 1, text: 'Santan dan Susu', text_en: 'Coconut milk and milk', isCorrect: true },
+        { id: 2, text: 'Kaldu dan Kecap', text_en: 'Broth and soy sauce', isCorrect: false },
+        { id: 3, text: 'Kacang dan Tauco', text_en: 'Peanuts and tauco', isCorrect: false },
+        { id: 4, text: 'Kelapa dan Terasi', text_en: 'Coconut and shrimp paste', isCorrect: false },
       ],
     },
     {
       text: 'Kue tradisional Betawi yang berwarna hijau berbahan dasar tepung beras dan daun pandan adalah...',
+      text_en: 'Traditional green Betawi cake made from rice flour and pandan leaves is...',
       options: [
-        { id: 1, text: 'Kue Cucur', isCorrect: true },
-        { id: 2, text: 'Kue Lapis', isCorrect: false },
-        { id: 3, text: 'Kue Putu', isCorrect: false },
-        { id: 4, text: 'Klepon', isCorrect: false },
+        { id: 1, text: 'Kue Cucur', text_en: 'Kue Cucur', isCorrect: true },
+        { id: 2, text: 'Kue Lapis', text_en: 'Kue Lapis', isCorrect: false },
+        { id: 3, text: 'Kue Putu', text_en: 'Kue Putu', isCorrect: false },
+        { id: 4, text: 'Klepon', text_en: 'Klepon', isCorrect: false },
       ],
     },
     {
       text: 'Minuman khas Betawi berbahan dasar kelapa muda yang sering disajikan saat Lebaran adalah...',
+      text_en: 'Iconic iced Betawi dessert made with coconut milk and often served during Eid is...',
       options: [
-        { id: 1, text: 'Es Selendang Mayang', isCorrect: true },
-        { id: 2, text: 'Es Cendol', isCorrect: false },
-        { id: 3, text: 'Es Dawet', isCorrect: false },
-        { id: 4, text: 'Es Campur', isCorrect: false },
+        { id: 1, text: 'Es Selendang Mayang', text_en: 'Es Selendang Mayang', isCorrect: true },
+        { id: 2, text: 'Es Cendol', text_en: 'Es Cendol', isCorrect: false },
+        { id: 3, text: 'Es Dawet', text_en: 'Es Dawet', isCorrect: false },
+        { id: 4, text: 'Es Campur', text_en: 'Es Campur', isCorrect: false },
       ],
     },
     {
       text: 'Makanan Betawi berupa potongan lontong dengan bumbu kacang dan sayuran disebut...',
+      text_en: 'Betawi dish consisting of rice cake, tofu, vermicelli, and peanut sauce is...',
       options: [
-        { id: 1, text: 'Gado-gado', isCorrect: true },
-        { id: 2, text: 'Ketoprak', isCorrect: false },
-        { id: 3, text: 'Lotek', isCorrect: false },
-        { id: 4, text: 'Pecel', isCorrect: false },
+        { id: 1, text: 'Gado-gado', text_en: 'Gado-gado', isCorrect: true },
+        { id: 2, text: 'Ketoprak', text_en: 'Ketoprak', isCorrect: false },
+        { id: 3, text: 'Lotek', text_en: 'Lotek', isCorrect: false },
+        { id: 4, text: 'Pecel', text_en: 'Pecel', isCorrect: false },
       ],
     },
     {
       text: 'Kerak telor adalah makanan khas Betawi yang dimasak menggunakan...',
+      text_en: 'Kerak Telor is a traditional Betawi dish uniquely cooked by...',
       options: [
-        { id: 1, text: 'Wajan dibalik di atas bara arang', isCorrect: true },
-        { id: 2, text: 'Kukusan bambu', isCorrect: false },
-        { id: 3, text: 'Oven tradisional', isCorrect: false },
-        { id: 4, text: 'Wajan biasa di kompor', isCorrect: false },
+        { id: 1, text: 'Wajan dibalik di atas bara arang', text_en: 'Flipping the pan over charcoal', isCorrect: true },
+        { id: 2, text: 'Kukusan bambu', text_en: 'Bamboo steamer', isCorrect: false },
+        { id: 3, text: 'Oven tradisional', text_en: 'Traditional oven', isCorrect: false },
+        { id: 4, text: 'Wajan biasa di kompor', text_en: 'Regular pan on stove', isCorrect: false },
       ],
     },
   ],
@@ -177,60 +193,75 @@ const quizData = [
   [
     {
       text: 'Monumen Nasional (Monas) dibangun untuk memperingati...',
+      text_en: 'The National Monument (Monas) was built to commemorate...',
       options: [
-        { id: 1, text: 'Perjuangan kemerdekaan Indonesia', isCorrect: true },
-        { id: 2, text: 'Kemenangan Fatahillah', isCorrect: false },
-        { id: 3, text: 'Pembebasan Irian Barat', isCorrect: false },
-        { id: 4, text: 'Proklamasi Soekarno-Hatta', isCorrect: false },
+        { id: 1, text: 'Perjuangan kemerdekaan Indonesia', text_en: "Indonesia's independence struggle", isCorrect: true },
+        { id: 2, text: 'Kemenangan Fatahillah', text_en: 'Fatahillah victory', isCorrect: false },
+        { id: 3, text: 'Pembebasan Irian Barat', text_en: 'West Irian liberation', isCorrect: false },
+        { id: 4, text: 'Proklamasi Soekarno-Hatta', text_en: 'Soekarno-Hatta proclamation', isCorrect: false },
       ],
     },
     {
       text: 'Patung yang dibangun untuk memperingati pembebasan Irian Barat adalah Patung...',
+      text_en: 'The statue built to commemorate the liberation of West Irian is...',
       options: [
-        { id: 1, text: 'Patung Pembebasan (Patung Dirgantara)', isCorrect: false },
-        { id: 2, text: 'Patung Pemuda Membangun', isCorrect: false },
-        { id: 3, text: 'Patung Selamat Datang', isCorrect: false },
-        { id: 4, text: 'Patung Pembebasan Irian Barat', isCorrect: true },
+        { id: 1, text: 'Patung Pembebasan (Patung Dirgantara)', text_en: 'Dirgantara Statue', isCorrect: false },
+        { id: 2, text: 'Patung Pemuda Membangun', text_en: 'Youth Monument', isCorrect: false },
+        { id: 3, text: 'Patung Selamat Datang', text_en: 'Welcome Monument', isCorrect: false },
+        { id: 4, text: 'Patung Pembebasan Irian Barat', text_en: 'West Irian Liberation Statue', isCorrect: true },
       ],
     },
     {
       text: 'Museum Fatahillah atau Museum Sejarah Jakarta berlokasi di kawasan...',
+      text_en: 'Fatahillah Museum or Jakarta History Museum is located in...',
       options: [
-        { id: 1, text: 'Kota Tua Jakarta', isCorrect: true },
-        { id: 2, text: 'Menteng', isCorrect: false },
-        { id: 3, text: 'Kebayoran Baru', isCorrect: false },
-        { id: 4, text: 'Kemang', isCorrect: false },
+        { id: 1, text: 'Kota Tua Jakarta', text_en: 'Jakarta Old Town (Kota Tua)', isCorrect: true },
+        { id: 2, text: 'Menteng', text_en: 'Menteng', isCorrect: false },
+        { id: 3, text: 'Kebayoran Baru', text_en: 'Kebayoran Baru', isCorrect: false },
+        { id: 4, text: 'Kemang', text_en: 'Kemang', isCorrect: false },
       ],
     },
     {
       text: 'Taman Mini Indonesia Indah (TMII) terletak di wilayah...',
+      text_en: 'Taman Mini Indonesia Indah (TMII) is located in...',
       options: [
-        { id: 1, text: 'Jakarta Timur', isCorrect: true },
-        { id: 2, text: 'Jakarta Selatan', isCorrect: false },
-        { id: 3, text: 'Jakarta Barat', isCorrect: false },
-        { id: 4, text: 'Jakarta Utara', isCorrect: false },
+        { id: 1, text: 'Jakarta Timur', text_en: 'East Jakarta', isCorrect: true },
+        { id: 2, text: 'Jakarta Selatan', text_en: 'South Jakarta', isCorrect: false },
+        { id: 3, text: 'Jakarta Barat', text_en: 'West Jakarta', isCorrect: false },
+        { id: 4, text: 'Jakarta Utara', text_en: 'North Jakarta', isCorrect: false },
       ],
     },
     {
       text: 'Kebun Binatang tertua di Jakarta yang masih beroperasi hingga kini adalah...',
+      text_en: 'The oldest operating zoo in Jakarta to this day is...',
       options: [
-        { id: 1, text: 'Kebun Binatang Ragunan', isCorrect: true },
-        { id: 2, text: 'Kebun Binatang Gembira Loka', isCorrect: false },
-        { id: 3, text: 'Taman Safari', isCorrect: false },
-        { id: 4, text: 'Ancol Dreamland', isCorrect: false },
+        { id: 1, text: 'Kebun Binatang Ragunan', text_en: 'Ragunan Zoo', isCorrect: true },
+        { id: 2, text: 'Kebun Binatang Gembira Loka', text_en: 'Gembira Loka Zoo', isCorrect: false },
+        { id: 3, text: 'Taman Safari', text_en: 'Taman Safari', isCorrect: false },
+        { id: 4, text: 'Ancol Dreamland', text_en: 'Ancol Dreamland', isCorrect: false },
       ],
     },
   ],
 ];
 
-const tutorialSteps = [
+const tutorialStepsId = [
   'Tekan pos aktif pertama, yaitu "Sejarah Batavia", untuk memulai permainan.',
   'Selesaikan 5 pertanyaan tipe Benar atau Salah yang tersedia di setiap pos.',
   'Jawab minimal 3 pertanyaan dengan benar untuk dapat melangkah ke tahap berikutnya.',
   'Pos berikutnya akan terbuka secara otomatis setelah Anda berhasil menyelesaikan pos sebelumnya.',
 ];
 
+const tutorialStepsEn = [
+  'Tap the first active station, "Batavia History", to start the game.',
+  'Complete 5 multiple-choice questions available at each station.',
+  'Answer at least 3 questions correctly to proceed to the next stage.',
+  'The next station will automatically unlock after you successfully complete the previous one.',
+];
+
 const TutorialModal = ({ isOpen, onClose }) => {
+  const { language } = useLanguage();
+  const steps = language === 'en' ? tutorialStepsEn : tutorialStepsId;
+
   const handleKeyDown = useCallback(
     (e) => { if (e.key === 'Escape') onClose(); },
     [onClose],
@@ -315,7 +346,7 @@ const TutorialModal = ({ isOpen, onClose }) => {
                   </div>
 
                   <div className="min-w-0">
-                    <h2 className="text-[20px] font-bold leading-tight text-black sm:text-[22px]">Cara Bermain</h2>
+                    <h2 className="text-[20px] font-bold leading-tight text-black sm:text-[22px]">{language === 'en' ? 'How to Play' : 'Cara Bermain'}</h2>
                     <div className="mt-1 inline-flex h-6 items-center rounded-full bg-[#EAF0FF] px-4">
                       <img src={titleImage} alt="NoeQuiz Explorasi" className="h-3.5 w-auto object-contain select-none" />
                     </div>
@@ -336,7 +367,7 @@ const TutorialModal = ({ isOpen, onClose }) => {
               <div className="my-7 h-px w-full bg-gray-100" />
 
               <div className="space-y-6 sm:space-y-7">
-                {tutorialSteps.map((step, i) => (
+                {steps.map((step, i) => (
                   <motion.div
                     key={i}
                     className="flex items-start gap-5 sm:gap-7"
@@ -372,6 +403,7 @@ const PASS_THRESHOLD = 3;
 const TIME_PER_QUESTION = 20;
 
 const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
+  const { language } = useLanguage();
   const [modalState, setModalState] = useState('confirm'); // 'confirm' | 'countdown' | 'quiz' | 'result'
   const [countdown, setCountdown] = useState(3);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -407,23 +439,11 @@ const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
       } else {
-        setModalState('quiz');
+        const t = setTimeout(() => setModalState('quiz'), 0);
+        return () => clearTimeout(t);
       }
     }
   }, [modalState, countdown]);
-
-  // Per-question timer
-  useEffect(() => {
-    if (modalState !== 'quiz' || hasSubmitted) return;
-    if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else {
-      // Time's up — treat as wrong answer
-      handleSubmit(true);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalState, timeLeft, hasSubmitted]);
 
   const handleSubmit = (isTimeout = false) => {
     if (hasSubmitted) return;
@@ -433,6 +453,20 @@ const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
       : (currentQuestion.options.find(o => o.id === selectedOption)?.isCorrect ?? false);
     if (isCorrect) setCorrectCount(prev => prev + 1);
   };
+
+  // Per-question timer
+  useEffect(() => {
+    if (modalState !== 'quiz' || hasSubmitted) return;
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      // Time's up — treat as wrong answer
+      const t = setTimeout(() => handleSubmit(true), 0);
+      return () => clearTimeout(t);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalState, timeLeft, hasSubmitted]);
 
   const handleNext = () => {
     const nextIndex = currentQuestionIndex + 1;
@@ -510,15 +544,23 @@ const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
                 </div>
               </div>
               <div className="px-8 pb-8 pt-4">
-                <h3 className="text-[28px] font-bold text-[#0A1B3F] mb-1">Siap?</h3>
-                <p className="text-[#3A3A3A] font-medium mb-2 text-[14px]">{station.title}</p>
-                <p className="text-[#6B7280] text-[13px] mb-8">Jawab minimal <span className="font-bold text-[#111A5A]">{PASS_THRESHOLD} dari {TOTAL_QUESTIONS}</span> soal dengan benar untuk lanjut ke pos berikutnya.</p>
+                <h3 className="text-[28px] font-bold text-[#0A1B3F] mb-1">{language === 'en' ? 'Ready?' : 'Siap?'}</h3>
+                <p className="text-[#3A3A3A] font-medium mb-2 text-[14px]">
+                  {language === 'en' ? (station.title_en || station.title) : station.title}
+                </p>
+                <p className="text-[#6B7280] text-[13px] mb-8">
+                  {language === 'en' ? (
+                    <>Answer at least <span className="font-bold text-[#111A5A]">{PASS_THRESHOLD} out of {TOTAL_QUESTIONS}</span> questions correctly to proceed to the next station.</>
+                  ) : (
+                    <>Jawab minimal <span className="font-bold text-[#111A5A]">{PASS_THRESHOLD} dari {TOTAL_QUESTIONS}</span> soal dengan benar untuk lanjut ke pos berikutnya.</>
+                  )}
+                </p>
                 <div className="flex justify-center gap-4">
                   <button onClick={() => setModalState('countdown')} className="flex-1 rounded-[14px] bg-[#111A5A] py-3.5 text-[15px] font-bold text-white transition hover:bg-[#083E93] shadow-[0_8px_20px_rgba(10,27,63,0.15)] cursor-pointer">
-                    Iya, Siap!
+                    {language === 'en' ? 'Yes, Ready!' : 'Iya, Siap!'}
                   </button>
                   <button onClick={onClose} className="flex-1 rounded-[14px] border-[2px] border-[#111A5A] bg-white py-3.5 text-[15px] font-bold text-[#111A5A] transition hover:bg-slate-50 cursor-pointer">
-                    Tidak
+                    {language === 'en' ? 'No' : 'Tidak'}
                   </button>
                 </div>
               </div>
@@ -607,12 +649,16 @@ const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
                         <div className="h-3.5 w-px bg-gray-300 mx-1.5" />
                         <img src={component5} alt="Logo 2" className="h-3.5 w-auto object-contain" />
                       </div>
-                      <span className="text-xs sm:text-sm font-semibold text-[#111A5A]">Soal {currentQuestionIndex + 1}/{TOTAL_QUESTIONS}</span>
+                      <span className="text-xs sm:text-sm font-semibold text-[#111A5A]">
+                        {language === 'en' ? 'Question' : 'Soal'} {currentQuestionIndex + 1}/{TOTAL_QUESTIONS}
+                      </span>
                     </div>
                     <div className="text-center">
-                      <h3 className={`mb-2 font-bold text-[#111A5A] transition-all ${isTextLarge ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>{station.title}</h3>
+                      <h3 className={`mb-2 font-bold text-[#111A5A] transition-all ${isTextLarge ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'}`}>
+                        {language === 'en' ? (station.title_en || station.title) : station.title}
+                      </h3>
                       <p className={`font-medium leading-relaxed text-gray-700 transition-all ${isTextLarge ? 'text-[15px] sm:text-[16px]' : 'text-[13px] sm:text-[14px]'}`}>
-                        {currentQuestion.text}
+                        {language === 'en' ? (currentQuestion.text_en || currentQuestion.text) : currentQuestion.text}
                       </p>
                     </div>
                   </motion.div>
@@ -767,6 +813,7 @@ const QuizModal = ({ stationIndex, station, onClose, onFinish }) => {
 };
 
 const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
+  const { language, toggleLanguage, t } = useLanguage();
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   
   useEffect(() => {
@@ -796,7 +843,7 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
   const accuracy = answersGiven ? Math.round((correctAnswers / answersGiven) * 100) : 0;
   const posData = stations.map((station, index) => ({
     id: index + 1,
-    name: station.title,
+    name: language === 'en' ? (station.title_en || station.title) : station.title,
     isLocked: index > 0 && !completedStations.includes(index - 1),
     isCompleted: completedStations.includes(index),
   }));
@@ -823,12 +870,12 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
       {/* Navbar */}
       <header className="flex items-center justify-between px-6 md:px-12 py-5 bg-white sticky top-0 z-50">
         <Link to="/" className="flex items-center gap-2 text-[#3A3A3A] font-semibold text-sm hover:text-[#0A1B3F]">
-           <ChevronLeft className="w-4 h-4" /> Kembali
+           <ChevronLeft className="w-4 h-4" /> {t('back')}
         </Link>
         <img src={logoNoekarta} alt="Noekarta" className="h-5 md:h-6 object-contain" />
         <div className="flex items-center gap-4 text-sm font-semibold text-[#3A3A3A]">
-           <div className="hidden md:flex items-center gap-1 cursor-pointer">
-             <Globe className="w-4 h-4" /> EN <span className="text-[10px]">▼</span>
+           <div className="hidden md:flex items-center gap-1 cursor-pointer" onClick={toggleLanguage}>
+             <Globe className="w-4 h-4" /> {language === 'en' ? 'ID' : 'EN'} <span className="text-[10px]">▼</span>
            </div>
            <Menu className="w-5 h-5 cursor-pointer md:hidden" />
         </div>
@@ -859,10 +906,10 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
                <div className="relative z-10 pr-[110px] sm:pr-[140px] md:pr-[180px] lg:pr-[240px] xl:pr-[270px]">
                  <img src={titleImage} alt="NoeQuiz Explorasi" className="h-[32px] md:h-[38px] object-contain mb-4 select-none" />
                  <p className="text-[#3A3A3A] text-sm md:text-[14px] leading-relaxed mb-6 font-medium">
-                   Selesaikan Tantangan di setiap pos dengan skor minimal 3/5 benar untuk membuka pos selanjutnya. Mari taklukkan semua level!
+                   {t('quiz_desc')}
                  </p>
                  <button onClick={() => setIsTutorialOpen(true)} className="bg-[#111A5A] hover:bg-[#0d1445] text-white font-semibold px-6 py-1.5 sm:px-8 sm:py-2 md:px-10 md:py-2.5 rounded-full transition-all text-[11px] sm:text-xs md:text-sm shadow-md cursor-pointer w-max">
-                   Tutorial!
+                   {t('quiz_tutorial_btn')}
                  </button>
                </div>
                {/* Maskot */}
@@ -874,7 +921,7 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
              {/* Right Card: Statistik */}
              <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] p-8 md:p-10 flex-1 lg:max-w-[420px] flex flex-col justify-center">
                 <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-lg md:text-xl font-bold text-[#111A5A]">Statistik Petualangan</h3>
+                  <h3 className="text-lg md:text-xl font-bold text-[#111A5A]">{t('quiz_stats_title')}</h3>
                   <div className="w-11 h-11 bg-[#111A5A] rounded-[12px] flex items-center justify-center shadow-md">
                     <img src={component3} alt="Chart" className="w-5 h-5 select-none object-contain invert brightness-0" />
                   </div>
@@ -882,8 +929,8 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
 
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-gray-500 font-semibold">Total Pos Diselesaikan</span>
-                    <span className="text-xs font-bold text-[#111A5A]">{completedCount}/4 Pos Selesai</span>
+                    <span className="text-xs text-gray-500 font-semibold">{t('quiz_stats_total')}</span>
+                    <span className="text-xs font-bold text-[#111A5A]">{completedCount}/4 {t('quiz_stats_completed')}</span>
                   </div>
                   <div className="flex gap-2">
                     {stations.map((station, index) => (
@@ -895,11 +942,11 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
                 <div className="flex items-center justify-center gap-6 pt-6 border-t border-gray-100">
                   <div className="text-center flex-1">
                     <p className="text-3xl font-black text-[#111A5A] mb-1">{answersGiven}</p>
-                    <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">Soal Dijawab</p>
+                    <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">{t('quiz_stats_answered')}</p>
                   </div>
                   <div className="text-center flex-1">
                     <p className="text-3xl font-black text-[#111A5A] mb-1">{accuracy}<span className="text-xl ml-0.5">%</span></p>
-                    <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">Tingkat Benar</p>
+                    <p className="text-[10px] text-gray-500 font-bold tracking-widest uppercase">{t('quiz_stats_accuracy')}</p>
                   </div>
                 </div>
              </div>
@@ -927,7 +974,7 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
 
         <div className="absolute left-[20%] top-[9%] z-20 flex -translate-x-1/2 flex-col items-center">
           <div className="flex h-13 w-13 items-center justify-center rounded-full border-4 border-white bg-[#272C39] text-white shadow-lg"><Flag className="h-5 w-5" /></div>
-          <span className="mt-2 text-[10px] font-bold text-[#0A1B3F]">MULAI</span>
+          <span className="mt-2 text-[10px] font-bold text-[#0A1B3F]">{t('quiz_map_start')}</span>
         </div>
 
         {posData.map((pos, index) => {
@@ -951,7 +998,7 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
                 {pos.isCompleted ? <Check className="h-7 w-7" strokeWidth={3} /> : pos.isLocked ? <LockKeyhole className="h-6 w-6" /> : <img src={stationIcons[index]} className="h-7 w-7 object-contain brightness-0 invert" alt={pos.name} />}
               </span>
               <span className={`absolute w-[112px] ${labelPositions[index]}`}>
-                <span className={`inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold ${pos.isCompleted ? 'bg-[#E6E2FF] text-[#2F1FE4]' : isUnlocked ? 'bg-white/90 text-[#0A4BB3]' : 'bg-slate-200/80 text-slate-500'}`}>{pos.isCompleted ? 'Selesai' : isUnlocked ? 'Aktif' : 'Terkunci'}</span>
+                <span className={`inline-flex rounded-full px-2 py-0.5 text-[9px] font-bold ${pos.isCompleted ? 'bg-[#E6E2FF] text-[#2F1FE4]' : isUnlocked ? 'bg-white/90 text-[#0A4BB3]' : 'bg-slate-200/80 text-slate-500'}`}>{pos.isCompleted ? (language === 'en' ? 'Done' : 'Selesai') : isUnlocked ? (language === 'en' ? 'Active' : 'Aktif') : (language === 'en' ? 'Locked' : 'Terkunci')}</span>
                 <span className={`mt-1 block text-xs font-bold leading-tight ${pos.isLocked ? 'text-slate-600' : 'text-[#0A1B3F]'}`}>{pos.name}</span>
               </span>
             </motion.button>
@@ -962,13 +1009,13 @@ const NoeQuizPage = ({ completedStations = [], setCompletedStations }) => {
           <div className={`flex h-13 w-13 items-center justify-center rounded-full border-4 border-white text-white shadow-lg transition-colors ${posData.at(-1).isCompleted ? 'bg-[#3522E7] ring-4 ring-[#B6AEFF]/80' : 'bg-[#272C39]'}`}>
             {posData.at(-1).isCompleted ? <Check className="h-5 w-5" strokeWidth={3} /> : <Flag className="h-5 w-5" />}
           </div>
-          <span className="mt-2 text-[10px] font-bold text-[#0A1B3F]">SELESAI</span>
+          <span className="mt-2 text-[10px] font-bold text-[#0A1B3F]">{t('quiz_map_finish')}</span>
         </div>
 
         <div className="absolute bottom-6 left-1/2 z-20 flex w-[min(92%,360px)] -translate-x-1/2 items-center justify-center gap-5 rounded-full border border-[#E3E8F5] bg-white/95 px-4 py-3 text-[10px] font-semibold text-slate-600 shadow-sm backdrop-blur">
-          <span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#0A4BB3]" />Aktif</span>
-          <span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#62646B]" />Terkunci</span>
-          <span className="flex items-center gap-1.5"><i className="flex h-3 w-3 items-center justify-center rounded-full bg-[#2F1FE4] text-[8px] text-white">✓</i>Selesai</span>
+          <span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#0A4BB3]" />{language === 'en' ? 'Active' : 'Aktif'}</span>
+          <span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 rounded-full bg-[#62646B]" />{language === 'en' ? 'Locked' : 'Terkunci'}</span>
+          <span className="flex items-center gap-1.5"><i className="flex h-3 w-3 items-center justify-center rounded-full bg-[#2F1FE4] text-[8px] text-white">✓</i>{language === 'en' ? 'Done' : 'Selesai'}</span>
         </div>
       </div>
 

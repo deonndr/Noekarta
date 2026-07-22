@@ -1,9 +1,10 @@
 import { useRef } from 'react';
-import { useInView, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { allKulinerData } from '../data/kuliner';
 import { useInventory } from '../hooks/useInventory';
-import cardfly from '../assets/cardfly2.svg';
+import { useLanguage } from '../context/LanguageContext';
+
 import component1 from '../assets/components/component1.webp';
 
 const kulinerData = allKulinerData.slice(0, 6);
@@ -26,8 +27,9 @@ const BookmarkIcon = () => (
 
 const KulinerJakarta = () => {
   const { savedItems, toggleSave } = useInventory();
+  const { language, t } = useLanguage();
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { margin: '200px' });
+
 
   return (
     <section ref={sectionRef} className="py-20 bg-[#fafafa]">
@@ -39,14 +41,14 @@ const KulinerJakarta = () => {
        
 
             <h2 className="text-4xl md:text-5xl lg:text-[54px] font-extrabold text-gray-900 mb-6 leading-tight tracking-tight font-ancizar">
-              Kuliner Jakarta
+              {t('kuliner_heading')}
             </h2>
             <p className="text-gray-700 text-xl lg:text-2xl mb-10 max-w-md">
-              Cicipi kuliner khas Betawi dan Jakarta
+              {t('kuliner_sub')}
             </p>
 
             <Link to="/kuliner" className="bg-[#0f285e] hover:bg-[#0a1b40] text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center w-fit gap-2 transition-colors">
-              Lihat Semua Kuliner
+              {t('kuliner_cta')}
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -96,7 +98,7 @@ const KulinerJakarta = () => {
                 >
                   <img
                     src={item.img}
-                    alt={item.title}
+                    alt={language === 'en' ? (item.title_en || item.title) : item.title}
                     className="w-full h-full object-cover select-none"
                     draggable="false"
                   />
@@ -105,10 +107,10 @@ const KulinerJakarta = () => {
                 {/* Content */}
                 <div className="flex flex-col gap-1 px-1" style={{ flex: 1 }}>
                   <h3 className="font-bold text-gray-900 text-[15px] leading-tight">
-                    {item.title}
+                    {language === 'en' ? (item.title_en || item.title) : item.title}
                   </h3>
                   <p className="text-gray-500 text-[12px] leading-relaxed line-clamp-3">
-                    {item.desc}
+                    {language === 'en' ? (item.desc_en || item.desc) : item.desc}
                   </p>
                 </div>
 
@@ -128,7 +130,7 @@ const KulinerJakarta = () => {
                     }}
                   >
                     <BookmarkIcon />
-                    {savedItems.includes(item.id) ? 'Batal Menyimpan' : 'Simpan ke inventory'}
+                    {savedItems.includes(item.id) ? t('kuliner_unsave_inventory') : t('kuliner_save_inventory')}
                   </button>
                 </div>
               </div>

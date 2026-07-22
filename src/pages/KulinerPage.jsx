@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Search } from 'lucide-react';
+import { ChevronLeft, Search, Globe, ChevronDown } from 'lucide-react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import logo from '../assets/logo-noekarta1.webp';
@@ -8,6 +8,7 @@ import cardfly from '../assets/cardfly2.svg';
 import Seo from '../components/Seo';
 import { allKulinerData } from '../data/kuliner';
 import { useInventory } from '../hooks/useInventory';
+import { useLanguage } from '../context/LanguageContext';
 
 /* Bookmark Icon SVG */
 const BookmarkIcon = () => (
@@ -28,6 +29,7 @@ const BookmarkIcon = () => (
 const KulinerPage = () => {
     const navigate = useNavigate();
     const { savedItems, toggleSave } = useInventory();
+    const { language, toggleLanguage, t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState("");
 
     // Restore scroll position and init Lenis
@@ -57,41 +59,42 @@ const KulinerPage = () => {
         navigate('/', { state: { scrollToKuliner: true } });
     };
 
-    const filteredData = allKulinerData.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredData = allKulinerData.filter(item => {
+        const title = language === 'en' ? (item.title_en || item.title) : item.title;
+        const desc = language === 'en' ? (item.desc_en || item.desc) : item.desc;
+        return title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+               desc.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     return (
         <div className="min-h-screen bg-white font-poppins flex flex-col">
             <Seo
-                title="Kuliner Jakarta"
-                description="Cicipi kuliner khas Betawi dan Jakarta melalui galeri interaktif Noekarta."
+                title={t('kuliner_page_title')}
+                description={t('kuliner_page_sub')}
             />
             {/* Header */}
             <header className="w-full bg-white border-b border-gray-100 shadow-sm z-50 sticky top-0">
                 <div className="max-w-[1200px] mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between">
                     <button
                         onClick={handleBack}
-                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors cursor-pointer"
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span className="text-sm md:text-base">Kembali</span>
+                        <span className="text-sm md:text-base">{t('back')}</span>
                     </button>
 
                     <a href="/" className="absolute left-1/2 -translate-x-1/2">
                         <img src={logo} alt="Noekarta" className="h-8 w-auto select-none" />
                     </a>
 
-                    <div className="flex items-center gap-2 text-gray-600 text-sm font-medium">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                        </svg>
-                        EN
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
+                    <button 
+                        onClick={toggleLanguage}
+                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 text-sm font-medium cursor-pointer transition-colors"
+                    >
+                        <Globe className="w-4 h-4" />
+                        {language === 'id' ? 'ID' : 'EN'}
+                        <ChevronDown className="w-4 h-4" />
+                    </button>
                 </div>
             </header>
 
@@ -102,10 +105,10 @@ const KulinerPage = () => {
                 <div className="flex flex-row items-center justify-between mb-8 gap-4">
                     <div className="flex-1">
                         <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-2 md:mb-3 font-ancizar leading-tight">
-                            Kuliner Jakarta
+                            {t('kuliner_heading')}
                         </h1>
                         <p className="text-gray-700 text-sm md:text-xl">
-                            Cicipi kuliner khas Betawi dan Jakarta
+                            {t('kuliner_sub')}
                         </p>
                     </div>
                     
@@ -113,7 +116,7 @@ const KulinerPage = () => {
                     <div className="relative w-[140px] sm:w-[200px] md:w-[280px] h-[80px] md:h-[100px] flex justify-end shrink-0">
                         <img
                             src={cardfly}
-                            alt="50+ Kuliner Khas"
+                            alt="Kuliner Khas"
                             className="w-full h-full object-contain drop-shadow-sm select-none"
                             style={{ animation: 'float-card-2 9s ease-in-out infinite' }}
                         />
@@ -129,14 +132,14 @@ const KulinerPage = () => {
                         <input 
                             type="text" 
                             className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0f285e] focus:bg-white transition-all placeholder:text-gray-400 text-gray-700"
-                            placeholder="Jelajahi Sejarah, budaya, kuliner, dll"
+                            placeholder={t('kuliner_search_placeholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                     <Link to="/inventory" className="bg-[#0f285e] hover:bg-[#0a1b40] text-white px-8 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2.5 transition-all shadow-sm">
                         <BookmarkIcon />
-                        Inventory
+                        {t('kuliner_view_inventory')}
                     </Link>
                 </div>
 
@@ -162,7 +165,7 @@ const KulinerPage = () => {
                             >
                                 <img
                                     src={item.img}
-                                    alt={item.title}
+                                    alt={language === 'en' ? (item.title_en || item.title) : item.title}
                                     className="w-full h-full object-cover select-none"
                                     draggable="false"
                                 />
@@ -171,10 +174,10 @@ const KulinerPage = () => {
                             {/* Content */}
                             <div className="flex flex-col gap-1 px-1" style={{ flex: 1 }}>
                                 <h3 className="font-bold text-gray-900 text-[16px] leading-tight">
-                                    {item.title}
+                                    {language === 'en' ? (item.title_en || item.title) : item.title}
                                 </h3>
                                 <p className="text-gray-500 text-[13px] leading-relaxed line-clamp-3">
-                                    {item.desc}
+                                    {language === 'en' ? (item.desc_en || item.desc) : item.desc}
                                 </p>
                             </div>
 
@@ -194,7 +197,7 @@ const KulinerPage = () => {
                                     }}
                                 >
                                     <BookmarkIcon />
-                                    {savedItems.includes(item.id) ? 'Batal Menyimpan' : 'Simpan ke inventory'}
+                                    {savedItems.includes(item.id) ? t('kuliner_unsave_inventory') : t('kuliner_save_inventory')}
                                 </button>
                             </div>
                         </div>
@@ -203,7 +206,7 @@ const KulinerPage = () => {
 
                 {filteredData.length === 0 && (
                     <div className="w-full text-center py-20 text-gray-500">
-                        Tidak ada kuliner yang ditemukan.
+                        {t('kuliner_empty_search')}
                     </div>
                 )}
             </main>

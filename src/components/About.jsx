@@ -97,7 +97,7 @@ const About = () => {
             {/* Stats Card */}
             <div className="bg-white rounded-2xl p-4 md:p-5 border border-white shadow-sm">
               <h3 className="text-xl md:text-2xl font-bold text-gray-900 whitespace-nowrap">
-                <AnimatedCounter value={11.01} duration={2} /> juta jiwa
+                <AnimatedCounter value={11.01} duration={2} /> {t('about_stat_unit')}
               </h3>
               <p className="text-xs md:text-sm text-gray-500 whitespace-nowrap mt-1">{t('about_stat_label')}</p>
             </div>

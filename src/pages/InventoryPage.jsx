@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Search } from 'lucide-react';
+import { ChevronLeft, Search, Globe, ChevronDown } from 'lucide-react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import logo from '../assets/logo-noekarta1.webp';
 import Seo from '../components/Seo';
 import { allKulinerData } from '../data/kuliner';
 import { useInventory } from '../hooks/useInventory';
+import { useLanguage } from '../context/LanguageContext';
 
 /* Bookmark Icon SVG */
 const BookmarkIcon = () => (
@@ -27,6 +28,7 @@ const BookmarkIcon = () => (
 const InventoryPage = () => {
     const navigate = useNavigate();
     const { savedItems, toggleSave } = useInventory();
+    const { language, toggleLanguage, t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState("");
 
     // Restore scroll position and init Lenis
@@ -59,41 +61,42 @@ const InventoryPage = () => {
     // Filter to only show saved items, and also apply search query
     const savedKulinerData = allKulinerData.filter(item => savedItems.includes(item.id));
     
-    const filteredData = savedKulinerData.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        item.desc.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredData = savedKulinerData.filter(item => {
+        const title = language === 'en' ? (item.title_en || item.title) : item.title;
+        const desc = language === 'en' ? (item.desc_en || item.desc) : item.desc;
+        return title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+               desc.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     return (
         <div className="min-h-screen bg-white font-poppins flex flex-col">
             <Seo
-                title="Inventory Kuliner"
-                description="Daftar kuliner khas Betawi dan Jakarta yang telah Anda simpan."
+                title={t('inventory_title')}
+                description={t('inventory_sub')}
             />
             {/* Header */}
             <header className="w-full bg-white border-b border-gray-100 shadow-sm z-50 sticky top-0">
                 <div className="max-w-[1200px] mx-auto px-4 md:px-8 h-[72px] flex items-center justify-between">
                     <button
                         onClick={handleBack}
-                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors cursor-pointer"
                     >
                         <ChevronLeft className="w-5 h-5" />
-                        <span className="text-sm md:text-base">Kembali</span>
+                        <span className="text-sm md:text-base">{t('back')}</span>
                     </button>
 
                     <a href="/" className="absolute left-1/2 -translate-x-1/2">
                         <img src={logo} alt="Noekarta" className="h-8 w-auto select-none" />
                     </a>
 
-                    <div className="flex items-center gap-2 text-gray-600 text-sm font-medium">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                        </svg>
-                        EN
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
+                    <button 
+                        onClick={toggleLanguage}
+                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600 text-sm font-medium cursor-pointer transition-colors"
+                    >
+                        <Globe className="w-4 h-4" />
+                        {language === 'id' ? 'ID' : 'EN'}
+                        <ChevronDown className="w-4 h-4" />
+                    </button>
                 </div>
             </header>
 
@@ -104,10 +107,10 @@ const InventoryPage = () => {
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                     <div>
                         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 font-ancizar">
-                            Inventory
+                            {t('inventory_title')}
                         </h1>
                         <p className="text-gray-700 text-lg md:text-xl">
-                            Beberapa Mkanan Yang Kamu Simpan
+                            {t('inventory_sub')}
                         </p>
                     </div>
                     
@@ -119,7 +122,7 @@ const InventoryPage = () => {
                         <input 
                             type="text" 
                             className="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0f285e] transition-all placeholder:text-gray-400 text-gray-700 shadow-sm"
-                            placeholder="Jelajahi Sejarah, budaya, kuliner, dll"
+                            placeholder={t('inventory_search_placeholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -148,7 +151,7 @@ const InventoryPage = () => {
                             >
                                 <img
                                     src={item.img}
-                                    alt={item.title}
+                                    alt={language === 'en' ? (item.title_en || item.title) : item.title}
                                     className="w-full h-full object-cover select-none"
                                     draggable="false"
                                 />
@@ -157,10 +160,10 @@ const InventoryPage = () => {
                             {/* Content */}
                             <div className="flex flex-col gap-1 px-1" style={{ flex: 1 }}>
                                 <h3 className="font-bold text-gray-900 text-[16px] leading-tight">
-                                    {item.title}
+                                    {language === 'en' ? (item.title_en || item.title) : item.title}
                                 </h3>
                                 <p className="text-gray-500 text-[13px] leading-relaxed line-clamp-3">
-                                    {item.desc}
+                                    {language === 'en' ? (item.desc_en || item.desc) : item.desc}
                                 </p>
                             </div>
 
@@ -180,7 +183,7 @@ const InventoryPage = () => {
                                     }}
                                 >
                                     <BookmarkIcon />
-                                    Batal Menyimpan
+                                    {t('remove')}
                                 </button>
                             </div>
                         </div>
@@ -190,8 +193,8 @@ const InventoryPage = () => {
                 {filteredData.length === 0 && (
                     <div className="w-full text-center py-20 text-gray-500">
                         {savedKulinerData.length === 0 
-                            ? "Belum ada kuliner yang disimpan di inventory."
-                            : "Tidak ada kuliner yang sesuai dengan pencarian."}
+                            ? t('inventory_empty')
+                            : (language === 'en' ? 'No saved culinary items match your search.' : 'Tidak ada kuliner tersimpan yang sesuai dengan pencarian.')}
                     </div>
                 )}
             </main>

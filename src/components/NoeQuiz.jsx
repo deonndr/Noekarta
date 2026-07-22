@@ -13,34 +13,44 @@ const sampleQuestions = [
   {
     id: 1,
     title: "Contoh Soal",
+    title_en: "Sample Question",
     text: "Pelabuhan utama di Batavia yang menjadi pusat perdagangan rempah-rempah pada masa penjajahan Belanda adalah...",
+    text_en: "The main port in Batavia that became the center of the spice trade during the Dutch colonial period is...",
   },
   {
     id: 2,
     title: "Contoh Soal",
+    title_en: "Sample Question",
     text: "Kesenian musik tradisional Betawi yang mendapat pengaruh dari budaya Tionghoa dengan alat musik gesek Tehyan adalah...",
+    text_en: "Traditional Betawi music art influenced by Chinese culture featuring the Tehyan string instrument is...",
   },
   {
     id: 3,
     title: "Contoh Soal",
+    title_en: "Sample Question",
     text: "Soto Betawi sangat khas dengan kuahnya yang kental dan gurih. Bahan utama pembuat kuah soto ini adalah...",
+    text_en: "Soto Betawi is famous for its thick and savory broth. The main ingredient for this broth is...",
   },
   {
     id: 4,
     title: "Contoh Soal",
+    title_en: "Sample Question",
     text: "Monumen berupa patung yang dibangun untuk memperingati pembebasan Irian Barat dari tangan Belanda adalah...",
+    text_en: "The monument statue built to commemorate the liberation of West Irian from the Dutch is...",
   },
   {
     id: 5,
     title: "Eksplorasi Jakarta",
+    title_en: "Jakarta Exploration",
     text: "Sebelum bernama Jakarta, kota ini pernah dinamakan Jayakarta oleh Fatahillah pada tanggal 22 Juni tahun...",
+    text_en: "Before it was named Jakarta, this city was named Jayakarta by Fatahillah on June 22 in the year...",
   }
 ];
 
 const NoeQuiz = ({ completedStations = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [timeLeft, setTimeLeft] = useState(5);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   const isBataviaComplete = completedStations.includes(0);
   const isBetawiUnlocked = completedStations.includes(0);
@@ -127,7 +137,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
                   </span>
                 </div>
 
-                <span className="text-[12px] md:text-[13px] font-semibold text-[#1A1856]">Soal {currentSlide + 1}/5</span>
+                <span className="text-[12px] md:text-[13px] font-semibold text-[#1A1856]">{language === 'en' ? 'Question' : 'Soal'} {currentSlide + 1}/5</span>
               </div>
 
               <div className="flex-1 relative w-full h-full flex flex-col items-center">
@@ -140,9 +150,11 @@ const NoeQuiz = ({ completedStations = [] }) => {
                     transition={{ duration: 0.3 }}
                     className="absolute inset-0 flex flex-col items-center text-center w-full mt-4"
                   >
-                    <h4 className="text-[#1A1856] font-bold text-[15px] md:text-[16px] mb-4">{sampleQuestions[currentSlide].title}</h4>
+                    <h4 className="text-[#1A1856] font-bold text-[15px] md:text-[16px] mb-4">
+                      {language === 'en' ? (sampleQuestions[currentSlide].title_en || sampleQuestions[currentSlide].title) : sampleQuestions[currentSlide].title}
+                    </h4>
                     <p className="text-[#3A3A3A] text-[12.5px] md:text-[13.5px] leading-[1.6] font-medium px-2">
-                      {sampleQuestions[currentSlide].text}
+                      {language === 'en' ? (sampleQuestions[currentSlide].text_en || sampleQuestions[currentSlide].text) : sampleQuestions[currentSlide].text}
                     </p>
                   </motion.div>
                 </AnimatePresence>
@@ -212,7 +224,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
                  </div>
                )}
 
-               <span className="text-[14px] font-bold mt-4 text-[#1A1856]">Sejarah Batavia</span>
+               <span className="text-[14px] font-bold mt-4 text-[#1A1856]">{language === 'en' ? 'Batavia History' : 'Sejarah Batavia'}</span>
             </Link>
 
             {/* Node 2: Budaya Betawi */}
@@ -237,7 +249,7 @@ const NoeQuiz = ({ completedStations = [] }) => {
                  </div>
                )}
 
-               <span className="text-[14px] font-bold mt-4 text-[#1A1856]">Budaya Betawi</span>
+               <span className="text-[14px] font-bold mt-4 text-[#1A1856]">{language === 'en' ? 'Betawi Culture' : 'Budaya Betawi'}</span>
             </Link>
 
             {/* Finish Node */}

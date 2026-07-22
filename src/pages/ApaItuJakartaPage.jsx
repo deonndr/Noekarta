@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronDown, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
+import { useLanguage } from '../context/LanguageContext';
 import logo from '../assets/logo-noekarta1.webp';
 import heroBackground from '../assets/bg-ApaItuJakarta.webp';
 import heroTitle from '../assets/title.pageApaItuJakarta.webp';
@@ -14,6 +15,7 @@ import Seo from '../components/Seo';
 
 const ApaItuJakartaPage = () => {
   const navigate = useNavigate();
+  const { language, toggleLanguage, t } = useLanguage();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -45,8 +47,8 @@ const ApaItuJakartaPage = () => {
   return (
     <div className="min-h-screen bg-white font-poppins font-sans">
       <Seo
-        title="Apa Itu Jakarta"
-        description="Kenali Jakarta sebagai jantung Indonesia: pusat pemerintahan, ekonomi, budaya, dan kehidupan metropolitan."
+        title={t('apa_itu_page_title')}
+        description={t('apa_itu_page_desc')}
       />
       {/* Header */}
       <header className="bg-white sticky top-0 z-50 border-b border-gray-100 h-[72px] flex items-center shrink-0">
@@ -54,10 +56,10 @@ const ApaItuJakartaPage = () => {
           {/* Back Button */}
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+            className="flex items-center gap-2 text-gray-700 hover:text-blue-600 font-medium transition-colors cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
-            <span className="text-sm md:text-base font-medium">Kembali</span>
+            <span className="text-sm md:text-base font-medium">{t('back')}</span>
           </button>
 
           {/* Logo Center */}
@@ -66,11 +68,14 @@ const ApaItuJakartaPage = () => {
           </a>
 
           {/* Language Selector */}
-          <div className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+          <button 
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 text-sm font-medium cursor-pointer text-gray-800 hover:text-blue-600 transition-colors"
+          >
             <Globe className="w-4 h-4" />
-            <span>EN</span>
+            <span>{language === 'id' ? 'ID' : 'EN'}</span>
             <ChevronDown className="w-4 h-4" />
-          </div>
+          </button>
         </div>
       </header>
 
@@ -129,7 +134,7 @@ const ApaItuJakartaPage = () => {
               {/* Tag */}
               <div className="absolute top-6 -left-6 z-10 bg-blue-950 text-white py-6 px-12 rounded-2xl shadow-lg">
                 <div className="font-semibold text-lg leading-tight">661 km²</div>
-                <div className="text-xs font-medium opacity-90">Luas Wilayah</div>
+                <div className="text-xs font-medium opacity-90">{language === 'en' ? 'Total Area' : 'Luas Wilayah'}</div>
               </div>
             </div>
           </div>
@@ -137,28 +142,28 @@ const ApaItuJakartaPage = () => {
           {/* Right: Facts */}
           <div className="w-full lg:w-1/2">
             <h2 className="text-4xl md:text-4xl font-ancizar font-bold text-gray-900 mb-8">
-              Jakarta, Kota Impian
+              {language === 'en' ? 'Jakarta, City of Dreams' : 'Jakarta, Kota Impian'}
             </h2>
 
             <div className="space-y-6">
               <div className="flex gap-4">
                 <div className="mt-1.5 min-w-[10px] h-[10px] rounded-full bg-blue-800"></div>
                 <p className="leading-relaxed text-[15px]">
-                  <span className="font-extrabold text-gray-900">Lokasi Geografis:</span> Terletak di pesisir barat laut Pulau Jawa, berbatasan langsung dengan Provinsi Banten di barat dan Jawa Barat di timur dan selatan, serta menghadap Laut Jawa di utara
+                  <span className="font-extrabold text-gray-900">{language === 'en' ? 'Geographic Location:' : 'Lokasi Geografis:'}</span> {language === 'en' ? 'Situated on the northwest coast of Java Island, bordering Banten Province to the west and West Java to the east and south, facing the Java Sea to the north.' : 'Terletak di pesisir barat laut Pulau Jawa, berbatasan langsung dengan Provinsi Banten di barat dan Jawa Barat di timur dan selatan, serta menghadap Laut Jawa di utara.'}
                 </p>
               </div>
 
               <div className="flex gap-4">
                 <div className="mt-1.5 min-w-[10px] h-[10px] rounded-full bg-blue-800"></div>
                 <p className="leading-relaxed text-[15px]">
-                  <span className="font-extrabold text-gray-900">Pembagian Wilayah:</span> Terbagi menjadi lima Kota Administrasi (Jakarta Pusat, Jakarta Barat, Jakarta Selatan, Jakarta Utara, Jakarta Timur) dan satu Kabupaten Administrasi (Kepulauan Seribu).
+                  <span className="font-extrabold text-gray-900">{language === 'en' ? 'Administrative Divisions:' : 'Pembagian Wilayah:'}</span> {language === 'en' ? 'Divided into five Administrative Cities (Central, West, South, North, East Jakarta) and one Administrative Regency (Thousand Islands).' : 'Terbagi menjadi lima Kota Administrasi (Jakarta Pusat, Jakarta Barat, Jakarta Selatan, Jakarta Utara, Jakarta Timur) dan satu Kabupaten Administrasi (Kepulauan Seribu).'}
                 </p>
               </div>
 
               <div className="flex gap-4">
                 <div className="mt-1.5 min-w-[10px] h-[10px] rounded-full bg-blue-800"></div>
                 <p className="leading-relaxed text-[15px]">
-                  <span className="font-extrabold text-gray-900">Skala Penduduk:</span> Wilayah metropolitan Jakarta Raya (dikenal sebagai Jabodetabek) dihuni oleh lebih dari 40 juta jiwa, menjadikannya salah satu aglomerasi perkotaan terbesar di dunia
+                  <span className="font-extrabold text-gray-900">{language === 'en' ? 'Population Scale:' : 'Skala Penduduk:'}</span> {language === 'en' ? 'The Greater Jakarta metropolitan area (Jabodetabek) is home to over 30 million people, making it one of the largest urban agglomerations in the world.' : 'Wilayah metropolitan Jakarta Raya (dikenal sebagai Jabodetabek) dihuni oleh lebih dari 30 juta jiwa, menjadikannya salah satu aglomerasi perkotaan terbesar di dunia.'}
                 </p>
               </div>
             </div>
