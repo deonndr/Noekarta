@@ -334,7 +334,7 @@ export const LanguageProvider = ({ children }) => {
         >
            <div className="w-14 h-14 border-4 border-[#111A5A]/20 border-t-[#111A5A] rounded-full animate-spin"></div>
            <p className="mt-6 text-[#111A5A] font-bold text-lg tracking-wide">
-              {language === 'id' ? 'Mengubah ke Bahasa Indonesia...' : 'Switching to English...'}
+              {language === 'id' ? 'Mengubah ke Bahasa Indonesia...' : 'Switching to English ...'}
            </p>
         </div>
       )}
