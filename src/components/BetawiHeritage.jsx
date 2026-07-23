@@ -134,6 +134,21 @@ const TextPage = forwardRef(({ data, language }, ref) => (
       }}
       draggable="false"
     />
+    {/* White corner overlay to hide black artifacts on English info images */}
+    {language === 'en' && (
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          boxShadow: 'inset 0 0 15px 20px #FAFAFA',
+          pointerEvents: 'none',
+          zIndex: 2
+        }}
+      />
+    )}
   </div>
 ));
 TextPage.displayName = 'TextPage';
@@ -194,7 +209,6 @@ const BetawiHeritage = () => {
 
   const bookStyle = {
     borderRadius: '24px',
-    boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)',
     overflow: 'hidden'
   };
 

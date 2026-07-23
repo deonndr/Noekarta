@@ -306,7 +306,13 @@ export const translations = {
 };
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState('id');
+  const [language, setLanguage] = useState(() => {
+    try {
+      return localStorage.getItem('noekarta_language') || 'id';
+    } catch {
+      return 'id';
+    }
+  });
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -315,7 +321,11 @@ export const LanguageProvider = ({ children }) => {
     setTimeout(() => setIsTransitioning(true), 10);
     
     setTimeout(() => {
-      setLanguage((prev) => (prev === 'id' ? 'en' : 'id'));
+      setLanguage((prev) => {
+        const next = prev === 'id' ? 'en' : 'id';
+        try { localStorage.setItem('noekarta_language', next); } catch { /* noop */ }
+        return next;
+      });
       setTimeout(() => {
         setIsTransitioning(false);
         setTimeout(() => setShowOverlay(false), 300);
